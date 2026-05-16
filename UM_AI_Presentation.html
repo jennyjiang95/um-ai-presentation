@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UM × AI — From Documents to Decisions</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@400,500&display=swap" />
+<style>
+/* =========================================================
+   THEME
+   ========================================================= */
+:root{
+  /* LIGHT THEME */
+  --bg:        #fafaf7;     /* warm paper */
+  --bg-2:      #ffffff;     /* card surface */
+  --bg-3:      #f0f1ee;     /* subtle band */
+  --paper:     #2a2a2a;
+  --ink:       #1a1d23;     /* primary text */
+  --ink-mute:  #6b7280;     /* secondary text */
+  --line:      #e4e6ea;     /* hairlines */
+  --cyan:      #008f74;     /* deep teal — accent */
+  --cyan-d:    #006b58;
+  --cyan-glow: rgba(0,143,116,.18);
+  --magenta:   #cc0040;     /* deep crimson */
+  --amber:     #c47a00;     /* bronze */
+  --violet:    #5b3fb8;     /* deep violet */
+  --red:       #cc0000;
+
+  --font-display: "Clash Display", "Satoshi", sans-serif;
+  --font-body:    "Satoshi", -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --h1: clamp(2.4rem,6.5vw,6rem);
+  --h2: clamp(1.6rem,3.6vw,3.2rem);
+  --h3: clamp(1.05rem,1.7vw,1.5rem);
+  --body: clamp(.85rem,1.05vw,1.05rem);
+  --small: clamp(.7rem,.85vw,.85rem);
+  --mega: clamp(3rem,10vw,9.5rem);
+
+  --pad: clamp(1.4rem,3.6vw,3.6rem);
+  --gap: clamp(.8rem,1.4vw,1.4rem);
+  --ease: cubic-bezier(.16,1,.3,1);
+  --dur: .8s;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg)}
+body{
+  font-family:var(--font-body);color:var(--ink);background:var(--bg);
+  overflow-x:hidden;font-size:var(--body);line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.slide{
+  position:relative;height:100vh;height:100dvh;width:100vw;
+  overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;
+  padding:var(--pad);display:flex;flex-direction:column;justify-content:center;
+  isolation:isolate;
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+
+/* atmosphere */
+.slide::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 60% 50% at 18% 100%, rgba(0,143,116,.07) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 92% 0%, rgba(204,0,64,.05) 0%, transparent 55%),
+    var(--bg);
+}
+.slide::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(rgba(0,0,0,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.025) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 90%);
+}
+
+/* type */
+h1,h2,h3,.mega{font-family:var(--font-display);letter-spacing:-.02em;font-weight:600;line-height:1.02}
+h1{font-size:var(--h1)}
+h2{font-size:var(--h2);margin-bottom:.5em}
+h3{font-size:var(--h3);margin-bottom:.3em}
+.mega{font-size:var(--mega);font-weight:700;letter-spacing:-.04em;line-height:.9}
+.eyebrow{
+  font-family:var(--font-mono);font-size:var(--small);text-transform:uppercase;
+  letter-spacing:.18em;color:var(--cyan);margin-bottom:.8em;
+  display:inline-flex;align-items:center;gap:.6em;
+}
+.eyebrow::before{
+  content:"";display:inline-block;width:.5em;height:.5em;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 12px var(--cyan-glow);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+.mute{color:var(--ink-mute)}
+.cyan{color:var(--cyan)}.magenta{color:var(--magenta)}.amber{color:var(--amber)}
+.violet{color:var(--violet)}.paper{color:var(--paper)}.mono{font-family:var(--font-mono)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
+.slide.visible .reveal{opacity:1;transform:translateY(0)}
+.slide.visible .reveal:nth-child(1){transition-delay:.05s}
+.slide.visible .reveal:nth-child(2){transition-delay:.18s}
+.slide.visible .reveal:nth-child(3){transition-delay:.32s}
+.slide.visible .reveal:nth-child(4){transition-delay:.46s}
+.slide.visible .reveal:nth-child(5){transition-delay:.6s}
+.slide.visible .reveal:nth-child(6){transition-delay:.74s}
+.slide.visible .reveal:nth-child(7){transition-delay:.88s}
+.reveal-blur{filter:blur(12px);opacity:0;transition:filter 1s var(--ease),opacity 1s var(--ease)}
+.slide.visible .reveal-blur{filter:blur(0);opacity:1}
+
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--cyan-glow)}50%{box-shadow:0 0 0 14px transparent}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes flow{0%{stroke-dashoffset:200}100%{stroke-dashoffset:0}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes typeWriter{from{width:0}to{width:100%}}
+
+/* chrome */
+.progress{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  width:0%;z-index:1000;transition:width .25s ease;box-shadow:0 0 16px var(--cyan-glow);
+}
+.dots{position:fixed;right:clamp(12px,2vw,28px);top:50%;transform:translateY(-50%);z-index:1000;display:flex;flex-direction:column;gap:10px}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--ink-mute);background:transparent;cursor:pointer;padding:0;transition:all .25s ease;position:relative}
+.dots button.active{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px var(--cyan-glow);transform:scale(1.3)}
+.dots button:hover::after{
+  content:attr(data-label);position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  background:var(--bg-2);border:1px solid var(--line);padding:4px 10px;border-radius:6px;
+  font-family:var(--font-mono);font-size:.7rem;color:var(--ink);white-space:nowrap;
+}
+.counter{position:fixed;left:clamp(12px,2vw,28px);bottom:clamp(12px,2vw,28px);z-index:1000;font-family:var(--font-mono);font-size:var(--small);color:var(--ink-mute);letter-spacing:.1em}
+.counter span{color:var(--cyan)}
+.brand{position:fixed;left:clamp(12px,2vw,28px);top:clamp(12px,2vw,28px);z-index:1000;font-family:var(--font-mono);font-size:.7rem;color:var(--ink-mute);letter-spacing:.2em;text-transform:uppercase}
+.brand span{color:var(--magenta);font-weight:700}
+.hint{position:fixed;right:clamp(50px,5vw,80px);bottom:clamp(12px,2vw,28px);z-index:1000;font-family:var(--font-mono);font-size:.7rem;color:var(--ink-mute);letter-spacing:.1em;animation:drift 3s ease-in-out infinite}
+
+/* helpers */
+.kicker{font-family:var(--font-mono);font-size:var(--small);color:var(--cyan);text-transform:uppercase;letter-spacing:.2em}
+.tag{display:inline-block;padding:.3em .8em;border-radius:999px;font-family:var(--font-mono);font-size:.72em;letter-spacing:.1em;text-transform:uppercase;border:1px solid currentColor}
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:clamp(1rem,1.6vw,1.6rem);position:relative;transition:transform .3s var(--ease),border-color .3s ease,box-shadow .3s ease}
+.card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 18px 40px rgba(0,240,197,.08)}
+.kpi{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5vw,4.5rem);line-height:1;background:linear-gradient(180deg,var(--cyan),var(--cyan-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.kpi-label{font-size:var(--small);color:var(--ink-mute);text-transform:uppercase;letter-spacing:.15em;font-family:var(--font-mono);margin-top:.4em}
+
+.grid{display:grid;gap:var(--gap)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center;height:100%}
+@media (max-width:900px){.grid-3,.grid-4,.split{grid-template-columns:1fr}}
+
+/* ==== Slide-specific ==== */
+/* TITLE */
+.title-slide{justify-content:center}
+.title-slide .strike{color:var(--magenta);text-decoration:line-through;text-decoration-thickness:.06em;text-decoration-color:var(--magenta)}
+.title-slide .accent{color:var(--cyan)}
+.title-slide .underline-acc{display:inline-block;position:relative}
+.title-slide .underline-acc::after{content:"";position:absolute;left:0;right:0;bottom:.05em;height:.22em;background:var(--cyan);opacity:.3;z-index:-1}
+.title-slide .meta{margin-top:clamp(2rem,4.5vh,3.5rem);display:flex;gap:clamp(1rem,3vw,3rem);flex-wrap:wrap;font-family:var(--font-mono);font-size:var(--small);color:var(--ink-mute);text-transform:uppercase;letter-spacing:.15em}
+.title-slide .meta span{display:flex;align-items:center;gap:.5em}
+.title-slide .meta span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+
+/* PROBLEM quote */
+.problem-quote{font-family:var(--font-display);font-weight:500;font-size:clamp(1.4rem,3vw,2.4rem);line-height:1.2;border-left:3px solid var(--cyan);padding-left:clamp(1rem,2vw,2rem);max-width:30ch}
+
+/* Steps / chevrons */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+.step{position:relative;padding:1.2rem;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);transition:all .3s var(--ease)}
+.step:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.step .no{font-family:var(--font-mono);font-size:.7em;color:var(--cyan);letter-spacing:.2em;text-transform:uppercase}
+.step h4{font-family:var(--font-display);font-weight:600;font-size:1.1em;margin:.4em 0 .5em;line-height:1.15}
+.step p{font-size:.86em;color:var(--ink-mute);line-height:1.45}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+
+/* Big stat row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.5rem}
+.stats-row .s{padding:1.4rem 1.2rem;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);transition:all .3s var(--ease)}
+.stats-row .s:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.stats-row .n{font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3.2vw,2.8rem);line-height:1;color:var(--cyan)}
+.stats-row .s.magenta .n{color:var(--magenta)}
+.stats-row .s.amber .n{color:var(--amber)}
+.stats-row .l{font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase;margin-top:.7em}
+@media (max-width:900px){.stats-row{grid-template-columns:1fr 1fr}}
+
+/* Mock app */
+.app{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(20,40,80,.12),0 0 0 1px rgba(0,143,116,.08)}
+.app .bar{background:var(--bg-3);padding:.7rem 1rem;display:flex;gap:.5rem;align-items:center;border-bottom:1px solid var(--line);font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute)}
+.app .bar i{width:11px;height:11px;border-radius:50%}
+.app .bar i:nth-child(1){background:var(--magenta)}.app .bar i:nth-child(2){background:var(--amber)}.app .bar i:nth-child(3){background:var(--cyan)}
+.app .bar .url{margin-left:auto}
+.app .body{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);min-height:340px}
+.pane{background:var(--bg-2);padding:1.1rem}
+.pane h5{font-family:var(--font-mono);font-size:.72em;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.4em}
+.pane.r h5{color:var(--magenta)}
+.pane.r h5::before{content:"●";color:var(--magenta);animation:pulse 2.4s infinite}
+.pane.l h5::before{content:"●";color:var(--cyan);animation:pulse 2.4s infinite}
+.doc{display:flex;align-items:center;justify-content:space-between;padding:.5rem .7rem;border-radius:6px;font-size:.8em;color:var(--ink-mute);margin-bottom:.3rem;border:1px solid transparent;transition:all .25s}
+.doc:hover{background:var(--bg-3);border-color:var(--line);color:var(--ink);cursor:pointer}
+.doc .pg{font-family:var(--font-mono);font-size:.7em;color:var(--cyan)}
+.search-pill{margin-top:.8rem;display:flex;align-items:center;gap:.5rem;padding:.55rem .8rem;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:.8em;color:var(--ink-mute);font-style:italic}
+.field{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--magenta);padding:.6rem .8rem;border-radius:6px;margin-bottom:.5rem;display:flex;justify-content:space-between;gap:.6rem;align-items:flex-start;transition:all .25s}
+.field:hover{border-color:var(--magenta);transform:translateX(4px)}
+.field .l{flex:1}
+.field .lbl{font-family:var(--font-mono);font-size:.7em;color:var(--magenta);letter-spacing:.08em;text-transform:uppercase}
+.field .v{font-size:.85em;color:var(--ink);margin-top:.25em;line-height:1.35}
+.field .fb{font-size:.85em;color:var(--ink-mute);white-space:nowrap}
+
+/* Pillars (3 col) */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem}
+.pillar{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg-2);transition:all .3s var(--ease);display:flex;flex-direction:column}
+.pillar:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.pillar .hd{padding:1.1rem 1.4rem;background:linear-gradient(135deg,var(--cyan) 0%,var(--cyan-d) 100%);color:#fff}
+.pillar.r .hd{background:linear-gradient(135deg,var(--magenta) 0%,#990033 100%);color:#fff}
+.pillar.v .hd{background:linear-gradient(135deg,var(--violet) 0%,#3f2b88 100%);color:#fff}
+.pillar .hd h3{font-size:1.1em;font-weight:700;font-family:var(--font-display);letter-spacing:.04em}
+.pillar .hd .v{font-family:var(--font-mono);font-size:.75em;letter-spacing:.08em;opacity:.85;margin-top:.3em}
+.pillar .bd{padding:1.2rem 1.4rem;flex:1;display:flex;flex-direction:column;gap:.55rem}
+.pillar .bd .h{font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase}
+.pillar .bd .it{background:var(--bg);border-left:2px solid var(--cyan);padding:.7rem .9rem;border-radius:6px;font-size:.88em}
+.pillar.r .bd .it{border-color:var(--magenta)}
+.pillar.v .bd .it{border-color:var(--violet)}
+.pillar .bd .meta{margin-top:auto;font-family:var(--font-mono);font-size:.66em;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase;padding-top:.8rem;border-top:1px solid var(--line)}
+
+/* Bar charts */
+.bar-chart{margin-top:1rem}
+.bar-row{display:grid;grid-template-columns:100px 1fr 56px;align-items:center;gap:1rem;margin-bottom:.55rem;font-size:.85em}
+.bar-row .b-lbl{color:var(--ink-mute);font-family:var(--font-mono);font-size:.78em}
+.bar-row .b-track{height:18px;background:var(--bg);border-radius:4px;overflow:hidden;position:relative}
+.bar-row .b-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--cyan-d));border-radius:4px;width:0;transition:width 1.2s var(--ease)}
+.bar-row.r .b-fill{background:linear-gradient(90deg,var(--magenta),#c93072)}
+.slide.visible .bar-fill-1{width:86%} .slide.visible .bar-fill-2{width:58%}
+.slide.visible .bar-fill-3{width:52%} .slide.visible .bar-fill-4{width:46%}
+.slide.visible .bar-fill-5{width:45%}
+.slide.visible .bar-fill-6{width:86%} .slide.visible .bar-fill-7{width:85%}
+.slide.visible .bar-fill-8{width:82%} .slide.visible .bar-fill-9{width:70%}
+.slide.visible .bar-fill-10{width:69%}
+.bar-row .b-pct{font-family:var(--font-mono);font-weight:600;color:var(--cyan);font-size:.85em;text-align:right}
+.bar-row.r .b-pct{color:var(--magenta)}
+
+/* Pipeline diagram */
+.pipe{display:flex;align-items:center;gap:.5rem;padding:1.2rem;border-radius:14px;border:1px solid var(--line);background:var(--bg-2)}
+.pipe.legacy{background:var(--bg-3);border-style:dashed}
+.pipe.legacy .nd{border-color:var(--ink-mute);color:var(--ink-mute);background:var(--bg-2)}
+.pipe.legacy .nd .nt{color:var(--ink-mute)}
+.pipe.legacy .arr{color:var(--ink-mute)}
+.pipe.proposed{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,240,197,.08)}
+.nd{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:1rem;text-align:center;transition:all .3s var(--ease);min-width:0}
+.pipe.proposed .nd{border-color:var(--cyan)}
+.nd:hover{transform:translateY(-3px);border-color:var(--cyan);box-shadow:0 0 24px rgba(0,240,197,.18)}
+.nd .ic{font-size:1.4em;margin-bottom:.4em}
+.nd .nt{font-family:var(--font-display);font-weight:600;font-size:1em;line-height:1.1}
+.nd .ns{font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);letter-spacing:.08em;margin-top:.4em}
+.pipe.proposed .nd .nt{color:var(--cyan)}
+.arr{font-family:var(--font-mono);font-size:1.6em;color:var(--cyan);font-weight:300}
+.pipe-label{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-mono);font-size:.7em;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:.5rem}
+.pipe-label.now span{color:var(--magenta)}
+.pipe-label.new span{color:var(--cyan)}
+
+/* Highlight 3-card row */
+.hi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem}
+.hi{border-radius:14px;border:1px solid var(--line);overflow:hidden;background:var(--bg-2);transition:all .3s var(--ease)}
+.hi:hover{transform:translateY(-4px);border-color:currentColor}
+.hi .hd{padding:.7rem 1rem;font-family:var(--font-mono);font-size:.7em;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);border-bottom:1px solid var(--line);background:var(--bg-3)}
+.hi.g .hd{color:var(--amber)}
+.hi.r .hd{color:var(--magenta)}
+.hi ul{list-style:none;padding:1rem 1.2rem}
+.hi ul li{font-size:.85em;color:var(--ink);padding:.35rem 0;display:flex;gap:.6em;align-items:flex-start}
+.hi ul li::before{content:"→";color:currentColor;font-family:var(--font-mono);font-weight:700;flex-shrink:0}
+.hi.a ul li::before{color:var(--cyan)}
+.hi.g ul li::before{color:var(--amber)}
+.hi.r ul li::before{color:var(--magenta)}
+
+/* Agentic diagram (SVG container) */
+.svg-wrap{margin-top:1rem;width:100%}
+.svg-wrap svg{width:100%;height:auto;max-height:60vh;display:block}
+
+/* Roadmap timeline */
+.tl{position:relative;margin:1.4rem 0 .5rem;height:34px}
+.tl .track{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:2px;background:linear-gradient(90deg,var(--magenta),var(--cyan));border-radius:1px;overflow:hidden}
+.tl .track::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.4) 50%,transparent 100%);background-size:200% 100%;animation:shimmer 3s linear infinite}
+.tl .pts{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);justify-items:center;align-items:center}
+.tl .pt{width:34px;height:34px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;color:var(--cyan);font-size:.85em;position:relative}
+.tl .pt.r1{border-color:var(--magenta);color:var(--magenta)}
+.tl .pt.r2{border-color:var(--amber);color:var(--amber)}
+.tl .pt.r3{border-color:var(--violet);color:var(--violet)}
+.tl .pt.r4{border-color:var(--cyan);color:var(--cyan)}
+
+.road{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.ph{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:all .3s var(--ease)}
+.ph:hover{transform:translateY(-4px);border-color:currentColor}
+.ph .hd{padding:.6rem 1rem;font-family:var(--font-mono);font-size:.72em;letter-spacing:.18em;text-transform:uppercase;color:#fff;text-align:center}
+.ph.r1 .hd{background:linear-gradient(135deg,var(--magenta),#c93072)}
+.ph.r2 .hd{background:linear-gradient(135deg,var(--amber),#d99a30)}
+.ph.r3 .hd{background:linear-gradient(135deg,var(--violet),#7d5fd3)}
+.ph.r4 .hd{background:linear-gradient(135deg,var(--cyan),var(--cyan-d));color:#fff}
+.ph .bd{padding:1rem 1.1rem;flex:1;display:flex;flex-direction:column;gap:.5rem}
+.ph .ttl{font-family:var(--font-display);font-weight:600;font-size:1.05em;line-height:1.2}
+.ph .type{font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase}
+.ph .desc{font-size:.85em;color:var(--ink-mute);line-height:1.45;flex:1}
+.ph .lift{text-align:center;font-family:var(--font-display);font-weight:700;font-size:1.3em;padding:.5rem;border-radius:8px;background:var(--bg)}
+.ph.r1 .lift{color:var(--magenta)}.ph.r2 .lift{color:var(--amber)}.ph.r3 .lift{color:var(--violet)}.ph.r4 .lift{color:var(--cyan)}
+
+/* Compare table (IP vs SNF) */
+.cmp{display:grid;grid-template-columns:1fr 120px 1fr;gap:.5rem;margin-top:1rem}
+.cmp .h{padding:.8rem;text-align:center;font-family:var(--font-display);font-weight:600;border-radius:10px;font-size:1em}
+.cmp .h.l{background:linear-gradient(135deg,var(--cyan),var(--cyan-d));color:#fff}
+.cmp .h.r{background:linear-gradient(135deg,var(--violet),#7d5fd3);color:#fff}
+.cmp .row{display:contents}
+.cmp .v{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:.7rem 1rem;font-size:.9em;display:flex;align-items:center;transition:all .25s}
+.cmp .v:hover{border-color:var(--cyan)}
+.cmp .lbl{background:var(--bg-3);border:1px solid var(--line);border-radius:10px;padding:.7rem;font-family:var(--font-mono);font-size:.7em;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;text-align:center}
+
+.od{margin-top:1.2rem;padding:1rem 1.4rem;border:1px dashed var(--amber);border-radius:12px;background:rgba(255,181,71,.06);display:flex;gap:1rem;align-items:center}
+.od .k{font-family:var(--font-mono);font-size:.72em;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;flex-shrink:0}
+.od .b{font-size:.9em;color:var(--ink)}
+
+/* Arc */
+.arc{display:grid;grid-template-columns:1fr 30px 1fr 30px 1fr;gap:.4rem;margin-top:1.5rem;align-items:stretch}
+.arc .ph{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.arc .ph .hd{color:#fff;text-align:center;padding:.6rem;font-family:var(--font-mono);font-size:.7em;letter-spacing:.15em;text-transform:uppercase}
+.arc .ph.a .hd{background:linear-gradient(135deg,var(--ink-mute),#5a6378)}
+.arc .ph.r .hd{background:linear-gradient(135deg,var(--magenta),#c93072)}
+.arc .ph.g .hd{background:linear-gradient(135deg,var(--cyan),var(--cyan-d));color:#fff}
+.arc .ph .bd{padding:1.4rem;flex:1;display:flex;flex-direction:column}
+.arc .ph .t{font-family:var(--font-display);font-weight:700;font-size:1.8em;color:var(--ink);margin-bottom:.8rem;line-height:1.1}
+.arc .ph ul{list-style:none;padding:0;font-size:.9em;color:var(--ink-mute)}
+.arc .ph ul li{padding:.3rem 0 .3rem 1em;position:relative}
+.arc .ph ul li::before{content:"·";position:absolute;left:0;color:var(--cyan);font-weight:700;font-size:1.6em;line-height:.5}
+.arc .ph ul li:last-child{color:var(--cyan);font-weight:600;padding-top:.5rem;margin-top:.3rem;border-top:1px solid var(--line)}
+.arc .ph.r ul li:last-child{color:var(--magenta)}
+.arc .conn{display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.6em;font-family:var(--font-mono)}
+
+/* Takeaway */
+.tk{display:flex;gap:1rem;align-items:stretch;margin:.6rem 0;transition:transform .3s var(--ease)}
+.tk:hover{transform:translateX(8px)}
+.tk .badge{flex-shrink:0;width:70px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1.6em;border-radius:12px;background:var(--bg-2);border:1px solid var(--line);color:var(--cyan)}
+.tk.a .badge{color:var(--magenta)}.tk.b .badge{color:var(--amber)}.tk.c .badge{color:var(--violet)}.tk.d .badge{color:var(--cyan)}
+.tk .body{flex:1;padding:1rem 1.4rem;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;transition:all .3s var(--ease)}
+.tk:hover .body{border-color:var(--cyan)}
+.tk .h{font-family:var(--font-display);font-weight:600;font-size:1.1em;color:var(--ink)}
+.tk .b{font-size:.9em;color:var(--ink-mute);margin-top:.3em}
+
+/* Punch slide */
+.punch-slide{justify-content:center;text-align:center}
+.punch-slide .mega{font-size:var(--mega)}
+.punch-slide .sub{color:var(--ink-mute);font-family:var(--font-display);font-size:var(--h2);max-width:24ch;margin:1.5rem auto 0;line-height:1.2}
+.punch-slide .ribbon{display:inline-block;padding:.4em 1.2em;border:1px solid var(--cyan);color:var(--cyan);font-family:var(--font-mono);font-size:.7em;letter-spacing:.2em;text-transform:uppercase;border-radius:999px;margin-top:1.5rem;animation:pulse 2.5s infinite}
+
+/* Glow blob */
+.blob{position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,var(--cyan-glow),transparent 70%);filter:blur(40px);z-index:-1;pointer-events:none}
+.blob.tl{top:-200px;left:-200px}
+.blob.br{bottom:-200px;right:-200px;background:radial-gradient(circle,rgba(204,0,64,.10),transparent 70%)}
+
+/* Quote */
+.qt{padding:1.4rem 1.6rem;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:0 12px 12px 0;position:relative}
+.qt::before{content:""";position:absolute;left:14px;top:-10px;font-size:3em;color:var(--cyan);font-family:var(--font-display);line-height:1;opacity:.4}
+.qt p{font-size:1em;font-style:italic;line-height:1.4;color:var(--ink)}
+.qt .who{font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase;margin-top:.7em}
+
+/* footnote */
+.footnote{position:absolute;bottom:clamp(1rem,2vh,1.4rem);left:var(--pad);right:var(--pad);font-family:var(--font-mono);font-size:.66rem;color:var(--ink-mute);letter-spacing:.1em;display:flex;justify-content:space-between;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div class="brand">CVS HEALTH <span>×</span> UM × AI</div>
+<div class="progress" id="progress"></div>
+<nav class="dots" id="dots"></nav>
+<div class="counter"><span id="cur">01</span> / <span id="tot">15</span></div>
+<div class="hint">↓ scroll · ← → arrows</div>
+
+<!-- ========================================================== -->
+<!-- 01 — TITLE -->
+<!-- ========================================================== -->
+<section class="slide title-slide" data-label="Cover">
+  <div class="blob tl"></div>
+  <div class="blob br"></div>
+  <span class="eyebrow reveal">Utilization Management × AI</span>
+  <h1 class="reveal mega">
+    From <span class="strike">faxed PDFs</span><br>
+    to <span class="underline-acc">AI-assisted</span><br>
+    <span class="accent">decisions.</span>
+  </h1>
+  <div class="meta reveal">
+    <span>CDST · Clinical Decision Support Tool</span>
+    <span>Inpatient · SNF · Spine · Pre-cert</span>
+    <span>2.26M cases / yr</span>
+  </div>
+  <div class="reveal" style="margin-top:2rem;font-family:var(--font-display);font-size:var(--h3);color:var(--ink-mute);max-width:42ch;line-height:1.3">
+    The technology is solvable. <span class="cyan">The human interface is the real work.</span>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 02 — THE PROBLEM -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Problem">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">01 · The problem</span>
+      <h2 class="reveal">Utilization management is buried under paper.</h2>
+      <p class="reveal mute" style="max-width:42ch;font-size:1.05em;line-height:1.55;margin-bottom:1.5rem">
+        UM ensures the right care, at the right time, in the right setting — using
+        evidence-based criteria. <span class="cyan">The bottleneck is reading.</span>
+      </p>
+      <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div><div class="kpi">2.26M</div><div class="kpi-label">Cases / year</div></div>
+        <div><div class="kpi">$250M</div><div class="kpi-label">Admin budget</div></div>
+        <div><div class="kpi">20–60</div><div class="kpi-label">Min per case</div></div>
+        <div><div class="kpi">3–50<span style="font-size:.4em">×</span>10–200</div><div class="kpi-label">Docs × pages</div></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="problem-quote">
+        "Open <span class="cyan">MedCompass</span>. Download <span class="cyan">30 docs</span> with identical names. Scan <span class="cyan">200 pages</span>. Most aren't searchable."
+      </p>
+      <p class="mute mono" style="margin-top:1.5rem;font-size:.78em;letter-spacing:.12em;text-transform:uppercase">— Daily nurse workflow</p>
+      <div class="card reveal" style="margin-top:2rem">
+        <span class="kicker">PRESSURE STACKING UP</span>
+        <ul style="list-style:none;padding:0;margin-top:.8rem;font-size:.92em;color:var(--ink-mute);line-height:1.7">
+          <li>· CMS 2026 Final Rule (Two-Midnight, FHIR PA APIs, 72hr/7d SLAs)</li>
+          <li>· Rising Medicare cost trend → volume up, budget flat</li>
+          <li>· Nurses on overtime · burnout is real</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 03 — WHERE TIME GOES (WORKFLOW) -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Workflow">
+  <span class="eyebrow reveal">02 · Where time goes</span>
+  <h2 class="reveal">A 60-minute review is just <span class="cyan">four mechanical steps.</span></h2>
+  <div class="steps reveal" style="margin-top:2rem">
+    <div class="step">
+      <span class="no">Step 01</span>
+      <h4>Open MedCompass</h4>
+      <p>Hot Link entry. CDST opens beside the case in a new viewer.</p>
+    </div>
+    <div class="step">
+      <span class="no">Step 02</span>
+      <h4>Download docs one-by-one</h4>
+      <p>3–50 attachments per case. Identical names. Manual click each.</p>
+    </div>
+    <div class="step">
+      <span class="no">Step 03</span>
+      <h4>Scan every page</h4>
+      <p>10–200 pages each. Many faxed PDFs aren't searchable — no copy/paste.</p>
+    </div>
+    <div class="step">
+      <span class="no">Step 04</span>
+      <h4>Transcribe to QuickBase</h4>
+      <p>Vitals, labs, dates, meds — typed by hand into a 100-field form.</p>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:2.5rem;text-align:center">
+    <p style="font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:600;line-height:1.2">
+      The hardest part isn't <span class="mute">"the AI"</span>.
+      <br>It's <span class="cyan">the workflow, the interface, the trust.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 04 — CDST CO-PILOT (MOCK UI) -->
+<!-- ========================================================== -->
+<section class="slide" data-label="CDST">
+  <div class="split" style="grid-template-columns:.9fr 1.1fr">
+    <div>
+      <span class="eyebrow reveal">03 · The solution</span>
+      <h2 class="reveal">CDST — a <span class="cyan">co-pilot</span> for nurses.</h2>
+      <p class="reveal mute" style="max-width:38ch;font-size:1.05em;line-height:1.55;margin-bottom:1.4rem">
+        Unstructured clinical documents → AI summary → nurse validates instead of transcribes.
+      </p>
+      <div class="reveal" style="display:flex;flex-direction:column;gap:.7rem">
+        <div class="card" style="display:flex;align-items:center;gap:1rem">
+          <span class="mono cyan" style="font-size:.72em;letter-spacing:.15em">LEFT</span>
+          <div><h3 style="font-size:1em;margin:0">📄 Document Viewer</h3><p class="mute" style="font-size:.85em">All case docs · cross-doc search · zoom · citation</p></div>
+        </div>
+        <div class="card" style="display:flex;align-items:center;gap:1rem">
+          <span class="mono magenta" style="font-size:.72em;letter-spacing:.15em">RIGHT</span>
+          <div><h3 style="font-size:1em;margin:0">🤖 AI Clinical Summary</h3><p class="mute" style="font-size:.85em">Pre-populates QuickBase · editable · 👍👎 feedback loop</p></div>
+        </div>
+        <div class="card" style="display:flex;align-items:center;gap:1rem;border-color:var(--cyan)">
+          <span class="mono cyan" style="font-size:.72em;letter-spacing:.15em">RULE</span>
+          <div><h3 style="font-size:1em;margin:0">Recall &gt; Precision</h3><p class="mute" style="font-size:.85em">Surface critical; let the clinician trim. Nurse always owns the answer.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-blur">
+      <div class="app">
+        <div class="bar">
+          <i></i><i></i><i></i>
+          <span style="margin-left:.6rem">CDST · Case #251027207666 · Smith, J. · Acute IP</span>
+          <span class="url">cdst.aetna · prod</span>
+        </div>
+        <div class="body">
+          <div class="pane l">
+            <h5>Document Viewer</h5>
+            <div class="doc"><span>■ ED Notes</span><span class="pg">12 pages</span></div>
+            <div class="doc"><span>■ H&P</span><span class="pg">8 pages</span></div>
+            <div class="doc"><span>■ Imaging Report</span><span class="pg">3 pages</span></div>
+            <div class="doc"><span>■ Labs</span><span class="pg">22 pages</span></div>
+            <div class="doc"><span>■ Cardiology Consult</span><span class="pg">4 pages</span></div>
+            <div class="doc"><span>■ Discharge Summary</span><span class="pg">6 pages</span></div>
+            <div class="search-pill">🔍  Search across all documents...</div>
+          </div>
+          <div class="pane r">
+            <h5>AI Clinical Summary</h5>
+            <div class="field">
+              <div class="l"><div class="lbl">HPI / CC</div><div class="v">65yo M, SOB x3 days, fever to 101.4°F, productive cough.</div></div>
+              <div class="fb">👍 👎</div>
+            </div>
+            <div class="field">
+              <div class="l"><div class="lbl">ED Summary</div><div class="v">BP 142/88 · HR 105 · SpO2 88% RA. CXR: RLL infiltrate.</div></div>
+              <div class="fb">👍 👎</div>
+            </div>
+            <div class="field">
+              <div class="l"><div class="lbl">PMH</div><div class="v">HTN · T2DM · COPD on home O2 2L NC</div></div>
+              <div class="fb">👍 👎</div>
+            </div>
+            <div class="field">
+              <div class="l"><div class="lbl">Clinical Summary</div><div class="v">Pneumonia + acute hypoxic resp failure. Sepsis criteria met.</div></div>
+              <div class="fb">👍 👎</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 05 — THREE PILLARS -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Pillars">
+  <span class="eyebrow reveal">04 · Scope</span>
+  <h2 class="reveal">Three pillars. <span class="cyan">One co-pilot pattern.</span></h2>
+  <div class="pillars reveal">
+    <div class="pillar">
+      <div class="hd"><h3>Pre-cert / PA</h3><div class="v">350K+ / yr  ·  by procedure group</div></div>
+      <div class="bd">
+        <div class="h">Products</div>
+        <div class="it"><b class="cyan">Spine CDST</b> · live</div>
+        <div class="it"><b class="cyan">Pre-cert AI layer</b> · in build</div>
+        <div class="meta">LoB · Medicare · Commercial · Medicaid</div>
+      </div>
+    </div>
+    <div class="pillar r">
+      <div class="hd"><h3>Concurrent Review · LARGEST</h3><div class="v">1.2M+ / yr  ·  Inpatient Acute</div></div>
+      <div class="bd">
+        <div class="h">Products</div>
+        <div class="it"><b class="magenta">Medicare</b> · scaled May '25</div>
+        <div class="it"><b class="magenta">Commercial</b> · launched Aug '25</div>
+        <div class="meta">LoB · Medicare · Commercial · Medicaid</div>
+      </div>
+    </div>
+    <div class="pillar v">
+      <div class="hd"><h3>Post-Acute</h3><div class="v">SNF · LTAC · Rehab</div></div>
+      <div class="bd">
+        <div class="h">Products</div>
+        <div class="it"><b class="violet">SNF CDA+</b> · live</div>
+        <div class="it"><b class="violet">SNF CDST + post-acute summarization</b> · next</div>
+        <div class="meta">LoB · Medicare · Commercial · Medicaid</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 06 — RESULTS -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Results">
+  <span class="eyebrow reveal">05 · Results to date</span>
+  <h2 class="reveal">It's working. The numbers say so. <span class="cyan">The nurses say so too.</span></h2>
+  <div class="stats-row reveal">
+    <div class="s"><div class="n">95%</div><div class="l">Adoption · Acute IP</div></div>
+    <div class="s"><div class="n">658K</div><div class="l">Reviews since Mar '25</div></div>
+    <div class="s amber"><div class="n">15–20%</div><div class="l">Time-per-review ↓</div></div>
+    <div class="s magenta"><div class="n">$16M</div><div class="l">SAI booked · 2025</div></div>
+  </div>
+  <div class="stats-row reveal">
+    <div class="s"><div class="n">5.5 → 8–10</div><div class="l">Min saved now → EOY</div></div>
+    <div class="s"><div class="n">70K+</div><div class="l">Reviews / month</div></div>
+    <div class="s amber"><div class="n">2.2K</div><div class="l">Non-MN cases flagged / yr</div></div>
+    <div class="s magenta"><div class="n">0.1%</div><div class="l">In-app negative feedback</div></div>
+  </div>
+  <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2rem">
+    <div class="qt"><p>"30 attachments on 1 case. Thank goodness for this tool."</p><div class="who">— Nurse · IP Medicare</div></div>
+    <div class="qt"><p>"Did a great job pulling clinical from the doc, even though the fax was not clear. Terrible fax — pretty well."</p><div class="who">— Nurse · IP Commercial</div></div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 07 — THE REAL CHALLENGE -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Human challenge">
+  <span class="eyebrow reveal">06 · The real challenge</span>
+  <h2 class="reveal">It isn't technical. <span class="magenta">It's human.</span></h2>
+  <p class="reveal mute" style="max-width:60ch;font-size:1em;margin-bottom:1.2rem">
+    AI is recall-biased on purpose — nurses do the final edit. <span class="cyan">Their edits are the signal.</span> Two forms, two completely different failure modes.
+  </p>
+  <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:.4rem">
+    <div class="card">
+      <span class="tag cyan" style="border-color:var(--cyan)">CARE DAYS · NARRATIVE OVER-GENERATION</span>
+      <div class="bar-chart">
+        <div class="bar-row"><span class="b-lbl">Subjective</span><div class="b-track"><div class="b-fill bar-fill-1"></div></div><span class="b-pct">17.2%</span></div>
+        <div class="bar-row"><span class="b-lbl">Diet</span><div class="b-track"><div class="b-fill bar-fill-2"></div></div><span class="b-pct">11.5%</span></div>
+        <div class="bar-row"><span class="b-lbl">Exams</span><div class="b-track"><div class="b-fill bar-fill-3"></div></div><span class="b-pct">10.3%</span></div>
+        <div class="bar-row"><span class="b-lbl">Respiratory</span><div class="b-track"><div class="b-fill bar-fill-4"></div></div><span class="b-pct">9.2%</span></div>
+        <div class="bar-row"><span class="b-lbl">EKG</span><div class="b-track"><div class="b-fill bar-fill-5"></div></div><span class="b-pct">8.9%</span></div>
+      </div>
+      <p class="mute" style="font-size:.85em;margin-top:.8em">Tune for <span class="cyan">ASSERTIVENESS</span> — strong-evidence sections only.</p>
+    </div>
+    <div class="card" style="border-color:var(--magenta)">
+      <span class="tag magenta" style="border-color:var(--magenta)">ED SUMMARY · OBJECTIVE BULK OVER-GENERATION</span>
+      <div class="bar-chart">
+        <div class="bar-row r"><span class="b-lbl">Vitals</span><div class="b-track"><div class="b-fill bar-fill-6"></div></div><span class="b-pct">17.1%</span></div>
+        <div class="bar-row r"><span class="b-lbl">Labs</span><div class="b-track"><div class="b-fill bar-fill-7"></div></div><span class="b-pct">16.9%</span></div>
+        <div class="bar-row r"><span class="b-lbl">Imaging</span><div class="b-track"><div class="b-fill bar-fill-8"></div></div><span class="b-pct">16.3%</span></div>
+        <div class="bar-row r"><span class="b-lbl">Therapy</span><div class="b-track"><div class="b-fill bar-fill-9"></div></div><span class="b-pct">14.0%</span></div>
+        <div class="bar-row r"><span class="b-lbl">Exams</span><div class="b-track"><div class="b-fill bar-fill-10"></div></div><span class="b-pct">13.7%</span></div>
+      </div>
+      <p class="mute" style="font-size:.85em;margin-top:.8em">Tune for <span class="magenta">SELECTIVITY</span> — only abnormal / critical values.</p>
+    </div>
+  </div>
+  <div class="reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1.2rem">
+    <div class="step" style="padding:.9rem"><span class="no">Pillar 01</span><h4 style="font-size:.95em">Page Classification &amp; Dedup</h4></div>
+    <div class="step" style="padding:.9rem"><span class="no">Pillar 02</span><h4 style="font-size:.95em">Missing Vitals / Lab Resolution</h4></div>
+    <div class="step" style="padding:.9rem"><span class="no">Pillar 03</span><h4 style="font-size:.95em">User Behavior Deep Dive</h4></div>
+    <div class="step" style="padding:.9rem"><span class="no">Pillar 04</span><h4 style="font-size:.95em">UX Enablement</h4></div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 08 — GPT-4o → GEMINI VISION PIPELINE -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Vision migration">
+  <span class="eyebrow reveal">07 · Technical architecture</span>
+  <h2 class="reveal">GPT-4o → Gemini Vision. <span class="cyan">Page by page.</span></h2>
+  <p class="reveal mute" style="max-width:62ch;font-size:.95em;margin-bottom:1rem">
+    Switch the LLM backbone from GPT-4o (OCR text in) to Gemini-1.5-pro-002 Vision (image in).
+    Preserve the rest of the pipeline. No UI change.
+  </p>
+  <div class="reveal" style="margin-bottom:1rem">
+    <div class="pipe-label now"><span>CURRENT PIPELINE</span><span class="mono">v1 · GPT-4o + OCR</span></div>
+    <div class="pipe legacy">
+      <div class="nd"><div class="ic">📄</div><div class="nt">Document</div><div class="ns">Faxed PDF</div></div>
+      <div class="arr">→</div>
+      <div class="nd"><div class="ic">🔤</div><div class="nt">OCR</div><div class="ns">Layout-based</div></div>
+      <div class="arr">→</div>
+      <div class="nd"><div class="ic">🧠</div><div class="nt">GPT-4o</div><div class="ns">Azure OpenAI</div></div>
+      <div class="arr">→</div>
+      <div class="nd"><div class="ic">📋</div><div class="nt">Summary</div><div class="ns">QuickBase</div></div>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="pipe-label new"><span>● UPDATED PIPELINE · GEMINI VISION</span><span class="mono">v2 · multimodal</span></div>
+    <div class="pipe proposed">
+      <div class="nd"><div class="ic">📄</div><div class="nt">Document</div><div class="ns">Faxed PDF</div></div>
+      <div class="arr">→</div>
+      <div class="nd"><div class="ic">🖼</div><div class="nt">Page Image</div><div class="ns">Per-page render</div></div>
+      <div class="arr">→</div>
+      <div class="nd"><div class="ic">👁</div><div class="nt">Gemini Vision</div><div class="ns">1.5-pro-002</div></div>
+      <div class="arr">→</div>
+      <div class="nd"><div class="ic">📋</div><div class="nt">Summary</div><div class="ns">QuickBase + cites</div></div>
+    </div>
+  </div>
+  <div class="hi-row reveal">
+    <div class="hi a">
+      <div class="hd">Why Vision</div>
+      <ul>
+        <li>Word position + layout context preserved</li>
+        <li>Faxes that break OCR still parse cleanly</li>
+        <li>Native PDF page handling</li>
+      </ul>
+    </div>
+    <div class="hi g">
+      <div class="hd">Economics</div>
+      <ul>
+        <li>GPT-4o image: <span class="mono amber">$0.001 / img</span></li>
+        <li>Gemini Pro image: <span class="mono amber">$0.0003 / img</span> · ~3× cheaper</li>
+        <li>Reduced OCR dependency</li>
+      </ul>
+    </div>
+    <div class="hi r">
+      <div class="hd">Targets</div>
+      <ul>
+        <li>95%+ summarization accuracy</li>
+        <li>&lt;1% pipeline failure rate</li>
+        <li>100K+ requests / day at scale</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 09 — INSIDE THE PIPELINE (SVG DIAGRAM) -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Page-by-page">
+  <span class="eyebrow reveal">07b · Technical architecture</span>
+  <h2 class="reveal">Inside the pipeline. <span class="cyan">Page-by-page extraction.</span></h2>
+  <p class="reveal mute" style="max-width:64ch;font-size:.95em">
+    Each PDF page → Vision call → aggregated into one mini-document per source doc → mapped to fields with page citations.
+  </p>
+  <div class="svg-wrap reveal-blur">
+    <svg viewBox="0 0 1400 460" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrC" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#008f74"/></marker>
+        <marker id="arrM" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#cc0040"/></marker>
+        <marker id="arrW" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a92a8"/></marker>
+        <linearGradient id="g-cyan" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#008f74"/>
+          <stop offset="100%" stop-color="#006b58"/>
+        </linearGradient>
+        <linearGradient id="g-mag" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#cc0040"/>
+          <stop offset="100%" stop-color="#c93072"/>
+        </linearGradient>
+      </defs>
+      <!-- stage labels -->
+      <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="600" fill="#8a92a8" letter-spacing="2">
+        <text x="130" y="32" text-anchor="middle">INPUT</text>
+        <text x="370" y="32" text-anchor="middle">PAGE IMAGES</text>
+        <text x="660" y="32" text-anchor="middle">EXTRACTION</text>
+        <text x="950" y="32" text-anchor="middle">AGGREGATION</text>
+        <text x="1230" y="32" text-anchor="middle">FIELD MAPPING</text>
+      </g>
+      <!-- Source PDF -->
+      <rect x="30" y="155" width="200" height="120" rx="14" fill="#ffffff" stroke="#1f2a44" stroke-width="1.5"/>
+      <text x="130" y="200" text-anchor="middle" fill="#1a1d23" font-family="Clash Display, sans-serif" font-size="16" font-weight="700">📄  Source PDF</text>
+      <text x="130" y="227" text-anchor="middle" fill="#008f74" font-family="JetBrains Mono" font-size="11">ED Notes</text>
+      <text x="130" y="245" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="11">12 pages</text>
+      <!-- pages stack -->
+      <g font-family="JetBrains Mono" font-size="11" fill="#008f74" text-anchor="middle">
+        <rect x="290" y="125" width="160" height="44" rx="8" fill="#ffffff" stroke="#008f74" stroke-width="1.5"/>
+        <text x="370" y="151">🖼  Page 1</text>
+        <rect x="290" y="178" width="160" height="44" rx="8" fill="#ffffff" stroke="#008f74" stroke-width="1.5"/>
+        <text x="370" y="204">🖼  Page 2</text>
+        <rect x="290" y="231" width="160" height="44" rx="8" fill="#ffffff" stroke="#008f74" stroke-width="1.5"/>
+        <text x="370" y="257">🖼  Page 3</text>
+        <rect x="290" y="284" width="160" height="44" rx="8" fill="#ffffff" stroke="#008f74" stroke-width="1.5"/>
+        <text x="370" y="310">🖼  Page N</text>
+      </g>
+      <!-- PDF → pages -->
+      <path d="M230,215 L290,215" stroke="#8a92a8" stroke-width="2" fill="none" marker-end="url(#arrW)"/>
+      <!-- Vision LLM box -->
+      <rect x="510" y="145" width="280" height="180" rx="14" fill="#ffffff" stroke="url(#g-mag)" stroke-width="2"/>
+      <text x="650" y="180" text-anchor="middle" fill="#cc0040" font-family="Clash Display" font-size="17" font-weight="700">👁  GEMINI VISION</text>
+      <text x="650" y="205" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="11">Per-page · 2 extraction Qs</text>
+      <rect x="530" y="225" width="240" height="36" rx="6" fill="#fafaf7" stroke="#cc0040" stroke-width="1"/>
+      <text x="650" y="248" text-anchor="middle" fill="#1a1d23" font-family="Satoshi" font-size="12">Q1 · clinical content</text>
+      <rect x="530" y="270" width="240" height="36" rx="6" fill="#fafaf7" stroke="#cc0040" stroke-width="1"/>
+      <text x="650" y="293" text-anchor="middle" fill="#1a1d23" font-family="Satoshi" font-size="12">Q2 · dates + references</text>
+      <!-- pages → vision -->
+      <path d="M450,147 C480,160 490,200 510,210" stroke="#008f74" stroke-width="1.5" fill="none" marker-end="url(#arrC)"/>
+      <path d="M450,200 C480,210 490,225 510,235" stroke="#008f74" stroke-width="1.5" fill="none" marker-end="url(#arrC)"/>
+      <path d="M450,253 C480,260 490,255 510,260" stroke="#008f74" stroke-width="1.5" fill="none" marker-end="url(#arrC)"/>
+      <path d="M450,306 C480,300 490,285 510,285" stroke="#008f74" stroke-width="1.5" fill="none" marker-end="url(#arrC)"/>
+      <!-- Aggregation -->
+      <rect x="850" y="170" width="220" height="130" rx="14" fill="#ffffff" stroke="url(#g-cyan)" stroke-width="2"/>
+      <text x="960" y="208" text-anchor="middle" fill="#008f74" font-family="Clash Display" font-size="16" font-weight="700">🧩  AGGREGATION</text>
+      <text x="960" y="240" text-anchor="middle" fill="#1a1d23" font-family="Satoshi" font-size="12">1 mini-document</text>
+      <text x="960" y="260" text-anchor="middle" fill="#1a1d23" font-family="Satoshi" font-size="12">per source doc</text>
+      <text x="960" y="282" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">deduplicated · reconciled</text>
+      <path d="M790,235 L850,235" stroke="#cc0040" stroke-width="2.5" fill="none" marker-end="url(#arrM)"/>
+      <!-- Mapping + parser -->
+      <rect x="1120" y="170" width="220" height="130" rx="14" fill="#ffffff" stroke="#008f74" stroke-width="1.5"/>
+      <text x="1230" y="200" text-anchor="middle" fill="#008f74" font-family="Clash Display" font-size="14" font-weight="700">🗺  MAPPING +</text>
+      <text x="1230" y="219" text-anchor="middle" fill="#008f74" font-family="Clash Display" font-size="14" font-weight="700">PARSER</text>
+      <text x="1230" y="250" text-anchor="middle" fill="#1a1d23" font-family="Satoshi" font-size="12">Field assignment</text>
+      <text x="1230" y="270" text-anchor="middle" fill="#1a1d23" font-family="Satoshi" font-size="12">Page citations</text>
+      <path d="M1070,235 L1120,235" stroke="#008f74" stroke-width="2.5" fill="none" marker-end="url(#arrC)"/>
+
+      <!-- Output strip -->
+      <rect x="30" y="370" width="1310" height="64" rx="12" fill="#ffffff" stroke="#1f2a44"/>
+      <text x="50" y="395" fill="#008f74" font-family="JetBrains Mono" font-size="11" font-weight="700" letter-spacing="2">STRUCTURED OUTPUT  →  QUICKBASE TEMPLATE</text>
+      <g font-family="Satoshi" font-size="12" fill="#1a1d23">
+        <text x="50" y="420">📌 HPI / CC · 1 field</text>
+        <text x="290" y="420">📌 ED Summary · 12 fields · pp. 1–4</text>
+        <text x="640" y="420">📌 Clinical Summary · 8 fields · pp. 5–10</text>
+        <text x="1070" y="420">📌 PMH · 5 fields · pp. 2, 7</text>
+      </g>
+    </svg>
+  </div>
+  <div class="reveal" style="margin-top:.6rem;display:flex;gap:.5rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:.7em;letter-spacing:.12em;text-transform:uppercase">
+    <span class="tag" style="color:var(--cyan);border-color:var(--cyan)">extraction Qs update</span>
+    <span class="tag" style="color:var(--cyan);border-color:var(--cyan)">aggregation + mapping</span>
+    <span class="tag" style="color:var(--cyan);border-color:var(--cyan)">prompt + parser</span>
+    <span class="tag" style="color:var(--ink-mute);border-color:var(--ink-mute)">non-LLM header/footer</span>
+    <span class="tag" style="color:var(--amber);border-color:var(--amber)">UI: no change</span>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 10 — ROADMAP -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Roadmap">
+  <span class="eyebrow reveal">08 · Accuracy roadmap</span>
+  <h2 class="reveal">Phased plan. <span class="cyan">Each fix compounds.</span> May → Oct 2026.</h2>
+  <p class="reveal mute" style="max-width:60ch;font-size:.92em">
+    Baseline (Jan–Apr '26): 460 👍 / 439 👎 from 268 unique cases.
+  </p>
+  <div class="tl reveal">
+    <div class="track"></div>
+    <div class="pts">
+      <div class="pt r1">1</div>
+      <div class="pt r2">2</div>
+      <div class="pt r3">3</div>
+      <div class="pt r4">4</div>
+    </div>
+  </div>
+  <div class="road reveal">
+    <div class="ph r1">
+      <div class="hd">MAY '26</div>
+      <div class="bd">
+        <div class="ttl">Doc-Reference Recovery</div>
+        <div class="type">Backend fuzzy-match</div>
+        <div class="desc">Recovers <span class="cyan mono">1,714 / 1,762</span> historical failures (~97%). No prompt or model change. Backend-only.</div>
+        <div class="lift">~31%</div>
+      </div>
+    </div>
+    <div class="ph r2">
+      <div class="hd">JUN '26</div>
+      <div class="bd">
+        <div class="ttl">Prompt + Function</div>
+        <div class="type">Prompt engineering</div>
+        <div class="desc">Date logic (planned vs actual), administered vs ordered meds, patient anchoring. Grounded in nurse-flagged cases.</div>
+        <div class="lift">~44%</div>
+      </div>
+    </div>
+    <div class="ph r3">
+      <div class="hd">AUG '26</div>
+      <div class="bd">
+        <div class="ttl">Page Classification</div>
+        <div class="type">ML pre-processing</div>
+        <div class="desc">ML layer filters duplicate / irrelevant pages before the LLM sees content. Foundational input-quality fix.</div>
+        <div class="lift">~30%</div>
+      </div>
+    </div>
+    <div class="ph r4">
+      <div class="hd">OCT '26</div>
+      <div class="bd">
+        <div class="ttl">Model Upgrade</div>
+        <div class="type">Foundation model refresh</div>
+        <div class="desc">Gemini 3.1 — stronger long-context reasoning, lower hallucination, compounding lift across all categories.</div>
+        <div class="lift">95%+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 11 — AGENTIC AI ARCHITECTURE -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Agentic">
+  <span class="eyebrow reveal">09 · Technical architecture</span>
+  <h2 class="reveal">Agentic AI. <span class="cyan">Next-gen modular pipeline.</span></h2>
+  <p class="reveal mute" style="max-width:64ch;font-size:.92em">
+    Root orchestrator + modular agents. Same pattern for IP, SNF, Spine — different components per pillar.
+  </p>
+  <div class="svg-wrap reveal-blur">
+    <svg viewBox="0 0 1400 510" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ag-c" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#008f74"/></marker>
+        <marker id="ag-m" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#cc0040"/></marker>
+        <marker id="ag-v" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#5b3fb8"/></marker>
+        <marker id="ag-w" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a92a8"/></marker>
+      </defs>
+      <g font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#8a92a8" letter-spacing="2">
+        <text x="130" y="30" text-anchor="middle">INPUTS</text>
+        <text x="700" y="30" text-anchor="middle">ORCHESTRATION</text>
+        <text x="130" y="250" text-anchor="middle">STRUCTURE CRITERIA</text>
+      </g>
+      <!-- Inputs -->
+      <rect x="30" y="48" width="200" height="76" rx="12" fill="#ffffff" stroke="#1f2a44"/>
+      <text x="130" y="82" text-anchor="middle" fill="#1a1d23" font-family="Clash Display" font-size="14" font-weight="700">📄  Clinical Docs</text>
+      <text x="130" y="105" text-anchor="middle" fill="#008f74" font-family="JetBrains Mono" font-size="10">PDFs · faxes · EMR</text>
+      <rect x="30" y="140" width="200" height="76" rx="12" fill="#ffffff" stroke="#1f2a44"/>
+      <text x="130" y="174" text-anchor="middle" fill="#1a1d23" font-family="Clash Display" font-size="14" font-weight="700">📑  MCG Criteria</text>
+      <text x="130" y="197" text-anchor="middle" fill="#008f74" font-family="JetBrains Mono" font-size="10">Unstructured</text>
+
+      <!-- Criteria Decomposer -->
+      <rect x="30" y="270" width="200" height="86" rx="12" fill="#ffffff" stroke="#5b3fb8" stroke-width="2"/>
+      <text x="130" y="300" text-anchor="middle" fill="#5b3fb8" font-family="Clash Display" font-size="13" font-weight="700">🔧  Criteria</text>
+      <text x="130" y="318" text-anchor="middle" fill="#5b3fb8" font-family="Clash Display" font-size="13" font-weight="700">Decomposer</text>
+      <text x="130" y="340" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.0 Flash</text>
+
+      <!-- Root orchestrator -->
+      <rect x="570" y="50" width="260" height="80" rx="14" fill="#cc0040"/>
+      <text x="700" y="84" text-anchor="middle" fill="#ffffff" font-family="Clash Display" font-size="16" font-weight="700">🎯  ROOT ORCHESTRATOR</text>
+      <text x="700" y="108" text-anchor="middle" fill="rgba(255,255,255,.85)" font-family="JetBrains Mono" font-size="10">agent coordination</text>
+
+      <!-- arrows inputs → orchestrator -->
+      <path d="M230,86 L570,86" stroke="#8a92a8" stroke-width="2" fill="none" marker-end="url(#ag-w)"/>
+      <path d="M230,178 L570,118" stroke="#8a92a8" stroke-width="2" fill="none" marker-end="url(#ag-w)"/>
+      <!-- orchestrator → band 1 -->
+      <path d="M700,130 L700,180" stroke="#cc0040" stroke-width="2.5" fill="none" marker-end="url(#ag-m)"/>
+
+      <!-- Band 1 -->
+      <rect x="280" y="180" width="1090" height="130" rx="14" fill="rgba(0,143,116,.07)" stroke="#1f2a44"/>
+      <text x="300" y="206" fill="#008f74" font-family="JetBrains Mono" font-size="11" font-weight="700" letter-spacing="2">1 · RETRIEVE CLINICAL INFORMATION</text>
+      <g>
+        <rect x="300" y="220" width="330" height="80" rx="10" fill="#ffffff" stroke="#008f74"/>
+        <text x="465" y="252" text-anchor="middle" fill="#008f74" font-family="Clash Display" font-size="14" font-weight="700">📚  Document Organizer</text>
+        <text x="465" y="278" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.5 Flash</text>
+        <rect x="650" y="220" width="330" height="80" rx="10" fill="#ffffff" stroke="#008f74"/>
+        <text x="815" y="252" text-anchor="middle" fill="#008f74" font-family="Clash Display" font-size="14" font-weight="700">🔍  Clinical Extraction</text>
+        <text x="815" y="278" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.5 Flash</text>
+        <rect x="1000" y="220" width="350" height="80" rx="10" fill="#ffffff" stroke="#008f74"/>
+        <text x="1175" y="252" text-anchor="middle" fill="#008f74" font-family="Clash Display" font-size="14" font-weight="700">🧭  RAG Context Retrieval</text>
+        <text x="1175" y="278" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.0 Flash</text>
+      </g>
+      <path d="M230,313 L300,260" stroke="#5b3fb8" stroke-width="2" fill="none" marker-end="url(#ag-v)"/>
+
+      <!-- Band 2 -->
+      <rect x="280" y="325" width="1090" height="130" rx="14" fill="rgba(204,0,64,.05)" stroke="#1f2a44"/>
+      <text x="300" y="351" fill="#cc0040" font-family="JetBrains Mono" font-size="11" font-weight="700" letter-spacing="2">2 · DECISION MAKING + RESULTS SUMMARIZATION</text>
+      <g>
+        <rect x="300" y="365" width="245" height="80" rx="10" fill="#ffffff" stroke="#cc0040"/>
+        <text x="422" y="395" text-anchor="middle" fill="#cc0040" font-family="Clash Display" font-size="13" font-weight="700">📊  Criteria Summarizer</text>
+        <text x="422" y="421" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.5 Flash</text>
+        <rect x="565" y="365" width="245" height="80" rx="10" fill="#ffffff" stroke="#cc0040"/>
+        <text x="687" y="395" text-anchor="middle" fill="#cc0040" font-family="Clash Display" font-size="13" font-weight="700">⚖️  Decision Agent</text>
+        <text x="687" y="421" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.0 Flash</text>
+        <rect x="830" y="365" width="245" height="80" rx="10" fill="#ffffff" stroke="#cc0040"/>
+        <text x="952" y="395" text-anchor="middle" fill="#cc0040" font-family="Clash Display" font-size="13" font-weight="700">🧮  Decision Aggregator</text>
+        <text x="952" y="421" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Rule-based</text>
+        <rect x="1095" y="365" width="255" height="80" rx="10" fill="#ffffff" stroke="#cc0040"/>
+        <text x="1222" y="395" text-anchor="middle" fill="#cc0040" font-family="Clash Display" font-size="13" font-weight="700">📝  Rationale Agent</text>
+        <text x="1222" y="421" text-anchor="middle" fill="#8a92a8" font-family="JetBrains Mono" font-size="10">Gemini 2.0 Flash</text>
+      </g>
+      <path d="M815,310 L815,325" stroke="#8a92a8" stroke-width="2.5" fill="none" marker-end="url(#ag-w)"/>
+
+      <!-- Output -->
+      <rect x="30" y="478" width="1340" height="28" rx="8" fill="#fafaf7" stroke="#008f74"/>
+      <text x="50" y="497" fill="#008f74" font-family="JetBrains Mono" font-size="11" font-weight="700" letter-spacing="2">OUTPUT →</text>
+      <text x="170" y="497" fill="#1a1d23" font-family="Satoshi" font-size="12">⚡ Atomic decision  ·  📌 Cited evidence  ·  📝 Rationale  ·  ✅ Final case outcome</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 12 — IP vs SNF COMPARE -->
+<!-- ========================================================== -->
+<section class="slide" data-label="IP vs SNF">
+  <span class="eyebrow reveal">09b · Same pattern, different shape</span>
+  <h2 class="reveal">Inpatient Acute vs SNF. <span class="cyan">Open decisions, surfaced.</span></h2>
+  <div class="cmp reveal">
+    <div class="h l">INPATIENT ACUTE</div>
+    <div></div>
+    <div class="h r">SNF · POST-ACUTE</div>
+    <div class="v">Existing Gemini summary + RAG vector DB</div>
+    <div class="lbl">Extraction</div>
+    <div class="v">Built from scratch · document structurer</div>
+    <div class="v">Decomposer for 20+ diagnoses (MCG)</div>
+    <div class="lbl">Criteria</div>
+    <div class="v">Fixed 1 criteria set (simpler)</div>
+    <div class="v">Dynamic UI by diagnosis · rationale display</div>
+    <div class="lbl">Front-end</div>
+    <div class="v">Static UI from back-end data</div>
+    <div class="v">LangChain</div>
+    <div class="lbl">Framework</div>
+    <div class="v">Google ADK</div>
+    <div class="v">Gemini 2.0 Flash</div>
+    <div class="lbl">Model</div>
+    <div class="v">Gemini 2.5 Flash + thinking</div>
+    <div class="v">~3–5 min</div>
+    <div class="lbl">Latency</div>
+    <div class="v">~10 min</div>
+  </div>
+  <div class="od reveal">
+    <div class="k">Open decisions →</div>
+    <div class="b">Framework alignment (LangChain vs ADK)  ·  cost + latency at scale  ·  single generalized pipeline vs two</div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 13 — ARC (3 PHASES) -->
+<!-- ========================================================== -->
+<section class="slide" data-label="The arc">
+  <span class="eyebrow reveal">10 · The arc</span>
+  <h2 class="reveal">Each phase was only possible <span class="cyan">because of the last.</span></h2>
+  <div class="arc reveal">
+    <div class="ph a">
+      <div class="hd">PHASE 1 · 2024</div>
+      <div class="bd">
+        <div class="t">Clinical Document Assistant</div>
+        <ul>
+          <li>Unified per-case viewer</li>
+          <li>Cross-document search</li>
+          <li>→ DATA foundation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="conn">→</div>
+    <div class="ph r">
+      <div class="hd">PHASE 2 · TODAY</div>
+      <div class="bd">
+        <div class="t">CDST</div>
+        <ul>
+          <li>AI summarization</li>
+          <li>Field auto-population</li>
+          <li>In-app feedback loop</li>
+          <li>→ TRUST foundation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="conn">→</div>
+    <div class="ph g">
+      <div class="hd">PHASE 3 · Q3/Q4 '26</div>
+      <div class="bd">
+        <div class="t">Agentic AI</div>
+        <ul>
+          <li>Criteria-aware agents</li>
+          <li>Cited evidence</li>
+          <li>Decision recommendations</li>
+          <li>→ Nurse = DECISION-VALIDATOR</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p class="reveal" style="text-align:center;margin-top:2rem;font-family:var(--font-display);font-size:1.3em;color:var(--ink)">
+    Same co-pilot principle, expanding scope.<br>
+    <span class="cyan">Human clinical judgment always retained.</span>
+  </p>
+</section>
+
+<!-- ========================================================== -->
+<!-- 14 — HOW I USE AI PERSONALLY -->
+<!-- ========================================================== -->
+<section class="slide" data-label="My AI workflow">
+  <span class="eyebrow reveal">11 · How I use AI personally</span>
+  <h2 class="reveal">It's not just the product. <span class="cyan">It's how I work every day.</span></h2>
+  <p class="reveal mute" style="max-width:60ch;font-size:.95em;margin-bottom:1rem">
+    Same principle as CDST — AI accelerates, I decide. Here's my personal stack.
+  </p>
+  <div class="reveal" style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:1.2rem">
+    <div class="step" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:1.8em;line-height:1">📊</div>
+      <span class="no">USE 01</span>
+      <h4>Analysis</h4>
+      <p>BigQuery pulls, feedback bucketing, edit-pattern detection. AI does the heavy lifting; I bring the hypothesis &amp; spot-audit.</p>
+    </div>
+    <div class="step" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:1.8em;line-height:1">🎯</div>
+      <span class="no">USE 02</span>
+      <h4>PowerPoint</h4>
+      <p>From CSV to a stakeholder-ready deck in one prompt. No designer, no template wrestling — just the story.</p>
+    </div>
+    <div class="step" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:1.8em;line-height:1">🛠</div>
+      <span class="no">USE 03</span>
+      <h4>Create Apps</h4>
+      <p>Streamlit dashboards, internal tools, prototypes. Ship a feedback dashboard or case-timeline tool in a day instead of a sprint.</p>
+    </div>
+    <div class="step" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:1.8em;line-height:1">📦</div>
+      <span class="no">USE 04</span>
+      <h4>Build Artifacts</h4>
+      <p>Excel trackers, Word reports, FRDs, mock UIs, architecture diagrams. The plumbing every PM owes their team — without the wait.</p>
+    </div>
+    <div class="step" style="display:flex;flex-direction:column;gap:.5rem">
+      <div style="font-size:1.8em;line-height:1">🤖</div>
+      <span class="no">USE 05</span>
+      <h4>Hermes Agent</h4>
+      <p>Daily standup in my inbox. Pipeline status, feedback delta, what shipped, what broke — auto-summarized while I sleep.</p>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:1.6rem;padding:1.2rem 1.6rem;border-left:3px solid var(--cyan);background:var(--bg-2);border-radius:0 12px 12px 0;max-width:70ch">
+    <p style="font-family:var(--font-display);font-size:1.15em;line-height:1.35">
+      <span class="cyan">Zero tickets filed.</span> Zero meetings about meetings.
+      I run my own data, draft my own artifacts, and ship my own analysis — so DS &amp; Eng can build, not export.
+    </p>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 15 — CLOSING / TAKEAWAYS -->
+<!-- ========================================================== -->
+<section class="slide punch-slide" data-label="Closing">
+  <div class="blob tl"></div>
+  <div class="blob br"></div>
+  <span class="eyebrow reveal" style="justify-content:center">12 · Takeaways</span>
+  <h2 class="reveal mega" style="text-align:center">
+    The hard part isn't the AI.<br>
+    <span class="cyan">It's earning trust.</span>
+  </h2>
+  <p class="reveal sub">
+    And we did — 95% adoption, 15–20% time saved, $16M SAI.
+    <br>Agentic AI is next, only because we earned it.
+  </p>
+  <div class="reveal" style="margin-top:3rem;display:flex;justify-content:center;gap:clamp(1.5rem,4vw,4rem);flex-wrap:wrap">
+    <div><div class="kpi">95%</div><div class="kpi-label">Adoption</div></div>
+    <div><div class="kpi">$16M</div><div class="kpi-label">SAI booked</div></div>
+    <div><div class="kpi">14</div><div class="kpi-label">Months from launch</div></div>
+    <div><div class="kpi">Q3/Q4 '26</div><div class="kpi-label">Agentic horizon</div></div>
+  </div>
+  <span class="reveal ribbon">Thank you  ·  Questions?</span>
+</section>
+
+<script>
+(() => {
+  const slides   = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const dotsEl   = document.getElementById('dots');
+  const curEl    = document.getElementById('cur');
+  const totEl    = document.getElementById('tot');
+  totEl.textContent = String(slides.length).padStart(2,'0');
+
+  dotsEl.innerHTML = '';
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', `Slide ${i+1}`);
+    b.setAttribute('data-label', s.dataset.label || `Slide ${i+1}`);
+    b.addEventListener('click', () => s.scrollIntoView({behavior:'smooth'}));
+    dotsEl.appendChild(b);
+  });
+  const dotBtns = dotsEl.querySelectorAll('button');
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.intersectionRatio > 0.5) {
+        e.target.classList.add('visible');
+        const idx = [...slides].indexOf(e.target);
+        dotBtns.forEach((d,i) => d.classList.toggle('active', i === idx));
+        curEl.textContent = String(idx+1).padStart(2,'0');
+        progress.style.width = (((idx+1) / slides.length) * 100) + '%';
+      }
+    });
+  }, { threshold:[0, .5, 1] });
+  slides.forEach(s => io.observe(s));
+
+  let current = 0;
+  const goto = (i) => {
+    current = Math.max(0, Math.min(slides.length-1, i));
+    slides[current].scrollIntoView({behavior:'smooth'});
+  };
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowDown','PageDown','ArrowRight',' '].includes(e.key)) { e.preventDefault(); goto(current+1); }
+    if (['ArrowUp','PageUp','ArrowLeft'].includes(e.key))         { e.preventDefault(); goto(current-1); }
+    if (e.key === 'Home') { e.preventDefault(); goto(0); }
+    if (e.key === 'End')  { e.preventDefault(); goto(slides.length-1); }
+  });
+
+  window.addEventListener('scroll', () => {
+    const idx = Math.round(window.scrollY / window.innerHeight);
+    current = idx;
+  }, {passive:true});
+
+  let touchY = 0;
+  document.addEventListener('touchstart', e => touchY = e.touches[0].clientY, {passive:true});
+  document.addEventListener('touchend',   e => {
+    const dy = touchY - e.changedTouches[0].clientY;
+    if (Math.abs(dy) > 60) goto(current + (dy > 0 ? 1 : -1));
+  }, {passive:true});
+})();
+</script>
+</body>
+</html>
