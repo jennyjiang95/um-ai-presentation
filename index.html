@@ -92,7 +92,8 @@ h1 .underline::after{
 .decks.single .deck{padding:2.2rem}
 .decks.single .deck h2{font-size:clamp(1.8rem,3.6vw,2.8rem)}
 .decks.single .deck .thumb{height:340px}
-@media (max-width:900px){.decks.split{grid-template-columns:1fr}}
+@media (max-width:1100px){#decks[style*="repeat(3"]{grid-template-columns:1fr 1fr!important}}
+@media (max-width:700px){#decks{grid-template-columns:1fr!important}}
 
 .deck{
   background:var(--bg-2);border:1px solid var(--line);border-radius:18px;
@@ -224,22 +225,23 @@ footer a:hover{text-decoration:underline}
 
   <span class="eyebrow">Pick your view</span>
   <h1>
-    Two decks.<br>
+    Three decks.<br>
     One <span class="underline">story</span>
     <span class="accent">.</span>
   </h1>
   <p class="subtitle">
-    The main UM × AI showcase, and the Claude × Hermes use-case deep dive.
+    The full UM × AI showcase, the Claude × Hermes use-case deep dive, and a personal journey through AI — work and life intertwined.
     Open one at a time, or compare side-by-side.
   </p>
 
   <div class="toggle" role="tablist">
-    <button id="m-both" class="active" role="tab">▦  Show Both</button>
+    <button id="m-both" class="active" role="tab">▦  Show All</button>
     <button id="m-um" role="tab">UM × AI Only</button>
     <button id="m-her" role="tab">Hermes Only</button>
+    <button id="m-journey" role="tab">AI Journey Only</button>
   </div>
 
-  <div class="decks split" id="decks">
+  <div class="decks" id="decks" style="grid-template-columns:repeat(3,1fr)">
 
     <!-- DECK 1 — UM × AI -->
     <div class="deck" id="d-um">
@@ -310,6 +312,45 @@ footer a:hover{text-decoration:underline}
       </div>
     </div>
 
+    <!-- DECK 3 — AI JOURNEY PERSONAL -->
+    <div class="deck" id="d-journey" style="border-left-color:var(--amber)">
+      <div class="tag-row">
+        <span class="tag a">PERSONAL STORY</span>
+        <span class="tag a">14 slides</span>
+        <span class="tag mute">Interactive</span>
+      </div>
+      <div class="thumb" style="background:linear-gradient(135deg,rgba(196,122,0,.06) 0%,var(--bg) 100%)">
+        <div class="thumb-slide" style="border-left:2px solid var(--amber)">
+          <div class="t-eye" style="color:var(--amber)">AI Journey · Personal × Work</div>
+          <div class="t-h">My AI story:<br>work <span class="acc">meets</span> life.</div>
+          <div class="t-grid">
+            <div class="t-c" style="border-left-color:var(--amber)"></div>
+            <div class="t-c" style="border-left-color:var(--amber)"></div>
+            <div class="t-c" style="border-left-color:var(--amber)"></div>
+          </div>
+          <div class="t-bars">
+            <div class="t-b" style="border-bottom:3px solid var(--amber)"></div>
+            <div class="t-b"></div>
+            <div class="t-b" style="border-bottom:3px solid var(--amber)"></div>
+            <div class="t-b"></div>
+          </div>
+        </div>
+      </div>
+      <h2 style="color:var(--ink)">My AI Journey <span class="acc">— Personal × Work × Technology</span></h2>
+      <p class="desc">
+        A personal narrative: from Costco expense chaos to clinical auto-approval agents.
+        OpenClaw (Jan/Feb), Hermes (April), the agent year — tied to the technology timeline.
+      </p>
+      <div class="meta" style="border-top-color:var(--line)">
+        <span>14 slides</span>
+        <span>Personal + Work</span>
+        <span>Technology timeline</span>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="ai-journey-personal.html" style="background:var(--amber);border-color:var(--amber)">Open Deck →</a>
+      </div>
+    </div>
+
   </div>
 
   <footer>
@@ -321,20 +362,26 @@ footer a:hover{text-decoration:underline}
 <script>
   const decks = document.getElementById('decks');
   const buttons = {
-    both: document.getElementById('m-both'),
-    um:   document.getElementById('m-um'),
-    her:  document.getElementById('m-her'),
+    both:    document.getElementById('m-both'),
+    um:      document.getElementById('m-um'),
+    her:     document.getElementById('m-her'),
+    journey: document.getElementById('m-journey'),
   };
   const setMode = (mode) => {
     Object.entries(buttons).forEach(([k,b]) => b.classList.toggle('active', k===mode));
-    document.getElementById('d-um').style.display  = (mode==='her') ? 'none' : '';
-    document.getElementById('d-her').style.display = (mode==='um')  ? 'none' : '';
-    decks.classList.toggle('split',  mode==='both');
-    decks.classList.toggle('single', mode!=='both');
+    document.getElementById('d-um').style.display      = (mode==='her'||mode==='journey') ? 'none' : '';
+    document.getElementById('d-her').style.display     = (mode==='um' ||mode==='journey') ? 'none' : '';
+    document.getElementById('d-journey').style.display = (mode==='um' ||mode==='her')     ? 'none' : '';
+    if(mode==='both'){
+      decks.style.gridTemplateColumns='repeat(3,1fr)';
+    } else {
+      decks.style.gridTemplateColumns='1fr';
+    }
   };
-  buttons.both.onclick = () => setMode('both');
-  buttons.um.onclick   = () => setMode('um');
-  buttons.her.onclick  = () => setMode('her');
+  buttons.both.onclick    = () => setMode('both');
+  buttons.um.onclick      = () => setMode('um');
+  buttons.her.onclick     = () => setMode('her');
+  buttons.journey.onclick = () => setMode('journey');
 </script>
 </body>
 </html>

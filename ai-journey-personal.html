@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My AI Journey — Personal × Work</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@400,500&display=swap" />
+<style>
+:root{
+  --bg:#fafaf7;
+  --bg-2:#ffffff;
+  --bg-3:#f0f1ee;
+  --ink:#1a1d23;
+  --ink-mute:#6b7280;
+  --line:#e4e6ea;
+  --cyan:#008f74;
+  --cyan-d:#006b58;
+  --cyan-glow:rgba(0,143,116,.18);
+  --magenta:#cc0040;
+  --amber:#c47a00;
+  --violet:#5b3fb8;
+  --personal:#e05c1a;
+  --work:#1a6ee0;
+
+  --font-display:"Clash Display","Satoshi",sans-serif;
+  --font-body:"Satoshi",-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+
+  --h1:clamp(2.4rem,6.5vw,5.6rem);
+  --h2:clamp(1.6rem,3.2vw,2.8rem);
+  --h3:clamp(1rem,1.6vw,1.4rem);
+  --body:clamp(.85rem,1.05vw,1.05rem);
+  --small:clamp(.7rem,.85vw,.85rem);
+  --mega:clamp(3rem,9vw,8rem);
+
+  --pad:clamp(1.4rem,3.6vw,3.6rem);
+  --gap:clamp(.8rem,1.4vw,1.4rem);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --dur:.8s;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg)}
+body{
+  font-family:var(--font-body);color:var(--ink);background:var(--bg);
+  overflow-x:hidden;font-size:var(--body);line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.slide{
+  position:relative;height:100vh;height:100dvh;width:100vw;
+  overflow:hidden;scroll-snap-align:start;scroll-snap-stop:always;
+  padding:var(--pad);display:flex;flex-direction:column;justify-content:center;
+  isolation:isolate;
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+
+.slide::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 60% 50% at 18% 100%,rgba(0,143,116,.07) 0%,transparent 50%),
+    radial-gradient(ellipse 50% 40% at 92% 0%,rgba(204,0,64,.05) 0%,transparent 55%),
+    var(--bg);
+}
+.slide::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(rgba(0,0,0,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,0,0,.025) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,black 30%,transparent 90%);
+}
+
+/* ── TYPE ── */
+h1,h2,h3,.mega{font-family:var(--font-display);letter-spacing:-.02em;font-weight:600;line-height:1.02}
+h1{font-size:var(--h1)}
+h2{font-size:var(--h2);margin-bottom:.5em}
+h3{font-size:var(--h3);margin-bottom:.3em}
+.mega{font-size:var(--mega);font-weight:700;letter-spacing:-.04em;line-height:.9}
+.eyebrow{
+  font-family:var(--font-mono);font-size:var(--small);text-transform:uppercase;
+  letter-spacing:.18em;color:var(--cyan);margin-bottom:.8em;
+  display:inline-flex;align-items:center;gap:.6em;
+}
+.eyebrow::before{
+  content:"";display:inline-block;width:.5em;height:.5em;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 12px var(--cyan-glow);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+.mute{color:var(--ink-mute)}
+.cyan{color:var(--cyan)}.magenta{color:var(--magenta)}.amber{color:var(--amber)}
+.violet{color:var(--violet)}.mono{font-family:var(--font-mono)}
+.personal{color:var(--personal)}
+.work{color:var(--work)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
+.slide.visible .reveal{opacity:1;transform:translateY(0)}
+.slide.visible .reveal:nth-child(1){transition-delay:.05s}
+.slide.visible .reveal:nth-child(2){transition-delay:.18s}
+.slide.visible .reveal:nth-child(3){transition-delay:.32s}
+.slide.visible .reveal:nth-child(4){transition-delay:.46s}
+.slide.visible .reveal:nth-child(5){transition-delay:.6s}
+.slide.visible .reveal:nth-child(6){transition-delay:.74s}
+.slide.visible .reveal:nth-child(7){transition-delay:.88s}
+.reveal-blur{filter:blur(12px);opacity:0;transition:filter 1s var(--ease),opacity 1s var(--ease)}
+.slide.visible .reveal-blur{filter:blur(0);opacity:1}
+
+/* ── ANIMATIONS ── */
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--cyan-glow)}50%{box-shadow:0 0 0 14px transparent}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CHROME ── */
+.progress{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  width:0%;z-index:1000;transition:width .25s ease;box-shadow:0 0 16px var(--cyan-glow);
+}
+.dots{position:fixed;right:clamp(12px,2vw,28px);top:50%;transform:translateY(-50%);z-index:1000;display:flex;flex-direction:column;gap:10px}
+.dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--ink-mute);background:transparent;cursor:pointer;padding:0;transition:all .25s ease;position:relative}
+.dots button.active{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px var(--cyan-glow);transform:scale(1.3)}
+.dots button:hover::after{
+  content:attr(data-label);position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  background:var(--bg-2);border:1px solid var(--line);padding:4px 10px;border-radius:6px;
+  font-family:var(--font-mono);font-size:.7rem;color:var(--ink);white-space:nowrap;
+}
+.counter{position:fixed;left:clamp(12px,2vw,28px);bottom:clamp(12px,2vw,28px);z-index:1000;font-family:var(--font-mono);font-size:var(--small);color:var(--ink-mute);letter-spacing:.1em}
+.counter span{color:var(--cyan)}
+.brand{position:fixed;left:clamp(12px,2vw,28px);top:clamp(12px,2vw,28px);z-index:1000;font-family:var(--font-mono);font-size:.7rem;color:var(--ink-mute);letter-spacing:.2em;text-transform:uppercase}
+.brand span{color:var(--magenta);font-weight:700}
+.hint{position:fixed;right:clamp(50px,5vw,80px);bottom:clamp(12px,2vw,28px);z-index:1000;font-family:var(--font-mono);font-size:.7rem;color:var(--ink-mute);letter-spacing:.1em;animation:drift 3s ease-in-out infinite}
+
+/* ── HELPERS ── */
+.kicker{font-family:var(--font-mono);font-size:var(--small);color:var(--cyan);text-transform:uppercase;letter-spacing:.2em}
+.tag{display:inline-block;padding:.3em .8em;border-radius:999px;font-family:var(--font-mono);font-size:.72em;letter-spacing:.1em;text-transform:uppercase;border:1px solid currentColor}
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:clamp(1rem,1.6vw,1.6rem);position:relative;transition:transform .3s var(--ease),border-color .3s ease,box-shadow .3s ease}
+.card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 18px 40px rgba(0,240,197,.08)}
+.kpi{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5vw,4rem);line-height:1;background:linear-gradient(180deg,var(--cyan),var(--cyan-d));-webkit-background-clip:text;background-clip:text;color:transparent}
+.kpi-label{font-size:var(--small);color:var(--ink-mute);text-transform:uppercase;letter-spacing:.15em;font-family:var(--font-mono);margin-top:.4em}
+.grid{display:grid;gap:var(--gap)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center;height:100%}
+@media(max-width:900px){.grid-3,.split{grid-template-columns:1fr}}
+.blob{position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,var(--cyan-glow),transparent 70%);filter:blur(40px);z-index:-1;pointer-events:none}
+.blob.tl{top:-200px;left:-200px}
+.blob.br{bottom:-200px;right:-200px;background:radial-gradient(circle,rgba(204,0,64,.10),transparent 70%)}
+
+/* ── DUAL-LANE PILL ── */
+.lane-pills{display:flex;gap:.6rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:.4em;padding:.3em .9em;border-radius:999px;font-family:var(--font-mono);font-size:.7em;letter-spacing:.12em;text-transform:uppercase;border:1px solid currentColor;font-weight:600}
+.pill.personal-pill{color:var(--personal);border-color:var(--personal);background:rgba(224,92,26,.07)}
+.pill.work-pill{color:var(--work);border-color:var(--work);background:rgba(26,110,224,.07)}
+.pill.tech-pill{color:var(--cyan);border-color:var(--cyan);background:rgba(0,143,116,.07)}
+
+/* ── DUAL LANE CARDS ── */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.2rem}
+.lane{border-radius:14px;overflow:hidden;background:var(--bg-2);border:1px solid var(--line)}
+.lane .lane-hd{padding:.7rem 1.2rem;font-family:var(--font-mono);font-size:.7em;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:.5em}
+.lane.personal-lane .lane-hd{background:rgba(224,92,26,.12);color:var(--personal);border-bottom:1px solid rgba(224,92,26,.2)}
+.lane.work-lane .lane-hd{background:rgba(26,110,224,.12);color:var(--work);border-bottom:1px solid rgba(26,110,224,.2)}
+.lane .lane-bd{padding:1rem 1.2rem;display:flex;flex-direction:column;gap:.6rem}
+.lane-item{font-size:.88em;color:var(--ink);display:flex;gap:.6em;align-items:flex-start;line-height:1.4}
+.lane-item::before{content:"→";font-family:var(--font-mono);font-weight:700;flex-shrink:0;margin-top:.05em}
+.lane.personal-lane .lane-item::before{color:var(--personal)}
+.lane.work-lane .lane-item::before{color:var(--work)}
+.lane-item .sub{color:var(--ink-mute);font-size:.88em;margin-top:.15em}
+@media(max-width:900px){.dual{grid-template-columns:1fr}}
+
+/* ── TECH TIMELINE ── */
+.tech-timeline{position:relative;margin:1.4rem 0;padding-left:1.6rem}
+.tech-timeline::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--magenta),var(--cyan));border-radius:1px}
+.tl-event{position:relative;padding:.9rem 1.2rem;margin-bottom:.8rem;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);transition:all .3s var(--ease)}
+.tl-event:hover{border-color:var(--cyan);transform:translateX(6px)}
+.tl-event::before{content:"";position:absolute;left:-1.95rem;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);box-shadow:0 0 0 2px var(--cyan)}
+.tl-event.personal-ev::before{background:var(--personal);box-shadow:0 0 0 2px var(--personal)}
+.tl-event.work-ev::before{background:var(--work);box-shadow:0 0 0 2px var(--work)}
+.tl-event.tech-ev::before{background:var(--amber);box-shadow:0 0 0 2px var(--amber)}
+.tl-date{font-family:var(--font-mono);font-size:.68em;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.3em}
+.tl-event.personal-ev .tl-date{color:var(--personal)}
+.tl-event.work-ev .tl-date{color:var(--work)}
+.tl-event.tech-ev .tl-date{color:var(--amber)}
+.tl-title{font-family:var(--font-display);font-weight:600;font-size:.95em;line-height:1.2}
+.tl-body{font-size:.82em;color:var(--ink-mute);margin-top:.25em;line-height:1.4}
+
+/* ── PIPELINE ── */
+.pipe{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;padding:1rem 1.2rem;border-radius:14px;border:1px solid var(--line);background:var(--bg-2);margin-top:.8rem}
+.nd{flex:1;min-width:80px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.8rem .6rem;text-align:center;transition:all .3s var(--ease)}
+.nd:hover{transform:translateY(-3px);border-color:var(--cyan);box-shadow:0 0 24px rgba(0,240,197,.18)}
+.nd .ic{font-size:1.3em;margin-bottom:.3em}
+.nd .nt{font-family:var(--font-display);font-weight:600;font-size:.78em;line-height:1.1}
+.nd .ns{font-family:var(--font-mono);font-size:.62em;color:var(--ink-mute);letter-spacing:.07em;margin-top:.3em}
+.arr{font-family:var(--font-mono);font-size:1.4em;color:var(--cyan);font-weight:300;flex-shrink:0}
+
+/* ── STEPS ── */
+.steps-row{display:grid;gap:1rem;margin-top:1.2rem}
+.step{position:relative;padding:1rem 1.2rem;border:1px solid var(--line);border-radius:12px;background:var(--bg-2);transition:all .3s var(--ease);display:flex;gap:1rem;align-items:flex-start}
+.step:hover{border-color:var(--cyan);transform:translateX(6px)}
+.step .no{font-family:var(--font-mono);font-size:.66em;color:var(--cyan);letter-spacing:.2em;text-transform:uppercase;flex-shrink:0;padding-top:.2em;min-width:4ch}
+.step h4{font-family:var(--font-display);font-weight:600;font-size:1em;margin-bottom:.25em;line-height:1.15}
+.step p{font-size:.84em;color:var(--ink-mute);line-height:1.4}
+
+/* ── INSIGHT BOX ── */
+.insight{margin-top:1rem;padding:1rem 1.4rem;border-radius:12px;display:flex;gap:.8rem;align-items:flex-start}
+.insight.amber-box{border:1px dashed var(--amber);background:rgba(196,122,0,.06)}
+.insight.cyan-box{border:1px dashed var(--cyan);background:rgba(0,143,116,.06)}
+.insight.magenta-box{border:1px dashed var(--magenta);background:rgba(204,0,64,.06)}
+.insight .ik{font-family:var(--font-mono);font-size:.68em;color:var(--amber);letter-spacing:.15em;text-transform:uppercase;flex-shrink:0;padding-top:.15em}
+.insight.cyan-box .ik{color:var(--cyan)}
+.insight.magenta-box .ik{color:var(--magenta)}
+.insight .ib{font-size:.9em;color:var(--ink);line-height:1.45}
+
+/* ── STAT GRID ── */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1.2rem}
+.stat-cell{padding:1rem 1.2rem;border:1px solid var(--line);border-radius:12px;background:var(--bg-2);transition:all .3s var(--ease)}
+.stat-cell:hover{border-color:var(--cyan);transform:translateY(-3px)}
+.stat-n{font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.4rem);line-height:1;color:var(--cyan)}
+.stat-n.personal-n{color:var(--personal)}
+.stat-n.work-n{color:var(--work)}
+.stat-l{font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase;margin-top:.5em}
+
+/* ── LESSON ── */
+.lesson-list{display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem}
+.lesson{display:flex;gap:1rem;align-items:stretch;transition:transform .3s var(--ease)}
+.lesson:hover{transform:translateX(8px)}
+.lesson .badge{flex-shrink:0;width:52px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1.2em;border-radius:10px;background:var(--bg-2);border:1px solid var(--line)}
+.lesson .lbody{flex:1;padding:.9rem 1.2rem;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;transition:all .3s var(--ease)}
+.lesson:hover .lbody{border-color:var(--cyan)}
+.lesson .lh{font-family:var(--font-display);font-weight:600;font-size:.98em;color:var(--ink)}
+.lesson .lb{font-size:.85em;color:var(--ink-mute);margin-top:.2em;line-height:1.4}
+
+/* ── QUOTE ── */
+.qt{padding:1.4rem 1.6rem;background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:0 12px 12px 0;position:relative;max-width:44ch}
+.qt::before{content:""";position:absolute;left:14px;top:-10px;font-size:3em;color:var(--cyan);font-family:var(--font-display);line-height:1;opacity:.4}
+.qt p{font-size:1.05em;font-style:italic;line-height:1.4;color:var(--ink)}
+.qt .who{font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase;margin-top:.7em}
+
+/* ── COMPARISON TABLE ── */
+.compare{display:grid;grid-template-columns:1fr 80px 1fr;gap:.4rem;margin-top:1rem}
+.cmp-h{padding:.6rem 1rem;text-align:center;font-family:var(--font-display);font-weight:600;border-radius:8px;font-size:.9em}
+.cmp-h.personal-h{background:rgba(224,92,26,.15);color:var(--personal)}
+.cmp-h.work-h{background:rgba(26,110,224,.15);color:var(--work)}
+.cmp-v{background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:.6rem .9rem;font-size:.86em;display:flex;align-items:center;transition:all .25s}
+.cmp-v:hover{border-color:var(--cyan)}
+.cmp-lbl{background:var(--bg-3);border:1px solid var(--line);border-radius:8px;padding:.6rem;font-family:var(--font-mono);font-size:.65em;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;text-align:center}
+
+/* ── CLOSING SLIDE ── */
+.closing-list{display:flex;flex-direction:column;gap:.6rem;margin-top:1.4rem}
+.cl{display:flex;gap:.8rem;align-items:center;padding:.9rem 1.2rem;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;transition:all .3s var(--ease)}
+.cl:hover{border-color:var(--cyan);transform:translateX(6px)}
+.cl .ci{font-size:1.3em;flex-shrink:0}
+.cl .ct{font-family:var(--font-display);font-weight:600;font-size:.95em;color:var(--ink)}
+.cl .cs{font-size:.82em;color:var(--ink-mute);margin-top:.15em;line-height:1.3}
+
+/* ── HERMES DISCORD ── */
+.discord-mock{background:#36393f;border-radius:12px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.3);max-width:500px}
+.discord-sidebar{background:#2f3136;padding:.8rem;font-family:var(--font-mono);font-size:.72em;color:#72767d}
+.discord-ch{padding:.35rem .6rem;border-radius:4px;margin-bottom:.2rem;cursor:pointer;display:flex;align-items:center;gap:.4em}
+.discord-ch.active{background:#42464d;color:#dcddde}
+.discord-ch::before{content:"#"}
+.discord-main{padding:1rem;background:#36393f}
+.discord-msg{display:flex;gap:.7rem;margin-bottom:.8rem}
+.discord-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8em;color:#fff;font-weight:700}
+.discord-content{flex:1}
+.discord-name{font-family:var(--font-mono);font-size:.72em;color:#7289da;margin-bottom:.25em}
+.discord-text{font-size:.82em;color:#dcddde;line-height:1.4}
+.discord-time{font-size:.65em;color:#72767d;margin-left:.4em}
+
+/* footnote */
+.footnote{position:absolute;bottom:clamp(1rem,2vh,1.4rem);left:var(--pad);right:var(--pad);font-family:var(--font-mono);font-size:.66rem;color:var(--ink-mute);letter-spacing:.1em;display:flex;justify-content:space-between;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div class="brand">AI Journey <span>×</span> Personal + Work</div>
+<div class="progress" id="progress"></div>
+<nav class="dots" id="dots"></nav>
+<div class="counter"><span id="cur">01</span> / <span id="tot">14</span></div>
+<div class="hint">↓ scroll · ← → arrows</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 01 — TITLE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Cover" style="justify-content:center;text-align:center">
+  <div class="blob tl"></div>
+  <div class="blob br"></div>
+
+  <div class="reveal" style="display:flex;justify-content:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap">
+    <span class="pill personal-pill">🏠 Personal Life</span>
+    <span style="font-family:var(--font-mono);font-size:.9em;color:var(--ink-mute);align-self:center">×</span>
+    <span class="pill work-pill">🏥 Work</span>
+    <span style="font-family:var(--font-mono);font-size:.9em;color:var(--ink-mute);align-self:center">×</span>
+    <span class="pill tech-pill">⚡ Technology</span>
+  </div>
+
+  <h1 class="reveal" style="line-height:1.04;max-width:18ch;margin:0 auto">
+    My <span class="cyan">AI</span> Journey<br>
+    <span style="font-size:.65em;color:var(--ink-mute);font-weight:500">how the technology moved,<br>and how I moved with it</span>
+  </h1>
+
+  <div class="reveal" style="margin-top:2rem;font-family:var(--font-display);font-size:var(--h3);color:var(--ink-mute);max-width:38ch;margin-left:auto;margin-right:auto;line-height:1.4">
+    Always start with a problem.<br>
+    <span class="cyan">Then figure out how AI can facilitate that process.</span>
+  </div>
+
+  <div class="reveal" style="margin-top:2rem;display:flex;justify-content:center;gap:2rem;font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute);flex-wrap:wrap">
+    <span>Phase 1 → Task-Driven</span>
+    <span>Phase 2 → Multimodal</span>
+    <span>Phase 3 → Agentic</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 02 — THE MINDSET: START WITH A PROBLEM -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Mindset">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">The Foundation</span>
+      <h2 class="reveal">Start with the <span class="cyan">problem.</span><br>Let AI follow.</h2>
+      <p class="reveal mute" style="max-width:40ch;font-size:1.05em;line-height:1.55;margin-bottom:1.4rem">
+        Every tool, every workflow, every agent — it starts with a real friction point.
+        If you don't know your problem, you're just chasing demos.
+      </p>
+
+      <div class="reveal qt" style="margin-bottom:1.2rem">
+        <p>I want to track my expenses. A Costco run can easily be $100–200 and I don't even feel like I'm getting that much grocery.</p>
+        <div class="who">Real problem → first personal AI project</div>
+      </div>
+
+      <div class="reveal insight amber-box">
+        <span class="ik">Principle</span>
+        <span class="ib">If you don't know the problem, try reverse engineering: <em>"What outcome do I want? What's blocking it?"</em></span>
+      </div>
+    </div>
+
+    <div class="reveal-blur">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card" style="border-left:3px solid var(--personal)">
+          <div class="pill personal-pill" style="margin-bottom:.7rem">Personal</div>
+          <div style="font-size:.92em;line-height:1.5;color:var(--ink)">Receipt chaos → expense tracker → eventually a full receipt-scanner app</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--work)">
+          <div class="pill work-pill" style="margin-bottom:.7rem">Work</div>
+          <div style="font-size:.92em;line-height:1.5;color:var(--ink)">Nurses reading 200-page PDFs manually → AI clinical summary pre-populates the form</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--cyan)">
+          <div class="kicker" style="margin-bottom:.5rem">Both driven by the same loop</div>
+          <div style="display:flex;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.78em;color:var(--ink-mute)">
+            <span style="color:var(--magenta)">Pain</span>
+            <span>→</span>
+            <span style="color:var(--amber)">Experiment</span>
+            <span>→</span>
+            <span style="color:var(--cyan)">Automate</span>
+            <span>→</span>
+            <span style="color:var(--violet)">Evaluate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 03 — PHASE 1: TASK-DRIVEN (tied to GPT-3.5/4 era) -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Phase 1">
+  <span class="eyebrow reveal">Phase 1 · 2022–2023 · GPT-3.5 era</span>
+  <h2 class="reveal">Task-driven: <span class="cyan">AI as a smarter search.</span></h2>
+
+  <div class="dual reveal" style="margin-top:1rem">
+    <div class="lane personal-lane">
+      <div class="lane-hd">🏠 Personal</div>
+      <div class="lane-bd">
+        <div class="lane-item">Started with copywriting and summarization — draft emails, reword things faster</div>
+        <div class="lane-item">Used it like an upgraded Google: "what does this term mean?", "give me a recipe"</div>
+        <div class="lane-item">
+          Data analysis was unreliable. Models confidently said 99 &lt; 101 was false.
+          <div class="sub">Math errors were real — you had to double-check everything numeric</div>
+        </div>
+        <div class="lane-item">Built a Chrome extension to rewrite text in-place — ended the copy/paste loop</div>
+      </div>
+    </div>
+    <div class="lane work-lane">
+      <div class="lane-hd">🏥 Work</div>
+      <div class="lane-bd">
+        <div class="lane-item">Pipeline: OCR the document → send text to GPT-3.5 → extract info page by page → summarize</div>
+        <div class="lane-item">
+          Moved to GPT-4o for better accuracy, but core pattern stayed the same
+          <div class="sub">Text in, extraction out — still treating the model like a parser</div>
+        </div>
+        <div class="lane-item">
+          Hard challenges: headers &amp; footers bleed into content, table structures collapse, messy unstructured data
+          <div class="sub">Getting accurate dates was surprisingly hard</div>
+        </div>
+        <div class="lane-item">Prompt engineering became the main lever — small changes had big effects on output quality</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal insight amber-box" style="margin-top:1rem">
+    <span class="ik">Tech Context</span>
+    <span class="ib">GPT-3.5 / 4 era: powerful but text-only, no real reasoning, math unreliable. AI was a <em>fast assistant</em>, not yet a <em>thinker</em>.</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 04 — THE COST QUESTION (work) -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Cost">
+  <span class="eyebrow reveal">Enterprise Reality · 2023</span>
+  <h2 class="reveal">Cost is a <span class="magenta">strategic decision</span>,<br>not an afterthought.</h2>
+
+  <div class="split reveal" style="margin-top:.5rem;gap:2rem">
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="kicker" style="margin-bottom:.8rem">The Old Stack</div>
+        <div class="pipe" style="margin-top:0;border-color:var(--ink-mute);background:var(--bg-3)">
+          <div class="nd" style="border-color:var(--ink-mute)">
+            <div class="ic">📄</div>
+            <div class="nt" style="color:var(--ink-mute)">PDF / Fax</div>
+          </div>
+          <div class="arr" style="color:var(--ink-mute)">→</div>
+          <div class="nd" style="border-color:var(--ink-mute)">
+            <div class="ic">🔍</div>
+            <div class="nt" style="color:var(--ink-mute)">OCR</div>
+            <div class="ns">$60k/mo</div>
+          </div>
+          <div class="arr" style="color:var(--ink-mute)">→</div>
+          <div class="nd" style="border-color:var(--ink-mute)">
+            <div class="ic">🤖</div>
+            <div class="nt" style="color:var(--ink-mute)">GPT</div>
+            <div class="ns">$60k/mo</div>
+          </div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);margin-top:.8rem;letter-spacing:.1em;text-transform:uppercase">
+          Total: <span style="color:var(--magenta);font-weight:700">$120k / month</span>
+        </div>
+      </div>
+
+      <div class="insight amber-box">
+        <span class="ik">Key Insight</span>
+        <span class="ib">OCR was costing as much as the LLM itself. When multimodal models arrived, we could skip the OCR step entirely — dramatically cutting cost per page.</span>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:1rem;font-size:1em">The cost forcing function</h3>
+      <div class="steps-row">
+        <div class="step">
+          <span class="no">01</span>
+          <div>
+            <h4>Justify the spend</h4>
+            <p>$120k/mo needs to deliver more than $120k in value. Evaluation becomes existential.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">02</span>
+          <div>
+            <h4>Gemini enters the picture</h4>
+            <p>Much cheaper per page. But a new trade-off: Gemini hallucinated more — especially on blank pages and document IDs.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">03</span>
+          <div>
+            <h4>Enterprise trade-offs are real</h4>
+            <p>Accuracy, latency, cost — pick your constraints. You can't ignore any of them at scale.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 05 — GOING MULTIMODAL (tech shift → both lanes) -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Multimodal">
+  <span class="eyebrow reveal">2023–2024 · GPT-4o · Gemini · Multimodal</span>
+  <h2 class="reveal">Models learned to <span class="cyan">see.</span><br>We rewrote the pipeline.</h2>
+
+  <div class="dual reveal" style="margin-top:1rem">
+    <div class="lane work-lane">
+      <div class="lane-hd">🏥 Work — The Big Shift</div>
+      <div class="lane-bd">
+        <div class="lane-item">
+          Migrated from <strong>text input</strong> to <strong>image input</strong>
+          <div class="sub">Models now see document structure like a human does — layout, tables, headers, all the styling</div>
+        </div>
+        <div class="lane-item">Dropped the separate OCR step — LLM reads the page directly, cutting cost per page significantly</div>
+        <div class="lane-item">Summaries gained rationale, not just facts — "here's what this means" instead of "here's what it says"</div>
+        <div class="lane-item">
+          Math and date extraction improved notably
+          <div class="sub">Still not perfect — we later added preprocessing to catch edge cases</div>
+        </div>
+        <div class="lane-item">Prompt engineering remained critical — the right prompt was worth months of model upgrades</div>
+      </div>
+    </div>
+    <div class="lane personal-lane">
+      <div class="lane-hd">🏠 Personal — What Changed</div>
+      <div class="lane-bd">
+        <div class="lane-item">
+          Math errors started disappearing — no more double-checking basic calculations
+          <div class="sub">Finally trusted AI with expense calculations</div>
+        </div>
+        <div class="lane-item">Started building more ambitious things: the wedding website (Loveable → Replit — needed everything in one app, not juggling Supabase + Railway)</div>
+        <div class="lane-item">Began the receipt scanner app — used n8n to map the workflow before coding anything</div>
+        <div class="lane-item">
+          Agents started appearing (Manus, deep research tools)
+          <div class="sub">First sense that AI could <em>act</em>, not just <em>answer</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal insight cyan-box" style="margin-top:1rem">
+    <span class="ik">Inflection</span>
+    <span class="ib">Multimodal models unlocked a fundamentally different interaction model. For work: the document IS the input. For life: AI could see a receipt, a screenshot, a design mockup.</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 06 — PREPROCESSING LESSON (work deep-dive) -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Preprocessing">
+  <span class="eyebrow reveal">Lesson Learned · Work</span>
+  <h2 class="reveal">AI isn't always the <span class="magenta">best tool</span><br>for every part of the problem.</h2>
+
+  <div class="split reveal" style="gap:2rem">
+    <div>
+      <p class="mute" style="max-width:40ch;font-size:1em;line-height:1.55;margin-bottom:1.2rem">
+        Gemini was cheaper — but it hallucinated in ways that mattered. Blank pages triggered fabricated content. Document IDs came back wrong or missing.
+      </p>
+
+      <div class="steps-row">
+        <div class="step">
+          <span class="no">Issue 1</span>
+          <div>
+            <h4>Blank page fabrication</h4>
+            <p>When a page had no content, Gemini invented information instead of returning empty. In clinical docs, that's dangerous.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">Issue 2</span>
+          <div>
+            <h4>Traceability failures</h4>
+            <p>Summaries needed page references. When a reference was missing or mismatched, we fail the AI result — hallucination detected.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight cyan-box" style="margin-top:1rem">
+        <span class="ik">Fix</span>
+        <span class="ib">Added <strong>traditional ML</strong> for page duplication detection and page classification <em>before</em> sending to LLM. Pre-processing with classical models → much cleaner LLM input.</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="kicker" style="margin-bottom:.8rem">The Evolved Pipeline</div>
+        <div class="pipe" style="flex-wrap:wrap;gap:.5rem;margin-top:.5rem">
+          <div class="nd" style="border-color:var(--amber)">
+            <div class="ic">📄</div>
+            <div class="nt">Raw Doc</div>
+          </div>
+          <div class="arr">→</div>
+          <div class="nd" style="border-color:var(--violet)">
+            <div class="ic">🔬</div>
+            <div class="nt">ML Pre-proc</div>
+            <div class="ns">classify · dedupe</div>
+          </div>
+          <div class="arr">→</div>
+          <div class="nd" style="border-color:var(--cyan)">
+            <div class="ic">🤖</div>
+            <div class="nt">LLM Vision</div>
+            <div class="ns">image input</div>
+          </div>
+          <div class="arr">→</div>
+          <div class="nd" style="border-color:var(--cyan)">
+            <div class="ic">✅</div>
+            <div class="nt">Verify</div>
+            <div class="ns">page refs</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight magenta-box">
+        <span class="ik">Key Lesson</span>
+        <span class="ib"><strong>Garbage in, garbage out.</strong> Cleaning your data before it hits the LLM is more valuable than upgrading the model. Pre-processing with classical ML was the right call — not everything needs a neural net.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 07 — 2025: THE AGENT YEAR (tech timeline) -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Agent Year">
+  <span class="eyebrow reveal">2025 · The Agent Year</span>
+  <h2 class="reveal">AI stopped <span class="cyan">answering</span><br>and started <span class="amber">deciding.</span></h2>
+
+  <div class="split reveal" style="gap:2.5rem">
+    <div>
+      <p class="mute" style="max-width:38ch;font-size:1em;line-height:1.55;margin-bottom:1.2rem">
+        2025 was the year agentic AI went from research demo to production workflow. In both work and personal life, the shift was from single-turn Q&amp;A to multi-step autonomous chains.
+      </p>
+
+      <div class="tech-timeline">
+        <div class="tl-event tech-ev">
+          <div class="tl-date">2025 · Jan / Feb</div>
+          <div class="tl-title">OpenClaw Gains Traction</div>
+          <div class="tl-body">Personal news aggregation — pulling Twitter / X signals and sending digests to phone. First serious agentic personal tool.</div>
+        </div>
+        <div class="tl-event work-ev">
+          <div class="tl-date">2025 · Q1</div>
+          <div class="tl-title">Work: Beyond Summarization</div>
+          <div class="tl-body">Expanded CDST from "summarize" to "decide" — AI gives a case-level answer, not just a text summary. SNF and IP auto-approval pilots begin.</div>
+        </div>
+        <div class="tl-event tech-ev">
+          <div class="tl-date">2025 · April</div>
+          <div class="tl-title">Hermes Becomes the Standard</div>
+          <div class="tl-body">Replaced OpenClaw for news ingestion. Discord-native, multi-channel — personal AI stack got a serious upgrade.</div>
+        </div>
+        <div class="tl-event personal-ev">
+          <div class="tl-date">2025 · Ongoing</div>
+          <div class="tl-title">Personal Finance + Receipt Agents</div>
+          <div class="tl-body">Expense tracking, receipt scanner plugin, personal finance digest from Peiji. Everything feeds into one coherent picture.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="kicker" style="margin-bottom:.7rem">The pattern shift</div>
+        <div class="compare" style="margin-top:.5rem">
+          <div class="cmp-h personal-h" style="font-size:.8em">Before</div>
+          <div></div>
+          <div class="cmp-h work-h" style="font-size:.8em">After</div>
+
+          <div class="cmp-v" style="font-size:.82em">Single turn: ask → get answer</div>
+          <div class="cmp-lbl">Mode</div>
+          <div class="cmp-v" style="font-size:.82em">Multi-step: plan → act → verify → report</div>
+
+          <div class="cmp-v" style="font-size:.82em">Manual trigger every time</div>
+          <div class="cmp-lbl">Trigger</div>
+          <div class="cmp-v" style="font-size:.82em">Scheduled or event-driven</div>
+
+          <div class="cmp-v" style="font-size:.82em">Read-only: I check the answer</div>
+          <div class="cmp-lbl">Trust</div>
+          <div class="cmp-v" style="font-size:.82em">Partial autonomy: AI acts, I review exceptions</div>
+        </div>
+      </div>
+
+      <div class="insight amber-box">
+        <span class="ik">The Trade-off</span>
+        <span class="ib">Agents give leverage — but they need maintenance. When Anthropic tightened the API and costs crossed $20/mo, debugging took more time than the tool saved. Know when to migrate.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 08 — WORK: AGENTIC DECISION PIPELINE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Agent Pipeline">
+  <span class="eyebrow reveal">Work · SNF + IP · 2025</span>
+  <h2 class="reveal">Breaking the <span class="cyan">nurse workflow</span><br>into an agent workflow.</h2>
+
+  <div class="reveal" style="margin-top:.8rem">
+    <p class="mute" style="max-width:52ch;font-size:.95em;line-height:1.55;margin-bottom:1.2rem">
+      The insight: a nurse's review is a sequence of discrete, verifiable steps.
+      Each step can be a tool call. RAG retrieves the right criteria. The agent makes the decision. A human reviews exceptions.
+    </p>
+
+    <div class="pipe" style="margin-bottom:1.2rem">
+      <div class="nd" style="border-color:var(--amber)">
+        <div class="ic">📋</div>
+        <div class="nt">Extract Info</div>
+        <div class="ns">EMR + docs</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="nd" style="border-color:var(--violet)">
+        <div class="ic">📐</div>
+        <div class="nt">RAG Criteria</div>
+        <div class="ns">fetch guidelines</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="nd" style="border-color:var(--cyan)">
+        <div class="ic">🔀</div>
+        <div class="nt">Map + Decide</div>
+        <div class="ns">per criterion</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="nd" style="border-color:var(--cyan)">
+        <div class="ic">🧮</div>
+        <div class="nt">Aggregate</div>
+        <div class="ns">all decisions</div>
+      </div>
+      <div class="arr">→</div>
+      <div class="nd" style="border-color:var(--cyan)">
+        <div class="ic">✅</div>
+        <div class="nt">Final Decision</div>
+        <div class="ns">approve / deny</div>
+      </div>
+    </div>
+
+    <div class="grid-3 grid" style="margin-top:.8rem">
+      <div class="card">
+        <div class="kicker" style="color:var(--violet);margin-bottom:.6rem">EMR Data Advantage</div>
+        <div style="font-size:.88em;color:var(--ink);line-height:1.45">EMR is almost structured data — AI does a much better job on it than on unstructured PDFs. <span class="mute">Lesson: structured input = cleaner output.</span></div>
+      </div>
+      <div class="card">
+        <div class="kicker" style="color:var(--amber);margin-bottom:.6rem">Evaluation is Simpler</div>
+        <div style="font-size:.88em;color:var(--ink);line-height:1.45">Yes/No decisions → confusion matrix. Recall, precision, accuracy. Clear success criteria meant we could iterate fast. <span class="mute">Ground truth is your foundation.</span></div>
+      </div>
+      <div class="card">
+        <div class="kicker" style="color:var(--magenta);margin-bottom:.6rem">Latency Constraint</div>
+        <div style="font-size:.88em;color:var(--ink);line-height:1.45">Must complete within 30 minutes. Purchased GSU quota to avoid rate limits at peak hours — idle at night, but that's the cost of SLA compliance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal insight cyan-box" style="margin-top:.8rem">
+    <span class="ik">Agent Telephone</span>
+    <span class="ib">If information is missing, the agent calls the facility — an automated phone tool that retrieves clinical data before returning a decision. The agent never blocks; it finds another path.</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 09 — EVALUATION IS EVERYTHING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Evaluation">
+  <span class="eyebrow reveal">The Discipline · Both Work + Personal</span>
+  <h2 class="reveal">Evaluation is the <span class="cyan">only way<br>you know if it's working.</span></h2>
+
+  <div class="split reveal" style="gap:2.5rem">
+    <div>
+      <div class="steps-row">
+        <div class="step">
+          <span class="no">Work</span>
+          <div>
+            <h4>Golden dataset + chunked evaluation</h4>
+            <p>Break the output into components. Align on the template first. Each field is scored independently — find where the model fails, not just whether it failed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">Work</span>
+          <div>
+            <h4>Confusion matrix for decisions</h4>
+            <p>Binary outputs (approve/deny) let you measure recall and precision cleanly. You pick your trade-off: miss a denial, or over-approve? Clinical context drives the threshold.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">Personal</span>
+          <div>
+            <h4>Does it actually save me time?</h4>
+            <p>When the OpenClaw → Hermes migration happened, the test was simple: does the new system give me the same signal with less friction?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="stat-grid" style="grid-template-columns:1fr 1fr">
+        <div class="stat-cell">
+          <div class="stat-n work-n">Golden</div>
+          <div class="stat-l">Dataset anchors every evaluation</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-n work-n">Chunks</div>
+          <div class="stat-l">Score each field separately</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-n">Recall</div>
+          <div class="stat-l">Catch everything critical</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-n">Precision</div>
+          <div class="stat-l">Don't add noise</div>
+        </div>
+      </div>
+
+      <div class="insight amber-box" style="margin-top:1rem">
+        <span class="ik">The ROI Test</span>
+        <span class="ib">If we spend $120k/month, benefits must exceed $120k/month. Evaluation is how you prove — and continuously re-prove — that the investment makes sense to leadership.</span>
+      </div>
+
+      <div class="insight cyan-box" style="margin-top:.8rem">
+        <span class="ik">Personal Version</span>
+        <span class="ib">$20/mo on Claude API was fine until costs hit the limit with every update. When maintaining the tool costs more than it saves — migrate. That's an evaluation too.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 10 — OPENCLAW (Jan/Feb) → PERSONAL AGENTS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="OpenClaw">
+  <span class="eyebrow reveal">Personal · Jan / Feb 2025 · OpenClaw Era</span>
+  <h2 class="reveal">Staying current:<br><span class="cyan">AI as my news filter.</span></h2>
+
+  <div class="split reveal" style="gap:2.5rem">
+    <div>
+      <p class="mute" style="max-width:40ch;font-size:1em;line-height:1.55;margin-bottom:1.2rem">
+        With AI moving at the speed it does, staying informed is itself a problem worth solving. OpenClaw was the first real answer — pulling Twitter/X signal and sending digests to my phone automatically.
+      </p>
+
+      <div class="steps-row">
+        <div class="step">
+          <span class="no">Why</span>
+          <div>
+            <h4>Information overload is real</h4>
+            <p>New models, new tools, new research — every week. Manually checking is unsustainable. The agent does the scanning; I read the summary.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">What</span>
+          <div>
+            <h4>Twitter → phone digest</h4>
+            <p>Limited API access, no manipulation of inbox, $20/mo flat. Simple, reliable, low-maintenance — at first.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">Cracks</span>
+          <div>
+            <h4>Anthropic tightened the API</h4>
+            <p>$20 hit the cap easily. Every update broke something. Time spent debugging outgrew time saved reading. Classic maintenance trap.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="kicker" style="margin-bottom:.8rem">Also building in parallel</div>
+        <div class="lane personal-lane" style="border-radius:10px;margin-top:.5rem">
+          <div class="lane-bd" style="padding:.8rem 1rem">
+            <div class="lane-item">Receipt scanner: n8n workflow mapping first, then code — design before build</div>
+            <div class="lane-item">Personal finance digest from Peiji — tracking investments, not just expenses</div>
+            <div class="lane-item">Expense tracker built with Claude — the original Costco problem, finally solved</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight amber-box">
+        <span class="ik">The Lesson</span>
+        <span class="ib">OpenClaw was valuable proof that personal AI agents work. The $20 limit and API changes were also valuable: they pushed me toward a better, more sustainable tool — Hermes.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 11 — HERMES (April) → PERSONAL AGENT STACK -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Hermes">
+  <span class="eyebrow reveal">Personal · April 2025 · Hermes</span>
+  <h2 class="reveal">Hermes: from news reader<br>to <span class="cyan">personal command center.</span></h2>
+
+  <div class="split reveal" style="gap:2.5rem">
+    <div>
+      <p class="mute" style="max-width:40ch;font-size:1em;line-height:1.55;margin-bottom:1.2rem">
+        Hermes became popular in April. Already had the groundwork from OpenClaw — migrating the logic wasn't starting over, it was porting a working system to better infrastructure.
+      </p>
+
+      <div class="steps-row">
+        <div class="step">
+          <span class="no">News</span>
+          <div>
+            <h4>Discord as the interface</h4>
+            <p>Separate channels for AI news, personal finance, tech updates. Discord's channel structure is a natural information architecture.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">Receipts</span>
+          <div>
+            <h4>Receipt scanner plugin</h4>
+            <p>Snap a receipt → Hermes processes → expense logged. The Costco problem, fully automated.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="no">Trade-off</span>
+          <div>
+            <h4>Local machine dependency</h4>
+            <p>Hermes needs a virtual machine or your laptop to stay on. Self-hosting has a different cost profile than a cloud API — time and infrastructure instead of money.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal-blur">
+      <div class="discord-mock">
+        <div style="display:grid;grid-template-columns:160px 1fr">
+          <div class="discord-sidebar">
+            <div style="font-size:.65em;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .6rem .6rem;opacity:.7">Channels</div>
+            <div class="discord-ch"># ai-news</div>
+            <div class="discord-ch active"># personal-finance</div>
+            <div class="discord-ch"># receipt-log</div>
+            <div class="discord-ch"># tech-updates</div>
+            <div class="discord-ch"># market-digest</div>
+          </div>
+          <div class="discord-main">
+            <div class="discord-msg">
+              <div class="discord-avatar">H</div>
+              <div class="discord-content">
+                <div class="discord-name">Hermes Bot <span class="discord-time">Today at 8:02 AM</span></div>
+                <div class="discord-text">📊 <strong>Weekly Finance Digest</strong><br>Portfolio up 2.1% · 3 new expense categories · Costco run: $187.43 logged ✓</div>
+              </div>
+            </div>
+            <div class="discord-msg">
+              <div class="discord-avatar">H</div>
+              <div class="discord-content">
+                <div class="discord-name">Hermes Bot <span class="discord-time">Today at 9:15 AM</span></div>
+                <div class="discord-text">🤖 <strong>AI News Roundup</strong><br>Claude 4 · Gemini 2.0 Ultra · OpenAI o3 — 5 headlines worth reading today</div>
+              </div>
+            </div>
+            <div class="discord-msg">
+              <div class="discord-avatar">H</div>
+              <div class="discord-content">
+                <div class="discord-name">Hermes Bot <span class="discord-time">Today at 11:32 AM</span></div>
+                <div class="discord-text">🧾 Receipt scanned · Costco · $143.22 · Grocery category · Added to tracker</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight cyan-box" style="margin-top:1rem">
+        <span class="ik">The Upgrade</span>
+        <span class="ib">Hermes didn't just replace OpenClaw — it consolidated news, receipts, and finance into one Discord workspace. Fewer tools, more signal.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 12 — WORK PRODUCTIVITY + ANALYSIS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Work Productivity">
+  <span class="eyebrow reveal">Work · Ongoing · Beyond Clinical AI</span>
+  <h2 class="reveal">AI for the <span class="cyan">work beside the work.</span></h2>
+
+  <div class="dual reveal" style="margin-top:1rem">
+    <div class="lane work-lane">
+      <div class="lane-hd">🏥 Day-to-Day Work Uses</div>
+      <div class="lane-bd">
+        <div class="lane-item">
+          <strong>Analysis:</strong> drop in data, get insight. Replaced hours of manual Excel work
+          <div class="sub">Still verify the math — especially on complex aggregations</div>
+        </div>
+        <div class="lane-item">
+          <strong>Slide creation:</strong> paste the brief, get a first draft. Then edit rather than start from scratch
+        </div>
+        <div class="lane-item">
+          <strong>Monitoring apps:</strong> built lightweight dashboards for model performance — no separate BI team needed
+        </div>
+        <div class="lane-item">
+          <strong>Tabs productivity:</strong> AI helps triage what to actually read vs. skim vs. skip
+        </div>
+      </div>
+    </div>
+    <div class="lane personal-lane">
+      <div class="lane-hd">🏠 Personal Productivity</div>
+      <div class="lane-bd">
+        <div class="lane-item">
+          <strong>Tab management:</strong> AI summarizes open tabs so I can close 40 and keep 4
+        </div>
+        <div class="lane-item">
+          <strong>Wedding website:</strong> built end-to-end in Replit — Loveable was great for UI, but I needed database + deploy in one place
+        </div>
+        <div class="lane-item">
+          <strong>n8n workflow design:</strong> map the flow before writing code — visual thinking before implementation
+        </div>
+        <div class="lane-item">
+          <strong>Chrome extension:</strong> in-place rewriting removed the copy/paste friction from every workflow
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap">
+    <div class="insight cyan-box" style="flex:1;min-width:200px">
+      <span class="ik">Work Rule</span>
+      <span class="ib">AI handles the first draft, the data pull, the slide structure. Humans handle the judgment, the context, the nuance.</span>
+    </div>
+    <div class="insight amber-box" style="flex:1;min-width:200px">
+      <span class="ik">Personal Rule</span>
+      <span class="ib">If I'm doing the same thing more than 3 times — there's probably an agent for it. Build the agent once, run it forever.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 13 — LESSONS LEARNED -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Lessons">
+  <span class="eyebrow reveal">Lessons Learned · Personal + Work</span>
+  <h2 class="reveal">What the journey<br>actually taught me.</h2>
+
+  <div class="lesson-list reveal">
+    <div class="lesson">
+      <div class="badge" style="color:var(--cyan)">1</div>
+      <div class="lbody">
+        <div class="lh">Start with the problem. Always.</div>
+        <div class="lb">Every tool I've regretted was one I adopted because it was impressive, not because it solved something real. Expense tracker, receipt scanner, CDST — all started with friction.</div>
+      </div>
+    </div>
+    <div class="lesson">
+      <div class="badge" style="color:var(--magenta)">2</div>
+      <div class="lbody">
+        <div class="lh">Garbage in, garbage out.</div>
+        <div class="lb">Cleaning data before it hits the LLM beats upgrading the model. Adding ML preprocessing to our pipeline beat switching to a "smarter" LLM. Quality input is the real leverage.</div>
+      </div>
+    </div>
+    <div class="lesson">
+      <div class="badge" style="color:var(--amber)">3</div>
+      <div class="lbody">
+        <div class="lh">Evaluation is non-negotiable — at any scale.</div>
+        <div class="lb">Golden dataset at work. "Does this actually save me time?" personally. Without evaluation, you're flying blind and paying for it.</div>
+      </div>
+    </div>
+    <div class="lesson">
+      <div class="badge" style="color:var(--violet)">4</div>
+      <div class="lbody">
+        <div class="lh">AI isn't always the best tool for every step.</div>
+        <div class="lb">Classical ML for page classification, n8n for workflow design, Discord for notification architecture — the best stack is hybrid. Use AI where it wins; don't force it everywhere.</div>
+      </div>
+    </div>
+    <div class="lesson">
+      <div class="badge" style="color:var(--personal)">5</div>
+      <div class="lbody">
+        <div class="lh">Things change very fast. That's actually the point.</div>
+        <div class="lb">OpenClaw → Hermes in months. GPT-3.5 → multimodal vision in a year. The tools change; the mindset (start with a problem) stays constant.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 14 — CLOSING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Closing" style="justify-content:center;text-align:center">
+  <div class="blob tl"></div>
+  <div class="blob br"></div>
+
+  <span class="eyebrow reveal" style="justify-content:center">The constant in a fast-changing field</span>
+  <h1 class="reveal mega" style="margin:1rem auto;max-width:16ch">
+    Have a clear<br><span class="cyan">problem.</span>
+  </h1>
+
+  <div class="reveal" style="font-family:var(--font-display);font-size:var(--h3);color:var(--ink-mute);max-width:44ch;margin:0 auto 2rem;line-height:1.5">
+    The technology will keep moving. The models will keep improving.<br>
+    <span class="cyan">Your problem statement is the only anchor that matters.</span>
+  </div>
+
+  <div class="reveal closing-list" style="max-width:600px;margin:0 auto;text-align:left">
+    <div class="cl">
+      <span class="ci">🏠</span>
+      <div>
+        <div class="ct">Personal: curiosity → automation</div>
+        <div class="cs">Expense chaos → receipt scanner → Hermes agent. Each step solved a real problem.</div>
+      </div>
+    </div>
+    <div class="cl">
+      <span class="ci">🏥</span>
+      <div>
+        <div class="ct">Work: summarize → decide → auto-approve</div>
+        <div class="cs">OCR + GPT-3.5 → multimodal vision → full agent pipeline with RAG and yes/no decisions.</div>
+      </div>
+    </div>
+    <div class="cl">
+      <span class="ci">⚡</span>
+      <div>
+        <div class="ct">Technology: text → vision → agents</div>
+        <div class="cs">Jan/Feb OpenClaw. April Hermes. 2025 the agent year. The tools moved — so did we.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:2rem;font-family:var(--font-mono);font-size:.75em;color:var(--ink-mute);letter-spacing:.15em;text-transform:uppercase">
+    If you don't know the problem yet — reverse engineer the outcome you want.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NAV SCRIPT -->
+<!-- ============================================================ -->
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const progress = document.getElementById('progress');
+const dotsNav = document.getElementById('dots');
+const curEl = document.getElementById('cur');
+const totEl = document.getElementById('tot');
+let current = 0;
+
+totEl.textContent = String(slides.length).padStart(2,'0');
+
+// build dot nav
+slides.forEach((s,i)=>{
+  const b = document.createElement('button');
+  b.dataset.label = s.dataset.label || String(i+1);
+  b.setAttribute('aria-label', b.dataset.label);
+  b.addEventListener('click',()=>goTo(i));
+  dotsNav.appendChild(b);
+});
+
+function goTo(idx){
+  current = Math.max(0,Math.min(slides.length-1,idx));
+  slides[current].scrollIntoView({behavior:'smooth'});
+}
+
+function onVisible(idx){
+  current = idx;
+  curEl.textContent = String(idx+1).padStart(2,'0');
+  progress.style.width = ((idx+1)/slides.length*100)+'%';
+  dotsNav.querySelectorAll('button').forEach((b,i)=>{
+    b.classList.toggle('active',i===idx);
+  });
+}
+
+// intersection observer
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && e.intersectionRatio>=.5){
+      e.target.classList.add('visible');
+      onVisible(slides.indexOf(e.target));
+    }
+  });
+},{threshold:.5});
+slides.forEach(s=>io.observe(s));
+
+// keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();goTo(current+1)}
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();goTo(current-1)}
+});
+</script>
+</body>
+</html>
