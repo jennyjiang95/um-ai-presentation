@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude & Hermes Agent — Use Cases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+/* === VIEWPORT BASE (mandatory) ============================================= */
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide {
+  width: 100vw; height: 100vh; height: 100dvh;
+  overflow: hidden; scroll-snap-align: start;
+  display: flex; flex-direction: column; position: relative;
+}
+.slide-content {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; max-height: 100%; overflow: hidden;
+  padding: var(--sp);
+}
+:root {
+  --title: clamp(1.5rem, 5vw, 4rem);
+  --h2:    clamp(1.2rem, 3vw, 2.2rem);
+  --h3:    clamp(0.95rem, 2.2vw, 1.6rem);
+  --body:  clamp(0.72rem, 1.4vw, 1.05rem);
+  --sm:    clamp(0.6rem, 0.95vw, 0.82rem);
+  --sp:    clamp(1rem, 3.5vw, 3.5rem);
+  --gap:   clamp(0.4rem, 1.5vw, 1.5rem);
+  --egap:  clamp(0.25rem, 0.8vw, 0.8rem);
+
+  /* Mission-control palette */
+  --bg:      #070c15;
+  --bg2:     #0c1421;
+  --bg3:     #111c2e;
+  --border:  #1b2d47;
+  --brite:   #253d5e;
+  --blue:    #4a9eff;
+  --cyan:    #22d3ee;
+  --green:   #4ade80;
+  --amber:   #fbbf24;
+  --txt:     #b8cfe6;
+  --dim:     #546c87;
+  --bright:  #e4f0ff;
+}
+@media (max-height: 700px) {
+  :root { --sp: clamp(0.7rem,2.5vw,1.8rem); --gap: clamp(0.3rem,1vw,1rem); --h2: clamp(1rem,2.5vw,1.7rem); }
+}
+@media (max-height: 600px) {
+  :root { --sp: clamp(0.5rem,2vw,1.2rem); --body: clamp(0.65rem,1.1vw,0.85rem); }
+  .nav-dots,.kbd-hint { display:none; }
+}
+@media (max-height: 500px) {
+  :root { --sp: clamp(0.4rem,1.8vw,1rem); --h2: clamp(0.9rem,2vw,1.3rem); }
+}
+@media (max-width: 600px) {
+  :root { --title: clamp(1.3rem,7vw,2.5rem); }
+  .two-col { grid-template-columns:1fr !important; }
+  .step-row { grid-template-columns:1fr 1fr !important; }
+  .stats-row { grid-template-columns:1fr 1fr !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.15s !important; }
+  html { scroll-behavior: auto; }
+}
+/* =========================================================================== */
+
+/* === BASE ================================================================== */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--txt); }
+
+/* Dot grid background overlay */
+.slide::before {
+  content:''; position:absolute; inset:0; z-index:0;
+  background-image: radial-gradient(circle, #1b2d47 1px, transparent 1px);
+  background-size: clamp(22px,3vw,34px) clamp(22px,3vw,34px);
+  opacity: 0.5; pointer-events:none;
+}
+
+/* Glow blob */
+.glow {
+  position:absolute; border-radius:50%; pointer-events:none; z-index:0;
+  filter: blur(80px);
+}
+
+/* === ANIMATIONS ============================================================ */
+@keyframes fadeUp  { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+@keyframes slideL  { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
+@keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:.35} }
+@keyframes scan    { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
+
+/* Triggered only after slide becomes visible */
+.slide[data-vis] .a-up  { animation: fadeUp 0.55s ease both; }
+.slide[data-vis] .a-in  { animation: fadeIn 0.55s ease both; }
+.slide[data-vis] .a-l   { animation: slideL 0.55s ease both; }
+
+.a-up, .a-in, .a-l { opacity:0; }
+
+/* Stagger delays */
+.d1 { animation-delay:.05s !important; }
+.d2 { animation-delay:.13s !important; }
+.d3 { animation-delay:.21s !important; }
+.d4 { animation-delay:.29s !important; }
+.d5 { animation-delay:.37s !important; }
+.d6 { animation-delay:.45s !important; }
+.d7 { animation-delay:.53s !important; }
+
+/* === COMMON COMPONENTS ===================================================== */
+.lbl {
+  font-family:'Space Mono',monospace; font-size:var(--sm); color:var(--dim);
+  letter-spacing:.18em; text-transform:uppercase; margin-bottom:var(--egap);
+}
+.accent-bar {
+  width:clamp(28px,4vw,50px); height:2px; background:var(--blue);
+  margin-bottom:var(--gap);
+}
+.tag {
+  display:inline-flex; align-items:center;
+  font-family:'Space Mono',monospace; font-size:var(--sm);
+  padding: 3px 10px; border-radius:4px; border:1px solid;
+  letter-spacing:.04em; white-space:nowrap;
+}
+.tag-b  { color:var(--blue);  background:rgba(74,158,255,.08);  border-color:rgba(74,158,255,.25); }
+.tag-c  { color:var(--cyan);  background:rgba(34,211,238,.08);  border-color:rgba(34,211,238,.25); }
+.tag-g  { color:var(--green); background:rgba(74,222,128,.08);  border-color:rgba(74,222,128,.25); }
+.tag-a  { color:var(--amber); background:rgba(251,191,36,.08);  border-color:rgba(251,191,36,.25); }
+
+.slide-h { font-family:'Syne',sans-serif; font-size:var(--h2); font-weight:800; color:var(--bright); }
+.center  { text-align:center; }
+
+.card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:10px;
+  padding:clamp(12px,1.8vw,22px);
+}
+
+/* === NAV =================================================================== */
+#nav-dots {
+  position:fixed; right:clamp(8px,1.2vw,18px); top:50%; transform:translateY(-50%);
+  z-index:200; display:flex; flex-direction:column; gap:7px;
+}
+.nd {
+  width:5px; height:5px; border-radius:50%; background:var(--brite);
+  cursor:pointer; transition:all .3s;
+}
+.nd.on { background:var(--blue); transform:scale(1.6); }
+
+#ctr {
+  position:fixed; bottom:clamp(10px,1.8vh,20px); right:clamp(14px,1.8vw,28px);
+  font-family:'Space Mono',monospace; font-size:var(--sm); color:var(--dim);
+  z-index:200;
+}
+.kbd-hint {
+  position:fixed; bottom:clamp(10px,1.8vh,20px); left:50%; transform:translateX(-50%);
+  font-family:'Space Mono',monospace; font-size:var(--sm); color:var(--dim);
+  z-index:200; opacity:.55;
+}
+
+/* ===== SLIDE 0: COVER ====================================================== */
+#s0 {
+  align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at 60% 40%, #0e1c34 0%, #070c15 70%);
+}
+#s0 .glow { width:60vw; height:60vw; max-width:700px; max-height:700px;
+  background:radial-gradient(circle,rgba(74,158,255,.14),transparent 70%);
+  top:50%; left:50%; transform:translate(-50%,-50%); }
+.s0-scan {
+  position:absolute; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(74,158,255,.35),transparent);
+  animation:scan 7s linear infinite; z-index:1; pointer-events:none;
+}
+.s0-body {
+  position:relative; z-index:2; display:flex; flex-direction:column;
+  align-items:center; gap:clamp(8px,2vh,18px); text-align:center;
+}
+.s0-eyebrow {
+  font-family:'Space Mono',monospace; font-size:var(--sm);
+  color:var(--blue); letter-spacing:.22em; text-transform:uppercase;
+}
+.s0-title {
+  font-family:'Syne',sans-serif; font-size:clamp(2.8rem,8vw,7rem);
+  font-weight:800; color:var(--bright); line-height:.95; letter-spacing:-.02em;
+}
+.s0-title em { color:var(--blue); font-style:normal; }
+.s0-sub {
+  font-size:clamp(.8rem,1.8vw,1.15rem); color:var(--dim); max-width:520px;
+  line-height:1.6;
+}
+.s0-tags { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+
+/* ===== SLIDE 1: TWO TOOLS ================================================== */
+.two-col {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:var(--gap); width:100%; max-width:min(90vw,960px); margin:0 auto;
+}
+.panel { display:flex; flex-direction:column; gap:var(--egap); }
+.panel-top { border-top:2px solid var(--blue); }
+.panel-top.cyan { border-color:var(--cyan); }
+.panel-num {
+  font-family:'Syne',sans-serif; font-size:clamp(2rem,4vw,3.5rem);
+  font-weight:800; line-height:1;
+}
+.panel-num.b { color:var(--blue); }
+.panel-num.c { color:var(--cyan); }
+.panel-h { font-family:'Syne',sans-serif; font-size:var(--h3); font-weight:700; color:var(--bright); }
+.panel-p { font-size:var(--body); color:var(--dim); line-height:1.55; }
+
+/* ===== USE CASE GRID (2×3) ================================================= */
+.uc-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr);
+  gap:clamp(7px,1vw,12px); max-width:min(92vw,1000px); margin:0 auto; width:100%;
+}
+.uc-card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:8px;
+  padding:clamp(10px,1.5vw,18px); display:flex; flex-direction:column; gap:5px;
+  transition:border-color .2s;
+}
+.uc-card:hover { border-color:var(--blue); }
+.uc-card.c:hover { border-color:var(--cyan); }
+.uc-ico  { font-size:clamp(.9rem,1.6vw,1.3rem); line-height:1; }
+.uc-h    { font-family:'Syne',sans-serif; font-size:clamp(.72rem,1.3vw,.95rem); font-weight:700; color:var(--bright); }
+.uc-p    { font-size:clamp(.6rem,1vw,.78rem); color:var(--dim); line-height:1.45; }
+
+/* ===== STEPS ROW (5 cards) ================================================= */
+.step-row {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:clamp(7px,1.1vw,14px); max-width:min(92vw,1040px); margin:0 auto; width:100%;
+}
+.step-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-top:2px solid var(--blue); border-radius:8px;
+  padding:clamp(10px,1.5vw,18px); display:flex; flex-direction:column; gap:6px;
+}
+.step-card.c { border-top-color:var(--cyan); }
+.step-n { font-family:'Space Mono',monospace; font-size:var(--sm); color:var(--dim); }
+.step-h { font-family:'Syne',sans-serif; font-size:clamp(.75rem,1.3vw,.98rem); font-weight:700; color:var(--bright); line-height:1.2; }
+.step-p { font-size:clamp(.6rem,.98vw,.77rem); color:var(--dim); line-height:1.4; }
+.step-code { font-family:'Space Mono',monospace; font-size:.72em; color:var(--blue); }
+.step-card.c .step-n { color:var(--cyan); }
+.step-card.c .step-code { color:var(--cyan); }
+
+/* ===== COMBINED FLOW ======================================================= */
+.flow-row {
+  display:grid; grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:center; gap:clamp(8px,1.5vw,18px);
+  max-width:min(88vw,880px); margin:0 auto; width:100%;
+}
+.flow-box {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:10px; padding:clamp(12px,2vw,24px); text-align:center;
+  display:flex; flex-direction:column; gap:6px;
+}
+.flow-box.b { border-color:rgba(74,158,255,.4); }
+.flow-box.c { border-color:rgba(34,211,238,.4); }
+.flow-label { font-family:'Space Mono',monospace; font-size:var(--sm); letter-spacing:.12em; }
+.flow-h { font-family:'Syne',sans-serif; font-size:var(--h3); font-weight:800; color:var(--bright); }
+.flow-p { font-size:clamp(.62rem,1.05vw,.8rem); color:var(--dim); line-height:1.5; }
+.flow-arr { font-size:clamp(1rem,2.5vw,1.8rem); color:var(--brite); flex-shrink:0; text-align:center; }
+
+/* ===== STATS ROW =========================================================== */
+.stats-row {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:clamp(8px,1.2vw,16px); max-width:min(90vw,960px); margin:0 auto; width:100%;
+}
+.stat-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:8px; padding:clamp(12px,1.8vw,22px);
+  display:flex; flex-direction:column; gap:6px; text-align:center;
+}
+.stat-n {
+  font-family:'Syne',sans-serif; font-size:clamp(1.6rem,3.8vw,3.2rem);
+  font-weight:800; color:var(--blue); line-height:1;
+}
+.stat-l { font-size:var(--sm); color:var(--dim); line-height:1.4; }
+
+/* ===== TIPS GRID (2×3) ===================================================== */
+.tips-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:clamp(8px,1.2vw,14px); max-width:min(88vw,880px); margin:0 auto; width:100%;
+}
+.tip-card {
+  background:var(--bg2); border:1px solid var(--border);
+  border-left:2px solid; border-radius:8px; padding:clamp(10px,1.5vw,18px);
+  display:flex; flex-direction:column; gap:5px;
+}
+.tip-h { font-family:'Syne',sans-serif; font-size:clamp(.78rem,1.3vw,.95rem); font-weight:700; color:var(--bright); }
+.tip-p { font-size:clamp(.62rem,1vw,.78rem); color:var(--dim); line-height:1.45; }
+
+/* ===== SHIFT SLIDE ========================================================= */
+.shift-row {
+  display:grid; grid-template-columns:1fr auto 1fr;
+  align-items:center; gap:clamp(10px,1.8vw,20px);
+  max-width:min(80vw,700px); margin:0 auto; width:100%;
+}
+.shift-box {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:8px; padding:clamp(12px,2vw,22px); text-align:center;
+  display:flex; flex-direction:column; gap:6px;
+}
+.shift-box.after { border-color:rgba(74,158,255,.3); background:rgba(74,158,255,.05); }
+.shift-lbl { font-family:'Space Mono',monospace; font-size:var(--sm); letter-spacing:.12em; }
+.shift-p { font-size:var(--body); color:var(--txt); line-height:1.6; }
+</style>
+</head>
+<body>
+
+<!-- Fixed UI -->
+<div id="nav-dots"></div>
+<div id="ctr">01 / 12</div>
+<div class="kbd-hint">↑↓ / Space to navigate</div>
+
+<!-- ===== SLIDE 0: COVER ==================================================== -->
+<section class="slide" id="s0" data-vis>
+  <div class="glow"></div>
+  <div class="s0-scan"></div>
+  <div class="s0-body">
+    <div class="s0-eyebrow a-in d1">2026 · Use Cases &amp; How-To Guide</div>
+    <div class="s0-title a-up d2">Claude &amp;<br><em>Hermes</em> Agent</div>
+    <div class="s0-sub a-up d3">What people are actually doing with them — and how you can too</div>
+    <div class="s0-tags a-up d4">
+      <span class="tag tag-b">Claude Code</span>
+      <span class="tag tag-c">Hermes Agent</span>
+      <span class="tag tag-g">Real Use Cases</span>
+      <span class="tag tag-a">Step-by-Step</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 1: TWO TOOLS ================================================ -->
+<section class="slide" id="s1">
+  <div class="slide-content">
+    <div class="lbl a-in d1">// Overview</div>
+    <h2 class="slide-h a-up d2" style="margin-bottom:var(--gap)">Two tools. One mission.</h2>
+    <div class="two-col">
+      <div class="card panel panel-top a-up d3">
+        <div><span class="tag tag-b">Synchronous · Interactive</span></div>
+        <div class="panel-h" style="margin-top:8px">Claude Code</div>
+        <div class="panel-p">An agentic CLI that reads your whole codebase, plans across files, executes, and iterates — with you in the loop reviewing every change.</div>
+        <div class="panel-num b" style="margin-top:auto">70%</div>
+        <div style="font-size:var(--sm);color:var(--dim)">of developers now prefer Claude for coding tasks</div>
+      </div>
+      <div class="card panel panel-top cyan a-up d4">
+        <div><span class="tag tag-c">Asynchronous · Autonomous</span></div>
+        <div class="panel-h" style="margin-top:8px">Hermes Agent</div>
+        <div class="panel-p">A schedulable, fire-and-forget agent. Native cron built in — set it once, come back to finished results. No babysitting.</div>
+        <div class="panel-num c" style="margin-top:auto">24/7</div>
+        <div style="font-size:var(--sm);color:var(--dim)">runs scheduled tasks without you watching</div>
+      </div>
+    </div>
+    <div class="a-up d5" style="text-align:center;font-size:var(--sm);color:var(--dim);margin-top:var(--gap)">
+      Key mental model: <strong style="color:var(--txt)">Claude Code = you're present</strong> · <strong style="color:var(--txt)">Hermes = you're not</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 2: CLAUDE CODE USE CASES (CODING) =========================== -->
+<section class="slide" id="s2">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div style="width:100%;max-width:min(92vw,1000px);margin:0 auto">
+      <div class="lbl a-in d1">// Claude Code → Code</div>
+      <h2 class="slide-h a-up d2" style="margin-bottom:var(--gap)">What developers use it for</h2>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card a-up d1"><div class="uc-ico">🔁</div><div class="uc-h">Multi-file refactoring</div><div class="uc-p">Reads the full codebase, plans safe changes across all affected files, executes, then runs tests to verify.</div></div>
+      <div class="uc-card a-up d2"><div class="uc-ico">🐛</div><div class="uc-h">Deep-dive debugging</div><div class="uc-p">"Something's broken" → Claude traces the call stack across modules and proposes a root-cause fix.</div></div>
+      <div class="uc-card a-up d3"><div class="uc-ico">🧪</div><div class="uc-h">Auto-write tests</div><div class="uc-p">Teams write comprehensive tests for new features automatically — PR triggers Claude to add coverage.</div></div>
+      <div class="uc-card a-up d4"><div class="uc-ico">🔀</div><div class="uc-h">PR creation &amp; review</div><div class="uc-p">GitHub Actions hook: Claude auto-comments on PRs — formatting, coverage gaps, suggested refactors.</div></div>
+      <div class="uc-card a-up d5"><div class="uc-ico">🗺️</div><div class="uc-h">Codebase onboarding</div><div class="uc-p">"How does auth work here?" — Claude maps the entire codebase and answers like a senior engineer.</div></div>
+      <div class="uc-card a-up d6"><div class="uc-ico">🚀</div><div class="uc-h">Feature from spec</div><div class="uc-p">Hand it a Jira ticket or PRD — it writes the code, creates tests, opens a PR. Hours → minutes.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 3: CLAUDE CODE USE CASES (NON-CODING) ======================= -->
+<section class="slide" id="s3">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div style="width:100%;max-width:min(92vw,1000px);margin:0 auto">
+      <div class="lbl a-in d1">// Claude Code → Beyond Code</div>
+      <h2 class="slide-h a-up d2" style="margin-bottom:var(--gap)">Non-developers are using it too</h2>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card a-up d1"><div class="uc-ico">🔍</div><div class="uc-h">Research powerhouse</div><div class="uc-p">Web search + code analysis in one session: summarize papers, identify patterns across hundreds of sources.</div></div>
+      <div class="uc-card a-up d2"><div class="uc-ico">💰</div><div class="uc-h">Expense tracker</div><div class="uc-p">One user described the goal → got a categorizer across multiple business credit cards. Zero code written manually.</div></div>
+      <div class="uc-card a-up d3"><div class="uc-ico">📊</div><div class="uc-h">Dataset analysis</div><div class="uc-p">Upload a massive CSV, ask "what drives engagement" — Claude writes the analysis script and runs it for you.</div></div>
+      <div class="uc-card a-up d4"><div class="uc-ico">📣</div><div class="uc-h">Marketing copy</div><div class="uc-p">Anthropic's own team: /help-me-market generates 3 copy versions from feature releases in seconds.</div></div>
+      <div class="uc-card a-up d5"><div class="uc-ico">📄</div><div class="uc-h">Multi-doc querying</div><div class="uc-p">Upload multiple PDFs/CSVs, ask cross-document questions. Legal, finance, research teams use this daily.</div></div>
+      <div class="uc-card a-up d6"><div class="uc-ico">🛰️</div><div class="uc-h">NASA Mars rover</div><div class="uc-p">Engineers used Claude Code to plan a 400-meter Perseverance route in Rover Markup Language. (Dec 2025)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 4: HERMES USE CASES ========================================= -->
+<section class="slide" id="s4">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div style="width:100%;max-width:min(92vw,1000px);margin:0 auto">
+      <div class="lbl a-in d1">// Hermes Agent → Use Cases</div>
+      <div class="accent-bar a-in d1" style="background:var(--cyan)"></div>
+      <h2 class="slide-h a-up d2" style="margin-bottom:var(--gap)">What Hermes is built for</h2>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card c a-up d1"><div class="uc-ico">📬</div><div class="uc-h">Daily inbox summary</div><div class="uc-p">Define what matters once. Hermes delivers a structured morning digest — no manual effort, ever again.</div></div>
+      <div class="uc-card c a-up d2"><div class="uc-ico">📰</div><div class="uc-h">Morning research brief</div><div class="uc-p">Scheduled web research on your industry, competitors, or topic. Lands in your inbox before 9 AM.</div></div>
+      <div class="uc-card c a-up d3"><div class="uc-ico">📋</div><div class="uc-h">Weekly reports</div><div class="uc-p">Aggregate data from APIs, repos, or docs on schedule. No dashboard needed — structured report delivered.</div></div>
+      <div class="uc-card c a-up d4"><div class="uc-ico">🔔</div><div class="uc-h">Monitoring &amp; alerts</div><div class="uc-p">Check conditions on a schedule — price changes, build failures, ESG risks. Notifies only when triggered.</div></div>
+      <div class="uc-card c a-up d5"><div class="uc-ico">🏗️</div><div class="uc-h">Client deliverables</div><div class="uc-p">Consultants orchestrate Claude Code via Hermes — client request to live deployed tool in under 4 hours.</div></div>
+      <div class="uc-card c a-up d6"><div class="uc-ico">🌍</div><div class="uc-h">ESG portfolio screening</div><div class="uc-p">Norway's $2.2T sovereign wealth fund uses Claude to monitor portfolio risks continuously. (Feb 2026)</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 5: HOW TO START — CLAUDE CODE ================================ -->
+<section class="slide" id="s5">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div class="lbl center a-in d1">// Getting Started</div>
+    <h2 class="slide-h center a-up d2">How to use Claude Code</h2>
+    <div class="step-row">
+      <div class="step-card a-up d1">
+        <div class="step-n">01 / Install</div>
+        <div class="step-h">Get it in your terminal</div>
+        <div class="step-p"><span class="step-code">npm i -g @anthropic-ai/claude-code</span><br>or download the desktop app from claude.com</div>
+      </div>
+      <div class="step-card a-up d2">
+        <div class="step-n">02 / Open in project</div>
+        <div class="step-h">Run <span class="step-code">claude</span> in any directory</div>
+        <div class="step-p">It automatically reads and maps your entire codebase. No config required.</div>
+      </div>
+      <div class="step-card a-up d3">
+        <div class="step-n">03 / Give a goal</div>
+        <div class="step-h">Plain English. Really.</div>
+        <div class="step-p">"Add pagination to the user list" or "Fix the auth bug on line 42" — describe the outcome, not the steps.</div>
+      </div>
+      <div class="step-card a-up d4">
+        <div class="step-n">04 / Review changes</div>
+        <div class="step-h">You stay in control</div>
+        <div class="step-p">See exactly which files changed and why. Approve, push back, or redirect. Nothing happens without you.</div>
+      </div>
+      <div class="step-card a-up d5">
+        <div class="step-n">05 / Iterate</div>
+        <div class="step-h">Keep the conversation going</div>
+        <div class="step-p">"Now write tests" or "Handle the empty state too." The session continues in context.</div>
+      </div>
+    </div>
+    <div class="a-up d6" style="font-size:var(--sm);color:var(--dim);text-align:center;margin-top:var(--egap)">
+      💡 Start with a small, well-scoped task to build trust before delegating bigger work
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 6: HOW TO START — HERMES ==================================== -->
+<section class="slide" id="s6">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div class="lbl center a-in d1">// Getting Started</div>
+    <h2 class="slide-h center a-up d2">How to use Hermes Agent</h2>
+    <div class="step-row">
+      <div class="step-card c a-up d1">
+        <div class="step-n">01 / Define task</div>
+        <div class="step-h">What runs on autopilot?</div>
+        <div class="step-p">"Every Monday, summarize this week's GitHub commits and flag any regressions."</div>
+      </div>
+      <div class="step-card c a-up d2">
+        <div class="step-n">02 / Write the prompt</div>
+        <div class="step-h">Craft it once, carefully</div>
+        <div class="step-p">Be specific about sources, output format, and what action to take. This is your only investment.</div>
+      </div>
+      <div class="step-card c a-up d3">
+        <div class="step-n">03 / Set schedule</div>
+        <div class="step-h">Cron built in natively</div>
+        <div class="step-p">Use <span class="step-code" style="color:var(--cyan)">/schedule</span> command or the built-in cron interface. Daily, weekly, hourly — your call.</div>
+      </div>
+      <div class="step-card c a-up d4">
+        <div class="step-n">04 / Agent runs</div>
+        <div class="step-h">You're not needed</div>
+        <div class="step-p">Hermes fetches, processes, writes — autonomously. No babysitting. No keeping a terminal open.</div>
+      </div>
+      <div class="step-card c a-up d5">
+        <div class="step-n">05 / Review &amp; refine</div>
+        <div class="step-h">Outputs arrive ready</div>
+        <div class="step-p">Review results at your leisure. Tune the prompt to improve quality over time — it compounds.</div>
+      </div>
+    </div>
+    <div class="a-up d6" style="font-size:var(--sm);color:var(--dim);text-align:center;margin-top:var(--egap)">
+      💡 Use Claude Code to build and test the agent logic interactively first, then hand off to Hermes to schedule
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 7: COMBINED WORKFLOW ========================================= -->
+<section class="slide" id="s7">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div class="lbl center a-in d1">// Power Move</div>
+    <h2 class="slide-h center a-up d2">The combined workflow</h2>
+    <div class="flow-row">
+      <div class="flow-box b a-up d2">
+        <div class="flow-label" style="color:var(--blue)">CLAUDE CODE</div>
+        <div class="flow-h">Build &amp; Test</div>
+        <div class="flow-p">Interactive session. Debug, test edge cases, refine tool calls. Stay in the loop until logic is solid.</div>
+      </div>
+      <div class="flow-arr a-up d3">→</div>
+      <div class="card a-up d3" style="text-align:center;padding:clamp(12px,2vw,20px)">
+        <div style="font-size:clamp(1rem,2.5vw,1.8rem)">✓</div>
+        <div style="font-size:var(--sm);color:var(--dim);margin-top:4px">Logic solid?<br>Hand it off.</div>
+      </div>
+      <div class="flow-arr a-up d4">→</div>
+      <div class="flow-box c a-up d4">
+        <div class="flow-label" style="color:var(--cyan)">HERMES AGENT</div>
+        <div class="flow-h" style="color:var(--cyan)">Schedule &amp; Run</div>
+        <div class="flow-p">Hermes takes over — runs autonomously on your schedule. You review the outputs, not the process.</div>
+      </div>
+    </div>
+    <div class="a-up d5" style="background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.18);border-radius:8px;padding:clamp(10px,1.8vw,20px);max-width:min(78vw,660px);text-align:center;">
+      <div style="font-family:'Space Mono',monospace;font-size:var(--sm);color:var(--dim)">Real result — consultant team</div>
+      <div style="font-size:var(--body);color:var(--bright);margin-top:5px;font-weight:600">Client request → deployed live tool in <span style="color:var(--blue)">under 4 hours</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 8: STATS ===================================================== -->
+<section class="slide" id="s8">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div class="lbl center a-in d1">// By the Numbers</div>
+    <h2 class="slide-h center a-up d2">Adoption is accelerating</h2>
+    <div class="stats-row">
+      <div class="stat-card a-up d2"><div class="stat-n">70%</div><div class="stat-l">of developers prefer Claude for coding tasks (2025)</div></div>
+      <div class="stat-card a-up d3"><div class="stat-n">43%</div><div class="stat-l">developer adoption — fastest-growing in Stack Overflow survey</div></div>
+      <div class="stat-card a-up d4"><div class="stat-n">58%</div><div class="stat-l">reduction in planning, review, and documentation time</div></div>
+      <div class="stat-card a-up d5"><div class="stat-n">&lt;4h</div><div class="stat-l">from client request to live deployed tool (Hermes + Claude Code)</div></div>
+    </div>
+    <div class="a-up d6" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:var(--egap)">
+      <span class="tag tag-b">NASA Mars rover route planning — Dec 2025</span>
+      <span class="tag tag-c">Norway $2.2T ESG fund monitoring — Feb 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 9: TIPS ===================================================== -->
+<section class="slide" id="s9">
+  <div class="slide-content" style="align-items:center;gap:var(--gap)">
+    <div class="lbl a-in d1">// Best Practices</div>
+    <h2 class="slide-h a-up d2" style="margin-bottom:var(--gap)">Tips that actually matter</h2>
+    <div class="tips-grid">
+      <div class="tip-card a-l d1" style="border-left-color:var(--blue)"><div class="tip-h">Start small to calibrate trust</div><div class="tip-p">Give Claude Code a small, well-scoped task first. See how it thinks. Then escalate scope as trust builds.</div></div>
+      <div class="tip-card a-l d2" style="border-left-color:var(--cyan)"><div class="tip-h">Prompt once, run forever</div><div class="tip-p">For Hermes: invest time in crafting the first prompt. A great prompt compounds — saves hours every week.</div></div>
+      <div class="tip-card a-l d3" style="border-left-color:var(--green)"><div class="tip-h">Claude is honest, not compliant</div><div class="tip-p">It pushes back on bad plans. Ask "is there a better approach?" before committing — use the friction.</div></div>
+      <div class="tip-card a-l d4" style="border-left-color:var(--amber)"><div class="tip-h">Non-devs: describe outcomes</div><div class="tip-p">"I need X to happen when Y" beats any technical spec. Claude figures out the implementation path.</div></div>
+      <div class="tip-card a-l d5" style="border-left-color:var(--blue)"><div class="tip-h">Context is compounding</div><div class="tip-p">The more context in your CLAUDE.md or prompt, the better every output. Invest in setup once — it pays every run.</div></div>
+      <div class="tip-card a-l d6" style="border-left-color:var(--cyan)"><div class="tip-h">Build → Test → Schedule</div><div class="tip-p">Always validate logic interactively in Claude Code before giving Hermes autonomy. Catch errors while you're watching.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 10: THE SHIFT ================================================ -->
+<section class="slide" id="s10">
+  <div class="slide-content" style="align-items:center;justify-content:center;gap:clamp(14px,2.5vh,28px)">
+    <div class="lbl center a-in d1">// The Shift</div>
+    <div class="a-up d2" style="font-family:'Syne',sans-serif;font-size:clamp(1.4rem,4.5vw,3.5rem);font-weight:800;color:var(--bright);line-height:1.1;text-align:center">
+      From <span style="color:var(--dim);text-decoration:line-through">using AI</span><br>to <span style="color:var(--blue)">delegating to AI</span>
+    </div>
+    <div class="shift-row a-up d3">
+      <div class="shift-box">
+        <div class="shift-lbl" style="color:var(--dim)">BEFORE</div>
+        <div class="shift-p">AI writes one line<br>You stitch it together<br>You run the tests<br>You write the PR</div>
+      </div>
+      <div style="font-size:clamp(1rem,2.5vw,1.8rem);color:var(--brite);text-align:center">→</div>
+      <div class="shift-box after">
+        <div class="shift-lbl" style="color:var(--blue)">NOW</div>
+        <div class="shift-p" style="color:var(--bright)">You describe the goal<br>Agent plans &amp; builds<br>Agent tests &amp; iterates<br>Agent opens the PR</div>
+      </div>
+    </div>
+    <div class="a-up d4" style="font-size:var(--body);color:var(--dim);text-align:center;max-width:min(70vw,580px);line-height:1.65">
+      The bottleneck is no longer writing code or doing research.<br>
+      It's <span style="color:var(--bright)">knowing what to ask for</span> — and trusting the output.
+    </div>
+  </div>
+</section>
+
+<!-- ===== SLIDE 11: CLOSING ================================================== -->
+<section class="slide" id="s11">
+  <div class="glow" style="width:50vw;height:50vw;max-width:600px;max-height:600px;background:radial-gradient(circle,rgba(34,211,238,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="slide-content" style="align-items:center;justify-content:center;gap:clamp(12px,2.5vh,26px);position:relative;z-index:1">
+    <div class="s0-eyebrow a-in d1" style="font-family:'Space Mono',monospace;font-size:var(--sm);color:var(--blue);letter-spacing:.22em;text-transform:uppercase">Get Started Today</div>
+    <div class="s0-title a-up d2" style="font-family:'Syne',sans-serif;font-size:clamp(2rem,5.5vw,4.5rem);font-weight:800;color:var(--bright);line-height:1;text-align:center">
+      Start small.<br><em style="color:var(--blue);font-style:normal">Delegate fast.</em>
+    </div>
+    <div class="a-up d3" style="display:flex;flex-direction:column;gap:var(--egap);max-width:min(78vw,580px);width:100%">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tag tag-b" style="flex-shrink:0">Claude Code</span>
+        <span style="font-size:var(--body);color:var(--dim)">code.claude.com · free tier · desktop + terminal</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tag tag-c" style="flex-shrink:0">Hermes Agent</span>
+        <span style="font-size:var(--body);color:var(--dim)">github.com/NousResearch/hermes-agent · open-source</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tag tag-g" style="flex-shrink:0">Best first task</span>
+        <span style="font-size:var(--body);color:var(--dim)">"Explain how this codebase works" or "Summarize my emails from this week"</span>
+      </div>
+    </div>
+    <div class="a-up d4" style="font-family:'Space Mono',monospace;font-size:var(--sm);color:var(--dim);text-align:center;line-height:1.6">
+      Sources: Anthropic · MindStudio · PromptWarrior · Stack Overflow 2025<br>syntaxdispatch.com · seedandsociety.com · aiagentindex.mit.edu
+    </div>
+  </div>
+</section>
+
+<script>
+/* === Navigation ============================================================ */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const ctr    = document.getElementById('ctr');
+const ndWrap = document.getElementById('nav-dots');
+let cur = 0;
+
+// Build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'nd' + (i === 0 ? ' on' : '');
+  d.onclick = () => goTo(i);
+  ndWrap.appendChild(d);
+});
+
+function goTo(i) {
+  i = Math.max(0, Math.min(slides.length - 1, i));
+  cur = i;
+  slides[i].scrollIntoView({ behavior: 'smooth' });
+}
+
+function ui() {
+  document.querySelectorAll('.nd').forEach((d, i) => d.classList.toggle('on', i === cur));
+  ctr.textContent = String(cur + 1).padStart(2, '0') + ' / ' + slides.length;
+}
+
+/* === IntersectionObserver: trigger animations + update UI ================= */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.5) {
+      cur = slides.indexOf(e.target);
+      e.target.setAttribute('data-vis', '1'); // triggers CSS animations
+      ui();
+    }
+  });
+}, { threshold: 0.5 });
+
+slides.forEach(s => obs.observe(s));
+
+/* === Keyboard ============================================================== */
+document.addEventListener('keydown', e => {
+  const map = {
+    ArrowDown: 1, ArrowRight: 1, ' ': 1,
+    ArrowUp: -1, ArrowLeft: -1
+  };
+  if (map[e.key] !== undefined) { e.preventDefault(); goTo(cur + map[e.key]); }
+  if (e.key === 'Escape') goTo(0);
+  if (/^\d$/.test(e.key)) goTo(+e.key - 1);
+});
+
+ui();
+</script>
+</body>
+</html>
