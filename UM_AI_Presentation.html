@@ -97,6 +97,13 @@ h3{font-size:var(--h3);margin-bottom:.3em}
 .cyan{color:var(--cyan)}.magenta{color:var(--magenta)}.amber{color:var(--amber)}
 .violet{color:var(--violet)}.paper{color:var(--paper)}.mono{font-family:var(--font-mono)}
 
+/* insight boxes */
+.insight{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem 1.1rem;border-radius:10px;margin-top:.8rem;font-family:var(--font-body)}
+.insight.cyan-box{background:rgba(0,143,116,.07);border:1px solid var(--cyan)}
+.insight.amber-box{background:rgba(196,122,0,.07);border:1px solid var(--amber)}
+.insight .ik{font-family:var(--font-mono);font-size:.65em;text-transform:uppercase;letter-spacing:.18em;color:var(--ink-mute);white-space:nowrap;margin-top:.15rem;padding-right:.6rem;border-right:1px solid var(--line)}
+.insight .ib{font-size:.85em;color:var(--ink);line-height:1.55}
+
 /* reveal */
 .reveal{opacity:0;transform:translateY(36px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
 .slide.visible .reveal{opacity:1;transform:translateY(0)}
@@ -594,6 +601,104 @@ h3{font-size:var(--h3);margin-bottom:.3em}
   <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2rem">
     <div class="qt"><p>"30 attachments on 1 case. Thank goodness for this tool."</p><div class="who">— Nurse · IP Medicare</div></div>
     <div class="qt"><p>"Did a great job pulling clinical from the doc, even though the fax was not clear. Terrible fax — pretty well."</p><div class="who">— Nurse · IP Commercial</div></div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- 06b — EVALUATION -->
+<!-- ========================================================== -->
+<section class="slide" data-label="Evaluation">
+  <span class="eyebrow reveal">06 · How we know it's working</span>
+  <h2 class="reveal">Evaluation is the <span class="cyan">only way</span><br>you know if it's working.</h2>
+
+  <div class="split reveal" style="gap:2rem;margin-top:.8rem;align-items:start">
+
+    <!-- LEFT: Work framework -->
+    <div style="display:flex;flex-direction:column;gap:.8rem">
+
+      <div>
+        <div style="font-family:var(--font-mono);font-size:.65em;text-transform:uppercase;letter-spacing:.15em;color:var(--ink-mute);margin-bottom:.6rem">Our Framework</div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div style="flex:1;padding:.7rem .9rem;background:rgba(91,63,184,.08);border:1px solid var(--violet);border-radius:10px;text-align:center">
+            <div style="font-weight:700;font-size:.88em;color:var(--violet)">Golden Dataset</div>
+            <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2rem">Ground truth anchors every test</div>
+          </div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="flex:1;padding:.7rem .9rem;background:rgba(0,143,116,.08);border:1px solid var(--cyan);border-radius:10px;text-align:center">
+            <div style="font-weight:700;font-size:.88em;color:var(--cyan)">Chunked Scoring</div>
+            <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2rem">Each field scored separately</div>
+          </div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="flex:1;padding:.7rem .9rem;background:rgba(196,122,0,.08);border:1px solid var(--amber);border-radius:10px;text-align:center">
+            <div style="font-weight:700;font-size:.88em;color:var(--amber)">Metrics</div>
+            <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2rem">Recall · Precision · Accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--font-mono);font-size:.65em;text-transform:uppercase;letter-spacing:.15em;color:var(--ink-mute);margin-bottom:.5rem">LLM Evals FAQ · Husain &amp; Shankar, 2026</div>
+        <div style="display:flex;flex-direction:column;gap:.35rem">
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.45rem .65rem;background:var(--bg-3);border-radius:7px;border-left:2px solid var(--violet)">
+            <span style="flex-shrink:0">🔍</span>
+            <span><strong>Error analysis first, infra second.</strong> Review 20–50 real outputs manually before building any automated eval.</span>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.45rem .65rem;background:var(--bg-3);border-radius:7px;border-left:2px solid var(--cyan)">
+            <span style="flex-shrink:0">👑</span>
+            <span><strong>Benevolent indicator.</strong> One subject matter expert sets the quality bar — nurses and MDs, not committee vote.</span>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.45rem .65rem;background:var(--bg-3);border-radius:7px;border-left:2px solid var(--amber)">
+            <span style="flex-shrink:0">✅</span>
+            <span><strong>Binary pass/fail beats Likert.</strong> 1–5 ratings are subjective. Pass/fail forces clarity.</span>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.45rem .65rem;background:rgba(204,0,64,.06);border-radius:7px;border-left:2px solid var(--magenta)">
+            <span style="flex-shrink:0">🏥</span>
+            <span><strong>Clinical = false negatives cost more.</strong> Missing something is worse than over-flagging.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Three Gulfs + Eval loop -->
+    <div style="display:flex;flex-direction:column;gap:.8rem">
+
+      <div>
+        <div style="font-family:var(--font-mono);font-size:.65em;text-transform:uppercase;letter-spacing:.15em;color:var(--cyan);margin-bottom:.5rem">The Three Gulfs</div>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="display:flex;gap:.8rem;align-items:center;padding:.45rem .8rem;background:var(--bg-3);border-radius:8px">
+            <span style="color:var(--violet);font-weight:700;font-size:1.1em;flex-shrink:0">1</span>
+            <span style="font-size:.82em"><strong>Comprehension</strong> — understand your data before writing a prompt</span>
+          </div>
+          <div style="display:flex;gap:.8rem;align-items:center;padding:.45rem .8rem;background:var(--bg-3);border-radius:8px">
+            <span style="color:var(--amber);font-weight:700;font-size:1.1em;flex-shrink:0">2</span>
+            <span style="font-size:.82em"><strong>Specification</strong> — observations into a clear, testable rubric</span>
+          </div>
+          <div style="display:flex;gap:.8rem;align-items:center;padding:.45rem .8rem;background:var(--bg-3);border-radius:8px">
+            <span style="color:var(--cyan);font-weight:700;font-size:1.1em;flex-shrink:0">3</span>
+            <span style="font-size:.82em"><strong>Generalization</strong> — what works on 10 can fail on 10,000</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:var(--font-mono);font-size:.65em;text-transform:uppercase;letter-spacing:.15em;color:var(--cyan);margin-bottom:.5rem">The Eval Loop</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.65rem 1rem;background:var(--bg-3);border-radius:10px;border:1px solid var(--line)">
+          <div style="text-align:center;font-size:.82em">Label<br><span style="color:var(--ink-mute);font-size:.85em">real outputs</span></div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="text-align:center;font-size:.82em">Build<br><span style="color:var(--ink-mute);font-size:.85em">LLM evaluator</span></div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="text-align:center;font-size:.82em">Score<br><span style="color:var(--ink-mute);font-size:.85em">vs. intent</span></div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="text-align:center;font-size:.82em">Refine<br><span style="color:var(--ink-mute);font-size:.85em">criteria</span></div>
+        </div>
+      </div>
+
+      <div class="insight cyan-box">
+        <span class="ik">The discipline</span>
+        <span class="ib">Evals tell you if it's working.<br>Keep refining what "good" means.</span>
+      </div>
+
+    </div>
   </div>
 </section>
 
