@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Style picker — PM × AI showcase</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Caveat:wght@600&family=Archivo+Black&family=DM+Serif+Display:ital@0;1&family=Homemade+Apple&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Inter,system-ui,sans-serif;background:#fafafa;color:#1a1815;
+    padding:48px;line-height:1.5}
+  h1{font-size:32px;margin-bottom:8px;letter-spacing:-.02em}
+  .sub{color:#6b6a64;margin-bottom:48px;max-width:60ch}
+  .group{margin-bottom:48px}
+  .group h2{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#6b6a64;margin-bottom:14px;font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;max-width:1500px}
+  a.card{display:block;text-decoration:none;color:inherit;border-radius:16px;
+    overflow:hidden;background:#fff;border:1px solid #eee;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);transition:transform .3s ease, box-shadow .3s ease}
+  a.card:hover{transform:translateY(-6px);box-shadow:0 14px 36px rgba(0,0,0,.12)}
+  .preview{height:200px;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:32px;letter-spacing:-.02em;line-height:1.05;text-align:center;padding:24px}
+
+  .preview.editorial{background:#f3ece0;color:#1a1815;font-family:Georgia,serif}
+  .preview.editorial em{color:#b3261e;font-style:italic}
+  .preview.swiss{background:#fff;color:#0a0a0a;border-top:6px solid #e60026;font-family:"Helvetica Neue",sans-serif}
+  .preview.swiss em{color:#e60026;font-style:normal}
+  .preview.notebook{background:#fbf8f0;color:#2b2a26;font-family:Georgia,serif;
+    background-image:linear-gradient(to bottom,transparent 31px,#c4d5f0 31px,#c4d5f0 32px,transparent 32px);background-size:100% 32px}
+  .preview.notebook em{color:#e85a4f;font-family:Caveat,cursive;font-weight:600;font-size:1.3em;font-style:normal}
+
+  .preview.bauhaus{background:#f7f1e3;color:#0e0e0e;font-family:"Archivo Black",sans-serif;text-transform:uppercase;
+    background-image:radial-gradient(circle at 80% 20%,#f4c20d 30px,transparent 30px),radial-gradient(circle at 20% 80%,#d62828 24px,transparent 24px)}
+  .preview.bauhaus em{color:#d62828;font-style:normal}
+  .preview.botanical{background:#eee9da;color:#1f2a1d;font-family:"DM Serif Display",Georgia,serif}
+  .preview.botanical em{color:#a4523c;font-style:italic}
+  .preview.postcard{background:#f5ecd9;color:#1c2c4c;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    background-image:radial-gradient(circle at 90% 15%,#c0392b 14px,transparent 14px)}
+  .preview.postcard em{color:#c0392b;font-family:"Homemade Apple",cursive;font-size:.7em;display:block;font-style:normal}
+
+  .meta{padding:20px 24px}
+  .meta h3{font-size:18px;margin-bottom:6px}
+  .meta p{font-size:13px;color:#6b6a64}
+</style>
+</head>
+<body>
+  <h1>Pick a style</h1>
+  <p class="sub">Same 13-slide story, six light-mode interpretations. The first three are the originals (editorial / swiss / notebook). The last three are notebook-flavored variations.</p>
+
+  <div class="group">
+    <h2>Original three</h2>
+    <div class="grid">
+      <a class="card" href="style-a-editorial.html">
+        <div class="preview editorial">From <em>weeks</em><br>to 1 day</div>
+        <div class="meta"><h3>A · Editorial Magazine</h3><p>Cream paper · Fraunces serif · signal red · drop caps · masthead title page.</p></div>
+      </a>
+      <a class="card" href="style-b-swiss.html">
+        <div class="preview swiss">From <em>weeks</em><br>to 1 day</div>
+        <div class="meta"><h3>B · Swiss Modern</h3><p>Pure white · Space Grotesk · Swiss red · 8-col grid · oversized numerals.</p></div>
+      </a>
+      <a class="card" href="style-c-notebook.html">
+        <div class="preview notebook">From <em>weeks</em><br>to 1 day</div>
+        <div class="meta"><h3>C · Notebook / Sketch</h3><p>Cream w/ ruled lines · Spectral + Caveat handwriting · sticky-note + taped polaroid feel.</p></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>New variations (notebook-flavored)</h2>
+    <div class="grid">
+      <a class="card" href="style-d-bauhaus.html">
+        <div class="preview bauhaus">From <em>weeks</em><br>to 1 day</div>
+        <div class="meta"><h3>D · Bauhaus Notebook</h3><p>Cream + bold red/yellow/blue blocks · Archivo Black · hard offset shadows · all caps.</p></div>
+      </a>
+      <a class="card" href="style-e-botanical.html">
+        <div class="preview botanical">From <em>weeks</em><br>to 1 day</div>
+        <div class="meta"><h3>E · Botanical Journal</h3><p>Sage cream + olive/terracotta · DM Serif Display italic · soft cards · ❦ flourishes.</p></div>
+      </a>
+      <a class="card" href="style-f-postcard.html">
+        <div class="preview postcard">From <em>weeks</em><br>to 1 day<em>(via airmail)</em></div>
+        <div class="meta"><h3>F · Postcard / Travel Diary</h3><p>Postcard cream · Bricolage Grotesque · postage stamps + dashed rules + Homemade Apple script.</p></div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PM × AI — Shipping Clinical Analysis Without DS or Eng</title>
+
+<!-- Fontshare: distinctive editorial-grade fonts -->
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@400,500&display=swap" />
+
+<style>
+/* ===========================================================
+   THEME — high-contrast indigo + electric cyan + paper white
+   =========================================================== */
+:root{
+  --bg:           #0b0f1c;     /* deep indigo-black */
+  --bg-2:         #121a2e;     /* card surface */
+  --paper:        #f4eddb;     /* warm paper accent */
+  --ink:          #e9ecf5;     /* primary text */
+  --ink-mute:     #8a92a8;     /* secondary text */
+  --line:         #1f2a44;     /* hairlines */
+  --cyan:         #00f0c5;     /* electric accent */
+  --cyan-glow:    rgba(0,240,197,.35);
+  --magenta:      #ff4d8d;     /* warning / drama */
+  --amber:        #ffb547;     /* highlight */
+
+  --font-display: "Clash Display", "Satoshi", sans-serif;
+  --font-body:    "Satoshi", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* clamp() for everything (viewport rule) */
+  --h1:        clamp(2.4rem, 6.5vw, 6rem);
+  --h2:        clamp(1.6rem, 3.6vw, 3.2rem);
+  --h3:        clamp(1.1rem, 1.8vw, 1.6rem);
+  --body:      clamp(0.85rem, 1.1vw, 1.05rem);
+  --small:     clamp(0.7rem, 0.85vw, 0.85rem);
+  --mega:      clamp(3.5rem, 11vw, 11rem);
+
+  --pad:       clamp(1.5rem, 4vw, 4rem);
+  --gap:       clamp(0.8rem, 1.6vw, 1.6rem);
+
+  --ease:      cubic-bezier(0.16, 1, 0.3, 1);
+  --dur:       0.8s;
+}
+
+/* ===========================================================
+   BASE — viewport-base.css invariants
+   =========================================================== */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;background:var(--bg)}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--bg);
+  overflow-x:hidden;
+  font-size:var(--body);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.slide{
+  position:relative;
+  height:100vh;
+  height:100dvh;
+  width:100vw;
+  overflow:hidden;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+  padding:var(--pad);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  isolation:isolate;
+}
+img{max-width:100%;display:block;max-height:min(60vh,520px)}
+@media (max-height:700px){
+  :root{--h1:clamp(2rem,5vw,4rem);--h2:clamp(1.4rem,3vw,2.6rem);--mega:clamp(2.5rem,8vw,7rem);}
+}
+@media (max-height:600px){
+  :root{--pad:clamp(1rem,3vw,2rem);}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s !important;transition-duration:.001s !important}
+}
+
+/* ===========================================================
+   ATMOSPHERE — gradient mesh + grid texture
+   =========================================================== */
+.slide::before{
+  content:"";
+  position:absolute;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 60% 50% at 18% 100%, rgba(0,240,197,.13) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 90% 0%, rgba(255,77,141,.10) 0%, transparent 55%),
+    var(--bg);
+}
+.slide::after{
+  content:"";
+  position:absolute;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 90%);
+}
+
+/* ===========================================================
+   TYPOGRAPHY
+   =========================================================== */
+h1,h2,h3,.label,.mega{
+  font-family:var(--font-display);
+  letter-spacing:-0.02em;
+  font-weight:600;
+  line-height:1.02;
+}
+h1{font-size:var(--h1)}
+h2{font-size:var(--h2);margin-bottom:.5em}
+h3{font-size:var(--h3);margin-bottom:.3em}
+.mega{font-size:var(--mega);font-weight:700;letter-spacing:-.04em;line-height:.9}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:var(--small);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--cyan);
+  margin-bottom:.8em;
+  display:inline-flex;align-items:center;gap:.6em;
+}
+.eyebrow::before{
+  content:"";display:inline-block;width:.5em;height:.5em;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 12px var(--cyan-glow);
+}
+.mute{color:var(--ink-mute)}
+.cyan{color:var(--cyan)}
+.magenta{color:var(--magenta)}
+.amber{color:var(--amber)}
+.paper{color:var(--paper)}
+.mono{font-family:var(--font-mono)}
+
+/* ===========================================================
+   ANIMATIONS — staggered reveal triggered by .visible
+   =========================================================== */
+.reveal{
+  opacity:0;
+  transform:translateY(36px);
+  transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);
+}
+.slide.visible .reveal{opacity:1;transform:translateY(0)}
+.slide.visible .reveal:nth-child(1){transition-delay:.05s}
+.slide.visible .reveal:nth-child(2){transition-delay:.18s}
+.slide.visible .reveal:nth-child(3){transition-delay:.32s}
+.slide.visible .reveal:nth-child(4){transition-delay:.46s}
+.slide.visible .reveal:nth-child(5){transition-delay:.6s}
+.slide.visible .reveal:nth-child(6){transition-delay:.74s}
+
+.reveal-blur{filter:blur(12px);opacity:0;
+  transition:filter 1s var(--ease),opacity 1s var(--ease)}
+.slide.visible .reveal-blur{filter:blur(0);opacity:1}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 var(--cyan-glow)}
+  50%{box-shadow:0 0 0 14px transparent}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* ===========================================================
+   CHROME — progress bar + nav dots + slide counter
+   =========================================================== */
+.progress{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  width:0%;z-index:1000;transition:width .25s ease;
+  box-shadow:0 0 16px var(--cyan-glow);
+}
+.dots{
+  position:fixed;right:clamp(12px,2vw,28px);top:50%;
+  transform:translateY(-50%);z-index:1000;
+  display:flex;flex-direction:column;gap:10px;
+}
+.dots button{
+  width:10px;height:10px;border-radius:50%;border:1px solid var(--ink-mute);
+  background:transparent;cursor:pointer;padding:0;
+  transition:all .25s ease;
+}
+.dots button.active{background:var(--cyan);border-color:var(--cyan);
+  box-shadow:0 0 10px var(--cyan-glow);transform:scale(1.3)}
+.counter{
+  position:fixed;left:clamp(12px,2vw,28px);bottom:clamp(12px,2vw,28px);
+  z-index:1000;font-family:var(--font-mono);font-size:var(--small);
+  color:var(--ink-mute);letter-spacing:.1em;
+}
+.counter span{color:var(--cyan)}
+
+/* ===========================================================
+   COMPONENTS
+   =========================================================== */
+.kicker{font-family:var(--font-mono);font-size:var(--small);color:var(--cyan);
+  text-transform:uppercase;letter-spacing:.2em;}
+
+.tag{
+  display:inline-block;padding:.3em .8em;border-radius:999px;
+  font-family:var(--font-mono);font-size:.72em;letter-spacing:.1em;
+  text-transform:uppercase;border:1px solid currentColor;
+}
+
+.card{
+  background:var(--bg-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:clamp(1rem,1.6vw,1.6rem);
+  position:relative;
+  transition:transform .3s var(--ease),border-color .3s ease;
+}
+.card:hover{transform:translateY(-4px);border-color:var(--cyan)}
+.card .num{
+  font-family:var(--font-mono);font-size:.85em;color:var(--cyan);
+  display:block;margin-bottom:.4em;letter-spacing:.1em;
+}
+
+.kpi{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(2.2rem,5.5vw,5rem);line-height:1;
+  background:linear-gradient(180deg,var(--ink),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.kpi-label{font-size:var(--small);color:var(--ink-mute);
+  text-transform:uppercase;letter-spacing:.15em;font-family:var(--font-mono);
+  margin-top:.4em;}
+
+/* layout helpers */
+.grid{display:grid;gap:var(--gap)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-asym{grid-template-columns:1.2fr 0.8fr}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center;height:100%;}
+
+@media (max-width:900px){
+  .grid-3,.grid-4,.grid-asym,.split{grid-template-columns:1fr}
+}
+
+/* ===========================================================
+   SLIDE-SPECIFIC
+   =========================================================== */
+/* TITLE */
+.title-slide{justify-content:center;text-align:left}
+.title-slide h1{font-size:var(--mega);font-weight:700}
+.title-slide .strike{color:var(--magenta);text-decoration:line-through;
+  text-decoration-thickness:.06em;text-decoration-color:var(--magenta);}
+.title-slide .accent{color:var(--cyan)}
+.title-slide .underline{
+  display:inline-block;position:relative;
+}
+.title-slide .underline::after{
+  content:"";position:absolute;left:0;right:0;bottom:.05em;height:.18em;
+  background:var(--cyan);opacity:.3;z-index:-1;
+}
+.title-slide .meta{
+  margin-top:clamp(2rem,5vh,4rem);
+  display:flex;gap:clamp(1rem,3vw,3rem);flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:var(--small);
+  color:var(--ink-mute);text-transform:uppercase;letter-spacing:.15em;
+}
+
+/* PROBLEM */
+.problem-quote{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(1.4rem,3vw,2.6rem);line-height:1.2;
+  border-left:3px solid var(--cyan);
+  padding-left:clamp(1rem,2vw,2rem);
+  max-width:30ch;
+}
+
+/* PROCESS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem}
+.step{
+  position:relative;padding:1.2rem 1.2rem 1.4rem;border:1px solid var(--line);
+  border-radius:14px;background:var(--bg-2);
+  transition:all .3s var(--ease);
+}
+.step:hover{border-color:var(--cyan);transform:translateY(-4px)}
+.step .step-no{
+  font-family:var(--font-mono);font-size:.7em;color:var(--cyan);
+  letter-spacing:.2em;text-transform:uppercase;
+}
+.step h4{font-family:var(--font-display);font-weight:600;
+  font-size:1.1em;margin:.4em 0 .5em;line-height:1.15}
+.step p{font-size:.88em;color:var(--ink-mute);line-height:1.45}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+
+/* CODE-LIKE BIGQUERY block */
+.sql{
+  font-family:var(--font-mono);font-size:clamp(.7rem,.95vw,.92rem);
+  background:var(--bg-2);border:1px solid var(--line);border-radius:12px;
+  padding:1.2rem 1.4rem;line-height:1.6;
+  color:var(--ink);overflow:hidden;
+}
+.sql .kw{color:var(--magenta);font-weight:500}
+.sql .str{color:var(--amber)}
+.sql .com{color:var(--ink-mute);font-style:italic}
+.sql .fn{color:var(--cyan)}
+
+/* ARTIFACT TILES — Excel/Word/PPT */
+.artifacts{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.art{
+  background:var(--bg-2);border:1px solid var(--line);
+  border-radius:16px;padding:1.4rem;display:flex;flex-direction:column;gap:.8rem;
+  position:relative;overflow:hidden;
+  transition:all .3s var(--ease);
+}
+.art:hover{border-color:var(--cyan);transform:translateY(-6px)}
+.art .badge{
+  font-family:var(--font-mono);font-size:.68em;text-transform:uppercase;
+  letter-spacing:.2em;padding:.3em .7em;border-radius:6px;
+  width:fit-content;
+}
+.art h4{font-family:var(--font-display);font-weight:600;font-size:1.25em;line-height:1.15}
+.art .num{font-family:var(--font-mono);color:var(--cyan);font-size:.8em;letter-spacing:.1em}
+.art .glyph{
+  position:absolute;right:-20px;bottom:-20px;font-size:7rem;
+  opacity:.05;font-family:var(--font-mono);
+}
+@media (max-width:900px){.artifacts{grid-template-columns:1fr}}
+
+/* SCREENSHOT FRAMES */
+.frame{
+  border-radius:14px;border:1px solid var(--line);overflow:hidden;
+  background:var(--bg-2);position:relative;
+  box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 0 1px rgba(0,240,197,.08);
+}
+.frame .titlebar{
+  background:var(--bg);padding:.6rem 1rem;display:flex;gap:.4rem;align-items:center;
+  border-bottom:1px solid var(--line);
+}
+.frame .titlebar i{width:11px;height:11px;border-radius:50%;background:#3a425a;display:inline-block}
+.frame .titlebar i:nth-child(1){background:var(--magenta)}
+.frame .titlebar i:nth-child(2){background:var(--amber)}
+.frame .titlebar i:nth-child(3){background:var(--cyan)}
+.frame .url{
+  margin-left:auto;font-family:var(--font-mono);font-size:.7em;
+  color:var(--ink-mute);
+}
+.frame img{display:block;width:100%;height:auto;max-height:min(56vh,500px);object-fit:cover;object-position:top}
+
+/* TIMELINE — before/after */
+.timeline{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1rem,3vw,3rem);position:relative}
+.timeline::before{
+  content:"VS";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-family:var(--font-display);font-weight:700;font-size:1.4rem;
+  color:var(--cyan);background:var(--bg);padding:.4em .6em;border:1px solid var(--cyan);
+  border-radius:999px;
+}
+.timeline .col{padding:1rem}
+.timeline h4{font-family:var(--font-mono);font-size:.8em;letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:1rem}
+.timeline .col.old h4{color:var(--ink-mute)}
+.timeline .col.new h4{color:var(--cyan)}
+.timeline ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.timeline li{font-size:.95em;line-height:1.4;padding-left:1.5em;position:relative}
+.timeline .col.old li::before{content:"×";position:absolute;left:0;color:var(--magenta);font-weight:700}
+.timeline .col.new li::before{content:"→";position:absolute;left:0;color:var(--cyan);font-weight:700}
+@media (max-width:900px){.timeline{grid-template-columns:1fr}.timeline::before{position:static;display:block;margin:1rem auto;width:fit-content}}
+
+/* CLOSER */
+.closer{justify-content:center;text-align:center}
+.closer h2{font-size:var(--mega);font-weight:700;letter-spacing:-.04em}
+.closer .quote{
+  max-width:30ch;margin:2rem auto;color:var(--ink-mute);
+  font-size:var(--h3);font-family:var(--font-display);font-weight:500;line-height:1.3;
+}
+
+/* footnote */
+.footnote{
+  position:absolute;bottom:clamp(1rem,2.5vh,2rem);left:var(--pad);right:var(--pad);
+  font-family:var(--font-mono);font-size:.7rem;
+  color:var(--ink-mute);letter-spacing:.1em;
+  display:flex;justify-content:space-between;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Progress bar -->
+<div class="progress" id="progress"></div>
+
+<!-- Navigation dots -->
+<nav class="dots" id="dots"></nav>
+
+<!-- Slide counter -->
+<div class="counter"><span id="cur">01</span> / <span id="tot">10</span></div>
+
+
+<!-- =============================================================
+SLIDE 01 — TITLE
+============================================================= -->
+<section class="slide title-slide">
+  <span class="eyebrow reveal">Internal showcase  ·  PM × AI workflow</span>
+  <h1 class="reveal">
+    Shipping <span class="underline">clinical analysis</span><br>
+    without <span class="strike">DS</span> or <span class="strike">Eng</span>
+    <span class="accent">.</span>
+  </h1>
+  <div class="meta reveal">
+    <span>Clinical Summary  ·  Issues + Action Plan</span>
+    <span>4 days  ·  end-to-end</span>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 02 — THE ASK / PROBLEM
+============================================================= -->
+<section class="slide">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">The ask</span>
+      <h2 class="reveal">Present a Clinical Summary issue analysis &amp; enhancement plan.</h2>
+      <p class="reveal mute" style="max-width:42ch;font-size:1.05em;line-height:1.55;">
+        Normally this is weeks: file a DS ticket, wait for engineering pulls, write an Excel back-and-forth.
+        I wanted to keep the loop tight — and own the story.
+      </p>
+    </div>
+    <div class="reveal">
+      <p class="problem-quote">
+        "Find what's broken in the AI clinical summary &mdash; and tell us what to do about it."
+      </p>
+      <p class="mute mono" style="margin-top:1.5rem;font-size:.8em;letter-spacing:.1em;text-transform:uppercase">— DMAC stakeholder request</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 03 — THE 4-STEP RECIPE
+============================================================= -->
+<section class="slide">
+  <span class="eyebrow reveal">The recipe</span>
+  <h2 class="reveal">Four steps. One PM. Zero ticket queues.</h2>
+  <div class="steps reveal" style="margin-top:2rem">
+    <div class="step">
+      <span class="step-no">Step 01</span>
+      <h4>Pull the data</h4>
+      <p>Connect to BigQuery directly. Filter feedback rows. No DS request.</p>
+    </div>
+    <div class="step">
+      <span class="step-no">Step 02</span>
+      <h4>Categorize with AI</h4>
+      <p>Hand AI the raw rows. Bring my own hypothesis. Sanity-check the bins.</p>
+    </div>
+    <div class="step">
+      <span class="step-no">Step 03</span>
+      <h4>Generate artifacts</h4>
+      <p>AI builds the Excel tracker, Word deficiency report, and PPT version.</p>
+    </div>
+    <div class="step">
+      <span class="step-no">Step 04</span>
+      <h4>Synthesize the plan</h4>
+      <p>Claude turns categorized issues into an executive action plan.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 04 — STEP 1 — BIGQUERY
+============================================================= -->
+<section class="slide">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">Step 01  ·  Pull the data</span>
+      <h2 class="reveal">I went to BigQuery myself.</h2>
+      <p class="reveal mute" style="max-width:38ch;font-size:1.05em;line-height:1.55">
+        The activity-monitor table logs every feedback row from CDST.
+        I wrote one query, ran it from the console, exported the CSV.
+      </p>
+      <div class="reveal" style="display:flex;gap:1.6rem;margin-top:1.8rem;flex-wrap:wrap">
+        <div><div class="kpi">12K+</div><div class="kpi-label">feedback rows pulled</div></div>
+        <div><div class="kpi">16</div><div class="kpi-label">months of history</div></div>
+      </div>
+    </div>
+    <div class="reveal-blur">
+      <div class="sql">
+<span class="com">-- one query, no ticket, no waiting</span>
+<span class="kw">SELECT</span> *
+<span class="kw">FROM</span> <span class="str">`anbc-hcb-prod.prv_um_cdt_hcb_prod
+       .clinical_decision_activity_monitor_results`</span>
+<span class="kw">WHERE</span> stage = <span class="str">'feedback'</span>
+  <span class="kw">AND</span> caseType = <span class="str">'cdt inpatient'</span>
+  <span class="kw">AND</span> <span class="fn">DATE</span>(receiveTimestamp)
+      <span class="kw">BETWEEN</span> <span class="str">'2025-01-01'</span> <span class="kw">AND</span> <span class="str">'2026-04-30'</span>
+<span class="kw">ORDER BY</span> receiveTimestamp;
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 05 — STEP 2 — CATEGORIZE WITH AI
+============================================================= -->
+<section class="slide">
+  <span class="eyebrow reveal">Step 02  ·  Categorize with AI</span>
+  <h2 class="reveal">I had a hypothesis. AI did the heavy lifting. I sanity-checked.</h2>
+  <div class="grid grid-3 reveal" style="margin-top:2rem">
+    <div class="card">
+      <span class="num">My input</span>
+      <h3>Hypothesis bins</h3>
+      <p class="mute" style="font-size:.95em">Core summary, discharge, MCG criteria, hallucination, missing info, wrong dates.</p>
+    </div>
+    <div class="card">
+      <span class="num">AI's job</span>
+      <h3>Bucket every row</h3>
+      <p class="mute" style="font-size:.95em">Map raw <span class="mono cyan">aiFeedbackOption</span> + <span class="mono cyan">formField</span> into the categories.</p>
+    </div>
+    <div class="card">
+      <span class="num">My check</span>
+      <h3>Spot-audit</h3>
+      <p class="mute" style="font-size:.95em">Pull 30 random rows per bin. Confirm the labels. Adjust the rules.</p>
+    </div>
+  </div>
+  <div class="reveal" style="margin-top:2rem;padding:1.2rem 1.6rem;border-left:3px solid var(--cyan);background:var(--bg-2);border-radius:0 14px 14px 0;max-width:60ch">
+    <p style="font-family:var(--font-display);font-size:1.2em;line-height:1.3">
+      <span class="cyan">75%</span> of all 👎 came from one bucket: <span class="paper">Core Summary</span>.
+    </p>
+    <p class="mute" style="font-size:.85em;margin-top:.4em">439 of 583 negative thumbs · 268 unique cases · Jan–Apr 2026</p>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 06 — STEP 3 — ARTIFACTS GENERATED
+============================================================= -->
+<section class="slide">
+  <span class="eyebrow reveal">Step 03  ·  Generate artifacts</span>
+  <h2 class="reveal">From CSV to deliverables in one prompt.</h2>
+  <div class="artifacts reveal" style="margin-top:2rem">
+    <div class="art">
+      <span class="badge" style="color:var(--cyan);background:rgba(0,240,197,.08)">Excel</span>
+      <h4>AI Deficiency Tracker</h4>
+      <p class="mute" style="font-size:.9em">22 issues across 3 sheets. Issue Log, Summary Dashboard, Source Documents.</p>
+      <div style="margin-top:auto;display:flex;gap:1.2rem;font-size:.78em" class="mono">
+        <span><span class="cyan">21</span> issues</span>
+        <span><span class="cyan">7</span> high-priority</span>
+      </div>
+      <span class="glyph">.xlsx</span>
+    </div>
+    <div class="art">
+      <span class="badge" style="color:var(--magenta);background:rgba(255,77,141,.08)">Word</span>
+      <h4>AI Deficiency Report</h4>
+      <p class="mute" style="font-size:.9em">Per-case narrative for clinical leadership. Vital signs missed, meds skipped, status conversions.</p>
+      <div style="margin-top:auto;display:flex;gap:1.2rem;font-size:.78em" class="mono">
+        <span><span class="magenta">1</span> case</span>
+        <span><span class="magenta">6</span> source docs</span>
+      </div>
+      <span class="glyph">.docx</span>
+    </div>
+    <div class="art">
+      <span class="badge" style="color:var(--amber);background:rgba(255,181,71,.08)">PPT</span>
+      <h4>Feedback Detail Deck</h4>
+      <p class="mute" style="font-size:.9em">Slide version for stakeholders. Same data, presented for the room.</p>
+      <div style="margin-top:auto;display:flex;gap:1.2rem;font-size:.78em" class="mono">
+        <span><span class="amber">14</span> slides</span>
+        <span><span class="amber">CVS</span> brand</span>
+      </div>
+      <span class="glyph">.pptx</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 07 — STEP 4 — SYNTHESIZE WITH CLAUDE
+============================================================= -->
+<section class="slide">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">Step 04  ·  Synthesize</span>
+      <h2 class="reveal">Then Claude turned issues into a plan.</h2>
+      <p class="reveal mute" style="max-width:38ch;font-size:1.05em;line-height:1.55">
+        I dropped the categorized data into Claude with a prompt: <em>"Build me a phased
+        accuracy improvement plan that compounds — group fixes by leverage and timing."</em>
+      </p>
+    </div>
+    <div class="reveal" style="display:flex;flex-direction:column;gap:.8rem">
+      <div class="card" style="display:flex;align-items:baseline;gap:1rem">
+        <span class="mono cyan" style="font-size:.85em">May</span>
+        <div><h3 style="font-size:1em;margin:0">Doc-Reference Recovery</h3><p class="mute" style="font-size:.85em">Cumulative <span class="cyan">31%</span></p></div>
+      </div>
+      <div class="card" style="display:flex;align-items:baseline;gap:1rem">
+        <span class="mono cyan" style="font-size:.85em">Jun</span>
+        <div><h3 style="font-size:1em;margin:0">Prompt &amp; Function Tuning</h3><p class="mute" style="font-size:.85em">Cumulative <span class="cyan">75%</span></p></div>
+      </div>
+      <div class="card" style="display:flex;align-items:baseline;gap:1rem">
+        <span class="mono cyan" style="font-size:.85em">Aug</span>
+        <div><h3 style="font-size:1em;margin:0">Page Classification &amp; Dedup</h3><p class="mute" style="font-size:.85em">Cumulative <span class="cyan">92%</span></p></div>
+      </div>
+      <div class="card" style="display:flex;align-items:baseline;gap:1rem">
+        <span class="mono cyan" style="font-size:.85em">Oct</span>
+        <div><h3 style="font-size:1em;margin:0">Foundation Model Upgrade</h3><p class="mute" style="font-size:.85em">Cumulative <span class="cyan">100%</span> · 95%+ accuracy goal</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 08 — WHAT'S NEXT — FEEDBACK DASHBOARD
+============================================================= -->
+<section class="slide">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">In progress  ·  Tool 01</span>
+      <h2 class="reveal">A daily feedback dashboard.</h2>
+      <p class="reveal mute" style="max-width:38ch;font-size:1.05em;line-height:1.55">
+        Streamlit + BigQuery. Open it every morning. See sentiment trend, form-field hot-spots,
+        case-type breakdown, and negative-reason heatmap — without re-running a query.
+      </p>
+      <div class="reveal" style="display:flex;gap:1.4rem;margin-top:1.5rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:.78em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.15em">
+        <span><span class="cyan">●</span> Live BQ query</span>
+        <span><span class="cyan">●</span> 1-hour cache</span>
+        <span><span class="cyan">●</span> Self-serve filters</span>
+      </div>
+    </div>
+    <div class="frame reveal-blur">
+      <div class="titlebar"><i></i><i></i><i></i><span class="url">localhost:8601</span></div>
+      <img src="feedback_dashboard.png" alt="CDST Feedback Dashboard screenshot" />
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 09 — WHAT'S NEXT — CASE TIMELINE
+============================================================= -->
+<section class="slide">
+  <div class="split">
+    <div>
+      <span class="eyebrow reveal">In progress  ·  Tool 02</span>
+      <h2 class="reveal">A case-level timeline.</h2>
+      <p class="reveal mute" style="max-width:38ch;font-size:1.05em;line-height:1.55">
+        Combines BE pipeline logs with UI events for any single case ID.
+        See when a fax was ingested, how long OCR took, when the nurse opened the case,
+        and which steps failed — in one chronological view.
+      </p>
+      <div class="reveal" style="display:flex;gap:1.4rem;margin-top:1.5rem;flex-wrap:wrap;font-family:var(--font-mono);font-size:.78em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.15em">
+        <span><span class="cyan">●</span> BE + FE joined</span>
+        <span><span class="cyan">●</span> Per-doc latency</span>
+        <span><span class="cyan">●</span> LLM narrative</span>
+      </div>
+    </div>
+    <div class="frame reveal-blur">
+      <div class="titlebar"><i></i><i></i><i></i><span class="url">localhost:8602</span></div>
+      <img src="case_timeline.png" alt="CDT Case Timeline screenshot" />
+    </div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SLIDE 10 — WHY IT MATTERS / CLOSER
+============================================================= -->
+<section class="slide closer">
+  <span class="eyebrow reveal" style="justify-content:center">The point</span>
+  <h2 class="reveal" style="font-size:var(--mega);font-weight:700;letter-spacing:-.04em;line-height:1">
+    Stop waiting on tickets.<br>
+    <span class="cyan">Focus on the story.</span>
+  </h2>
+  <p class="reveal quote" style="margin:2.5rem auto 0;max-width:36ch;color:var(--ink-mute);font-size:var(--h3);font-family:var(--font-display);font-weight:500;line-height:1.3">
+    AI lets a PM run their own data, draft their own artifacts,
+    and ship their own analysis &mdash; so DS &amp; Eng can build, not export.
+  </p>
+  <div class="reveal" style="margin-top:3rem;display:flex;justify-content:center;gap:clamp(1.5rem,4vw,4rem);flex-wrap:wrap">
+    <div><div class="kpi">4 days</div><div class="kpi-label">end-to-end</div></div>
+    <div><div class="kpi">0</div><div class="kpi-label">tickets filed</div></div>
+    <div><div class="kpi">3</div><div class="kpi-label">artifacts shipped</div></div>
+  </div>
+</section>
+
+
+<!-- =============================================================
+SCRIPT
+============================================================= -->
+<script>
+(() => {
+  const slides   = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const dotsEl   = document.getElementById('dots');
+  const curEl    = document.getElementById('cur');
+  const totEl    = document.getElementById('tot');
+  totEl.textContent = String(slides.length).padStart(2,'0');
+
+  // Build nav dots
+  dotsEl.innerHTML = '';
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', `Slide ${i+1}`);
+    b.addEventListener('click', () => s.scrollIntoView({behavior:'smooth'}));
+    dotsEl.appendChild(b);
+  });
+  const dotBtns = dotsEl.querySelectorAll('button');
+
+  // Intersection observer for visibility + counter + progress
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.intersectionRatio > 0.5) {
+        e.target.classList.add('visible');
+        const idx = [...slides].indexOf(e.target);
+        dotBtns.forEach((d,i) => d.classList.toggle('active', i === idx));
+        curEl.textContent = String(idx+1).padStart(2,'0');
+        progress.style.width = (((idx+1) / slides.length) * 100) + '%';
+      }
+    });
+  }, { threshold:[0, .5, 1] });
+  slides.forEach(s => io.observe(s));
+
+  // Keyboard nav
+  let current = 0;
+  const goto = (i) => {
+    current = Math.max(0, Math.min(slides.length-1, i));
+    slides[current].scrollIntoView({behavior:'smooth'});
+  };
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowDown','PageDown','ArrowRight',' '].includes(e.key)) { e.preventDefault(); goto(current+1); }
+    if (['ArrowUp','PageUp','ArrowLeft'].includes(e.key))         { e.preventDefault(); goto(current-1); }
+    if (e.key === 'Home') { e.preventDefault(); goto(0); }
+    if (e.key === 'End')  { e.preventDefault(); goto(slides.length-1); }
+  });
+
+  // Update current on scroll for keyboard goto reference
+  window.addEventListener('scroll', () => {
+    const idx = Math.round(window.scrollY / window.innerHeight);
+    current = idx;
+  }, {passive:true});
+
+  // Touch swipe
+  let touchY = 0;
+  document.addEventListener('touchstart', e => touchY = e.touches[0].clientY, {passive:true});
+  document.addEventListener('touchend',   e => {
+    const dy = touchY - e.changedTouches[0].clientY;
+    if (Math.abs(dy) > 60) goto(current + (dy > 0 ? 1 : -1));
+  }, {passive:true});
+})();
+</script>
+
+</body>
+</html>
