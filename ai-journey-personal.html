@@ -28,12 +28,12 @@
   --font-body:"Satoshi",-apple-system,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,monospace;
 
-  --h1:clamp(2.4rem,6.5vw,5.6rem);
-  --h2:clamp(1.6rem,3.2vw,2.8rem);
-  --h3:clamp(1rem,1.6vw,1.4rem);
-  --body:clamp(.85rem,1.05vw,1.05rem);
-  --small:clamp(.7rem,.85vw,.85rem);
-  --mega:clamp(3rem,9vw,8rem);
+  --h1:clamp(3rem,7.5vw,6.4rem);
+  --h2:clamp(2rem,3.8vw,3.4rem);
+  --h3:clamp(1.2rem,1.9vw,1.7rem);
+  --body:clamp(1rem,1.3vw,1.3rem);
+  --small:clamp(.85rem,1vw,1rem);
+  --mega:clamp(3.5rem,10vw,9rem);
 
   --pad:clamp(1.4rem,3.6vw,3.6rem);
   --gap:clamp(.8rem,1.4vw,1.4rem);
@@ -367,119 +367,62 @@ h3{font-size:var(--h3);margin-bottom:.3em}
   <span class="eyebrow reveal">Phase 1 · 2022–2023 · GPT-3.5 era</span>
   <h2 class="reveal">Task-driven: <span class="cyan">AI as a smarter search.</span></h2>
 
-  <!-- 2×3 visual grid: 3 personal + 3 work -->
-  <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1rem">
-    <div class="card" style="border-top:3px solid var(--personal)">
-      <div style="font-size:1.5em;margin-bottom:.4em">✍️</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Copywriting &amp; drafts</div>
-      <div style="font-size:.8em;color:var(--ink-mute)">Emails reworded in seconds</div>
+  <!-- Personal row -->
+  <div class="reveal" style="margin-top:1rem">
+    <div style="font-family:var(--font-mono);font-size:.75em;text-transform:uppercase;letter-spacing:.18em;color:var(--personal);margin-bottom:.5rem">🏠 Personal</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem">
+      <div class="card" style="border-top:3px solid var(--personal)">
+        <div style="font-size:1.5em;margin-bottom:.4em">✍️</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Writing</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">Emails, drafts, rewording</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--personal)">
+        <div style="font-size:1.5em;margin-bottom:.4em">🔌</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Chrome extension</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">In-place rewrite, no copy/paste</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--personal)">
+        <div style="font-size:1.5em;margin-bottom:.4em">💍</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Wedding website</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">RSVP + personal touch — a reason, not just a demo</div>
+      </div>
     </div>
-    <div class="card" style="border-top:3px solid var(--personal)">
-      <div style="font-size:1.5em;margin-bottom:.4em">🔌</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Chrome extension</div>
-      <div style="font-size:.8em;color:var(--ink-mute)">In-place rewrite, no copy/paste</div>
-    </div>
-    <div class="card" style="border-top:3px solid var(--personal)">
-      <div style="font-size:1.5em;margin-bottom:.4em">⚠️</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Math: unreliable</div>
-      <div style="font-size:.8em;color:var(--ink-mute)">Double-check every number</div>
-    </div>
-    <div class="card" style="border-top:3px solid var(--work)">
-      <div style="font-size:1.5em;margin-bottom:.4em">📄</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">OCR → GPT pipeline</div>
-      <div style="font-size:.8em;color:var(--ink-mute)">Text in, extraction out</div>
-    </div>
-    <div class="card" style="border-top:3px solid var(--work)">
-      <div style="font-size:1.5em;margin-bottom:.4em">🔧</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Prompt engineering</div>
-      <div style="font-size:.8em;color:var(--ink-mute)">Biggest lever on quality</div>
-    </div>
-    <div class="card" style="border-top:3px solid var(--work)">
-      <div style="font-size:1.5em;margin-bottom:.4em">📅</div>
-      <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Dates: surprisingly hard</div>
-      <div style="font-size:.8em;color:var(--ink-mute)">Headers / footers bleed in</div>
+  </div>
+
+  <!-- Work row -->
+  <div class="reveal" style="margin-top:.8rem">
+    <div style="font-family:var(--font-mono);font-size:.75em;text-transform:uppercase;letter-spacing:.18em;color:var(--work);margin-bottom:.5rem">🏥 Work</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem">
+      <div class="card" style="border-top:3px solid var(--work)">
+        <div style="font-size:1.5em;margin-bottom:.4em">📄</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">OCR → GPT pipeline</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">Text in, extraction out</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--work)">
+        <div style="font-size:1.5em;margin-bottom:.4em">🔧</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Prompt engineering</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">Biggest lever on quality</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--work)">
+        <div style="font-size:1.5em;margin-bottom:.4em">⚠️</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Dates &amp; math: unreliable</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">GPT said 99 &lt; 101 was <em>false</em> · headers bleed into content</div>
+      </div>
     </div>
   </div>
 
   <div class="reveal insight amber-box" style="margin-top:1rem">
     <span class="ik">Tech Context</span>
-    <span class="ib">GPT-3.5 / 4: text-only, no real reasoning. AI was a fast assistant, not yet a thinker.</span>
+    <span class="ib">Nov 2022: GPT-3.5 launches. Text-only, no reasoning. AI = fast assistant, not yet a thinker. GPT-4 (Mar 2023) adds depth but same limitation.</span>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 04 — COST -->
-<!-- ══════════════════════════════════════════════════════ -->
-<section class="slide" data-label="Cost">
-  <span class="eyebrow reveal">Enterprise Reality · 2023</span>
-  <h2 class="reveal">Cost is a <span class="magenta">strategic decision</span>,<br>not an afterthought.</h2>
-
-  <div class="split reveal" style="margin-top:.5rem;gap:2rem">
-    <!-- Left: old stack with big numbers -->
-    <div>
-      <div class="card">
-        <div class="kicker" style="margin-bottom:.8rem">The Old Stack</div>
-        <div class="pipe" style="margin-top:0;border-color:var(--ink-mute);background:var(--bg-3)">
-          <div class="nd" style="border-color:var(--ink-mute)">
-            <div class="ic">📄</div>
-            <div class="nt" style="color:var(--ink-mute)">PDF / Fax</div>
-          </div>
-          <div class="arr" style="color:var(--ink-mute)">→</div>
-          <div class="nd" style="border-color:var(--magenta)">
-            <div class="ic">🔍</div>
-            <div class="nt">OCR</div>
-            <div class="ns" style="color:var(--magenta);font-weight:700">$60k/mo</div>
-          </div>
-          <div class="arr" style="color:var(--ink-mute)">+</div>
-          <div class="nd" style="border-color:var(--magenta)">
-            <div class="ic">🤖</div>
-            <div class="nt">GPT</div>
-            <div class="ns" style="color:var(--magenta);font-weight:700">$60k/mo</div>
-          </div>
-        </div>
-        <div style="text-align:center;margin-top:1rem">
-          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,4vw,3.2rem);color:var(--magenta);line-height:1">$120k</div>
-          <div style="font-family:var(--font-mono);font-size:.7em;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase;margin-top:.2em">per month</div>
-        </div>
-      </div>
-      <div class="insight amber-box">
-        <span class="ik">Key Insight</span>
-        <span class="ib">OCR cost as much as the LLM. Multimodal let us skip it entirely.</span>
-      </div>
-    </div>
-
-    <!-- Right: personal spend hero stats -->
-    <div>
-      <div class="kicker" style="margin-bottom:.8rem;color:var(--magenta)">My personal AI bill · May 2026</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem">
-        <div class="card" style="border-top:3px solid var(--magenta);text-align:center">
-          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,5vw,4rem);color:var(--magenta);line-height:1">$570</div>
-          <div style="font-family:var(--font-mono);font-size:.68em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.1em;margin-top:.5em">1 heavy week</div>
-          <div style="font-size:.78em;color:var(--ink-mute);margin-top:.3em">2.7K req · 4M tokens</div>
-        </div>
-        <div class="card" style="border-top:3px solid var(--magenta);text-align:center">
-          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,5vw,4rem);color:var(--magenta);line-height:1">$826</div>
-          <div style="font-family:var(--font-mono);font-size:.68em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.1em;margin-top:.5em">May 1–16</div>
-          <div style="font-size:.78em;color:var(--ink-mute);margin-top:.3em">3.8K req · 32.2M tokens</div>
-        </div>
-      </div>
-      <div style="font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute);border:1px solid var(--line);border-radius:8px;padding:.6rem 1rem">
-        92% claude-opus-4-7 · 8% sonnet · personal Claude Code
-      </div>
-      <div class="insight magenta-box" style="margin-top:.8rem">
-        <span class="ik">Takeaway</span>
-        <span class="ib">Accuracy, latency, cost — you can't ignore any at scale.</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- 05 — MULTIMODAL -->
+<!-- 04 — MULTIMODAL -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="slide" data-label="Multimodal">
-  <span class="eyebrow reveal">2023–2024 · GPT-4o · Gemini · Multimodal</span>
-  <h2 class="reveal">Models learned to <span class="cyan">see.</span><br>We rewrote the pipeline.</h2>
+  <span class="eyebrow reveal">2024 · Gemini 1.5 · GPT-4o · GPT o1 · Multimodal + Reasoning</span>
+  <h2 class="reveal">Models learned to <span class="cyan">see — and reason.</span><br>We rewrote the pipeline.</h2>
 
   <div class="split reveal" style="margin-top:.8rem;gap:2.5rem">
     <!-- Before / After pipeline -->
@@ -510,16 +453,50 @@ h3{font-size:var(--h3);margin-bottom:.3em}
     </div>
 
     <div>
-      <div class="kicker" style="margin-bottom:.5rem">Personal</div>
-      <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem">
-        <div class="lane-item" style="font-size:.85em">Math errors stopped — trusted expense math</div>
-        <div class="lane-item" style="font-size:.85em">n8n → workflow design (pre-agent era)</div>
-        <div class="lane-item" style="font-size:.85em">First agents appeared: Manus, deep research</div>
+      <div class="kicker" style="margin-bottom:.6rem">Personal · Expense Tracker</div>
+
+      <!-- n8n pipeline decomposition -->
+      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem">
+        <div style="display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-radius:10px;background:var(--bg-3);border:1px solid var(--line)">
+          <span style="font-size:1.3em">📸</span>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:.82em;font-weight:600">OCR</div>
+            <div style="font-size:.72em;color:var(--ink-mute)">Read receipt → extract items + amounts</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-mono);font-size:.72em;color:var(--cyan)">↓</div>
+        <div style="display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-radius:10px;background:var(--bg-3);border:1px solid var(--line)">
+          <span style="font-size:1.3em">📊</span>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:.82em;font-weight:600">Google Sheets</div>
+            <div style="font-size:.72em;color:var(--ink-mute)">Auto-log data → categorize spending</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-mono);font-size:.72em;color:var(--cyan)">↓</div>
+        <div style="display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-radius:10px;background:rgba(0,143,116,.08);border:1px solid var(--cyan)">
+          <span style="font-size:1.3em">📈</span>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:.82em;font-weight:600;color:var(--cyan)">Visualize</div>
+            <div style="font-size:.72em;color:var(--ink-mute)">Dashboard → where does money go?</div>
+          </div>
+        </div>
       </div>
 
-      <div class="insight cyan-box" style="margin-top:1rem">
+      <div class="insight cyan-box">
         <span class="ik">Inflection</span>
-        <span class="ib">The document IS the input. No translation layer needed.</span>
+        <span class="ib">Break the problem into pieces. Have a tool for every individual piece.</span>
+      </div>
+
+      <!-- 2024 model timeline -->
+      <div style="margin-top:1rem;padding:.8rem 1rem;border-radius:10px;background:var(--bg-3);border:1px solid var(--line)">
+        <div class="kicker" style="margin-bottom:.5rem;font-size:.68em">2024 Model Milestones</div>
+        <div style="display:flex;flex-direction:column;gap:.3rem">
+          <div style="display:flex;gap:.6rem;font-size:.75em"><span style="color:var(--ink-mute);font-family:var(--font-mono);min-width:5ch">Feb</span><span>Gemini 1.5 — long context, multimodal</span></div>
+          <div style="display:flex;gap:.6rem;font-size:.75em"><span style="color:var(--ink-mute);font-family:var(--font-mono);min-width:5ch">May</span><span>GPT-4o — vision + voice</span></div>
+          <div style="display:flex;gap:.6rem;font-size:.75em"><span style="color:var(--ink-mute);font-family:var(--font-mono);min-width:5ch">Sep</span><span>GPT o1 — chain-of-thought reasoning</span></div>
+          <div style="display:flex;gap:.6rem;font-size:.75em"><span style="color:var(--ink-mute);font-family:var(--font-mono);min-width:5ch">Dec</span><span>Gemini 2.0 — agentic, real-time</span></div>
+          <div style="display:flex;gap:.6rem;font-size:.75em"><span style="color:var(--cyan);font-family:var(--font-mono);min-width:5ch">Jan '25</span><span style="color:var(--cyan)">DeepSeek R1 — reasoning at open-source cost</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -593,33 +570,38 @@ h3{font-size:var(--h3);margin-bottom:.3em}
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="slide" data-label="Agent Year">
   <!-- Giant watermark year -->
-  <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:clamp(12rem,30vw,22rem);font-weight:700;color:var(--ink);opacity:.04;z-index:-1;pointer-events:none;letter-spacing:-.06em;line-height:1">2025</div>
+  <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:clamp(10rem,26vw,20rem);font-weight:700;color:var(--ink);opacity:.04;z-index:-1;pointer-events:none;letter-spacing:-.06em;line-height:1">2025–26</div>
 
-  <span class="eyebrow reveal">2025 · The Agent Year</span>
-  <h2 class="reveal">AI stopped <span class="cyan">answering</span><br>and started <span class="amber">deciding.</span></h2>
+  <span class="eyebrow reveal">2025–2026 · The Agent Year</span>
+  <h2 class="reveal">AI stopped answering and started <span class="cyan">deciding</span> and <span class="amber">planning.</span></h2>
 
   <div class="split reveal" style="gap:2.5rem">
     <div>
       <div class="tech-timeline">
         <div class="tl-event tech-ev">
-          <div class="tl-date">2026 · Jan / Feb</div>
-          <div class="tl-title">OpenClaw Gains Traction</div>
-          <div class="tl-body">Twitter/X signals → phone digest. First real personal agent.</div>
-        </div>
-        <div class="tl-event work-ev">
-          <div class="tl-date">2025 · Q1</div>
-          <div class="tl-title">Work: Beyond Summarization</div>
-          <div class="tl-body">CDST gives a case-level answer, not just text. SNF + IP auto-approval pilots launch.</div>
+          <div class="tl-date">Feb 2025</div>
+          <div class="tl-title">GPT Deep Research · Manus (Mar)</div>
+          <div class="tl-body">First agents that run multi-step tasks autonomously without human handholding.</div>
         </div>
         <div class="tl-event tech-ev">
-          <div class="tl-date">2025 · April</div>
-          <div class="tl-title">Hermes Becomes Standard</div>
-          <div class="tl-body">Replaced OpenClaw. Discord-native, multi-channel, serious upgrade.</div>
+          <div class="tl-date">May 2025</div>
+          <div class="tl-title">Claude Code — general release</div>
+          <div class="tl-body">Coding agents go mainstream. Nov 2025: Opus 4.5 → Claude Code finally becomes really good. Harness engineering era begins.</div>
         </div>
         <div class="tl-event personal-ev">
-          <div class="tl-date">2025 · Ongoing</div>
-          <div class="tl-title">Finance + Receipt Agents</div>
-          <div class="tl-body">Expense tracking, receipt plugin, finance digest — one coherent picture.</div>
+          <div class="tl-date">Nov 2025</div>
+          <div class="tl-title">OpenClaw (clawbot) launches</div>
+          <div class="tl-body">Twitter/X → phone digest. Open source. Jan 2026: goes viral.</div>
+        </div>
+        <div class="tl-event work-ev">
+          <div class="tl-date">Q1 2026</div>
+          <div class="tl-title">Work: Beyond Summarization</div>
+          <div class="tl-body">CDST gives case-level answers. SNF + IP auto-approval pilots launch.</div>
+        </div>
+        <div class="tl-event personal-ev">
+          <div class="tl-date">Feb 2026</div>
+          <div class="tl-title">Hermes (closed learning loop)</div>
+          <div class="tl-body">Replaces OpenClaw. Persists memory across sessions. Apr 2026: full agent — self-improving.</div>
         </div>
       </div>
     </div>
@@ -726,184 +708,311 @@ h3{font-size:var(--h3);margin-bottom:.3em}
   <div class="split reveal" style="gap:2.5rem">
     <div>
       <!-- Big 3-step horizontal framework -->
-      <div class="kicker" style="margin-bottom:.8rem">The framework</div>
-      <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:1.4rem">
-        <div style="flex:1;min-width:100px;padding:1rem;border-radius:12px;background:rgba(26,110,224,.1);border:1px solid var(--work);text-align:center">
-          <div style="font-family:var(--font-display);font-weight:700;font-size:1.1em;color:var(--work);margin-bottom:.3em">Golden Dataset</div>
-          <div style="font-size:.75em;color:var(--ink-mute)">Ground truth anchors every test</div>
+      <div class="kicker" style="margin-bottom:.6rem">Our framework</div>
+      <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem">
+        <div style="flex:1;min-width:80px;padding:.7rem;border-radius:10px;background:rgba(26,110,224,.1);border:1px solid var(--work);text-align:center">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:.95em;color:var(--work);margin-bottom:.2em">Golden Dataset</div>
+          <div style="font-size:.7em;color:var(--ink-mute)">Ground truth anchors every test</div>
         </div>
         <div class="arr" style="color:var(--cyan)">→</div>
-        <div style="flex:1;min-width:100px;padding:1rem;border-radius:12px;background:rgba(0,143,116,.1);border:1px solid var(--cyan);text-align:center">
-          <div style="font-family:var(--font-display);font-weight:700;font-size:1.1em;color:var(--cyan);margin-bottom:.3em">Chunked Scoring</div>
-          <div style="font-size:.75em;color:var(--ink-mute)">Each field scored separately</div>
+        <div style="flex:1;min-width:80px;padding:.7rem;border-radius:10px;background:rgba(0,143,116,.1);border:1px solid var(--cyan);text-align:center">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:.95em;color:var(--cyan);margin-bottom:.2em">Chunked Scoring</div>
+          <div style="font-size:.7em;color:var(--ink-mute)">Each field scored separately</div>
         </div>
         <div class="arr" style="color:var(--cyan)">→</div>
-        <div style="flex:1;min-width:100px;padding:1rem;border-radius:12px;background:rgba(196,122,0,.1);border:1px solid var(--amber);text-align:center">
-          <div style="font-family:var(--font-display);font-weight:700;font-size:1.1em;color:var(--amber);margin-bottom:.3em">Metrics</div>
-          <div style="font-size:.75em;color:var(--ink-mute)">Recall · Precision · Accuracy</div>
+        <div style="flex:1;min-width:80px;padding:.7rem;border-radius:10px;background:rgba(196,122,0,.1);border:1px solid var(--amber);text-align:center">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:.95em;color:var(--amber);margin-bottom:.2em">Metrics</div>
+          <div style="font-size:.7em;color:var(--ink-mute)">Recall · Precision · Accuracy</div>
+        </div>
+      </div>
+
+      <!-- Key principles from LLM Evals FAQ (Husain + Shankar 2026) -->
+      <div class="kicker" style="margin-bottom:.5rem;font-size:.68em">LLM Evals FAQ · Husain &amp; Shankar, 2026</div>
+      <div style="display:flex;flex-direction:column;gap:.4rem">
+        <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.5rem .7rem;background:var(--bg-3);border-radius:8px;border-left:2px solid var(--work)">
+          <span style="flex-shrink:0">🔍</span>
+          <span><strong>Error analysis first, infra second.</strong> Review 20–50 real outputs manually before building any automated eval.</span>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.5rem .7rem;background:var(--bg-3);border-radius:8px;border-left:2px solid var(--cyan)">
+          <span style="flex-shrink:0">👑</span>
+          <span><strong>Benevolent dictator.</strong> One domain expert as the quality decision maker — nurse, not committee.</span>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.5rem .7rem;background:var(--bg-3);border-radius:8px;border-left:2px solid var(--amber)">
+          <span style="flex-shrink:0">✅</span>
+          <span><strong>Binary pass/fail beats Likert.</strong> 1–5 ratings are subjective and inconsistent. Pass/fail forces clarity.</span>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.5rem .7rem;background:rgba(204,0,64,.06);border-radius:8px;border-left:2px solid var(--magenta)">
+          <span style="flex-shrink:0">🏥</span>
+          <span><strong>Clinical = false negatives cost more.</strong> Missing something in a medical review is worse than over-flagging.</span>
         </div>
       </div>
     </div>
 
-    <div>
-      <div class="stat-grid" style="grid-template-columns:1fr 1fr">
-        <div class="stat-cell">
-          <div class="stat-n work-n">Golden</div>
-          <div class="stat-l">Dataset anchors evaluation</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-n work-n">Chunks</div>
-          <div class="stat-l">Score each field separately</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-n">Recall</div>
-          <div class="stat-l">Catch everything critical</div>
-        </div>
-        <div class="stat-cell">
-          <div class="stat-n">Precision</div>
-          <div class="stat-l">Don't add noise</div>
+    <div style="display:flex;flex-direction:column;gap:.7rem">
+
+      <!-- Criteria drift callout -->
+      <div style="padding:.75rem 1rem;border-radius:10px;background:rgba(204,0,64,.06);border:1px solid var(--magenta)">
+        <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.1em;color:var(--magenta);margin-bottom:.3rem">⚠ Evaluation criteria drift · Shreya Shankar, Stanford</div>
+        <div style="font-size:.78em;line-height:1.5">"Users start with a simple rubric — but as they see more examples, they refine it. Standard ML eval assumes fixed criteria. Real evals don't."</div>
+      </div>
+
+      <!-- Three Gulfs -->
+      <div>
+        <div class="kicker" style="margin-bottom:.5rem;font-size:.68em">The Three Gulfs (EvalGen / DocWrangler)</div>
+        <div style="display:flex;flex-direction:column;gap:.35rem">
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em">
+            <span style="color:var(--work);flex-shrink:0;font-weight:700">1</span>
+            <span><strong>Comprehension</strong> — What's actually in my data? You can't write good prompts for data you don't understand.</span>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em">
+            <span style="color:var(--amber);flex-shrink:0;font-weight:700">2</span>
+            <span><strong>Specification</strong> — How do I write the right prompt? Accumulated observations are hard to operationalize.</span>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em">
+            <span style="color:var(--cyan);flex-shrink:0;font-weight:700">3</span>
+            <span><strong>Generalization</strong> — Will this work at scale? A prompt that works on 10 examples can fail on 10,000.</span>
+          </div>
         </div>
       </div>
 
-      <div class="insight amber-box" style="margin-top:1rem">
-        <span class="ik">ROI Test</span>
-        <span class="ib">$120k/mo spend must deliver &gt;$120k/mo in value. Evaluation proves it to leadership.</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- 10 — OPENCLAW -->
-<!-- ══════════════════════════════════════════════════════ -->
-<section class="slide" data-label="OpenClaw">
-  <span class="eyebrow reveal">Personal · Jan / Feb 2025 · OpenClaw Era</span>
-  <h2 class="reveal">Staying current:<br><span class="cyan">AI as my news filter.</span></h2>
-
-  <div class="split reveal" style="gap:2.5rem">
-    <div>
-      <div style="display:grid;gap:.8rem;margin-bottom:1rem">
-        <div class="card" style="display:flex;gap:.8rem;align-items:flex-start">
-          <div style="font-size:1.5em;flex-shrink:0">❓</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.2em">Why</div>
-            <div style="font-size:.82em;color:var(--ink-mute)">New models weekly — manually scanning is unsustainable</div>
-          </div>
-        </div>
-        <div class="card" style="display:flex;gap:.8rem;align-items:flex-start">
-          <div style="font-size:1.5em;flex-shrink:0">📲</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.2em">What</div>
-            <div style="font-size:.82em;color:var(--ink-mute)">Twitter/X → phone digest · $20/mo flat · limited API</div>
-          </div>
-        </div>
-        <div class="card" style="display:flex;gap:.8rem;align-items:flex-start">
-          <div style="font-size:1.5em;flex-shrink:0">🔧</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.2em">Broke</div>
-            <div style="font-size:.82em;color:var(--ink-mute)">$20 cap hit constantly. Debugging time > reading time saved.</div>
-          </div>
-        </div>
+      <!-- EvalGen loop -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.6rem .8rem;background:var(--bg-3);border-radius:10px;border:1px solid var(--line)">
+        <div style="text-align:center;font-size:.72em">Label<br><span style="color:var(--ink-mute);font-size:.9em">outputs live</span></div>
+        <div style="color:var(--cyan);font-size:.9em">→</div>
+        <div style="text-align:center;font-size:.72em">Build<br><span style="color:var(--ink-mute);font-size:.9em">LLM evaluator</span></div>
+        <div style="color:var(--cyan);font-size:.9em">→</div>
+        <div style="text-align:center;font-size:.72em">Report card<br><span style="color:var(--ink-mute);font-size:.9em">vs. intent</span></div>
+        <div style="color:var(--cyan);font-size:.9em">→</div>
+        <div style="text-align:center;font-size:.72em">Refine<br><span style="color:var(--ink-mute);font-size:.9em">criteria</span></div>
       </div>
 
       <div class="insight amber-box">
-        <span class="ik">The Lesson</span>
-        <span class="ib">OpenClaw proved personal agents work — and pushed me to a better tool.</span>
-      </div>
-    </div>
-
-    <div>
-      <div class="card">
-        <div class="kicker" style="margin-bottom:.8rem">Also building in parallel</div>
-        <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.4rem">
-          <div class="lane-item" style="font-size:.85em">Receipt scanner: design workflow before coding</div>
-          <div class="lane-item" style="font-size:.85em">Finance digest — investments, not just expenses</div>
-          <div class="lane-item" style="font-size:.85em">Expense tracker — the Costco problem, finally solved</div>
-        </div>
-        <div style="margin-top:.8rem;font-family:var(--font-mono);font-size:.68em;color:var(--ink-mute);border-top:1px solid var(--line);padding-top:.6em">
-          * n8n used here for workflow mapping (pre-agent era) — now handled by Claude Code agents
-        </div>
+        <span class="ik">Our version</span>
+        <span class="ib">$145k/mo spend must deliver more back. Evaluation is how we prove it — and keep refining what "good" means.</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 11 — HERMES -->
+<!-- 10 — COST -->
 <!-- ══════════════════════════════════════════════════════ -->
-<section class="slide" data-label="Hermes">
-  <span class="eyebrow reveal">Personal · April 2025 · Hermes</span>
-  <h2 class="reveal">Hermes: from news reader<br>to <span class="cyan">personal command center.</span></h2>
+<section class="slide" data-label="Cost">
+  <span class="eyebrow reveal">Work + Personal · What AI actually costs</span>
+  <h2 class="reveal">Cost is a <span class="magenta">strategic decision</span>,<br>not an afterthought.</h2>
 
-  <div class="split reveal" style="gap:2.5rem">
+  <div class="split reveal" style="margin-top:.8rem;gap:2.5rem">
+
+    <!-- LEFT: Work / Enterprise -->
     <div>
-      <div style="display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem">
-        <div style="display:flex;gap:.7rem;align-items:center">
-          <div style="font-size:1.3em;flex-shrink:0">💬</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:.9em">Discord as the interface</div>
-            <div style="font-size:.8em;color:var(--ink-mute)">Channels = natural information architecture</div>
-          </div>
+      <div style="font-family:var(--font-mono);font-size:.75em;text-transform:uppercase;letter-spacing:.18em;color:var(--work);margin-bottom:.7rem">🏥 Work · Enterprise</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem">
+        <div class="card" style="border-top:3px solid var(--ink-mute);text-align:center">
+          <div style="font-family:var(--font-mono);font-size:.6em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3em">Before · GPT</div>
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.6rem);color:var(--ink-mute);line-height:1">$1.4M</div>
+          <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2em">per year</div>
         </div>
-        <div style="display:flex;gap:.7rem;align-items:center">
-          <div style="font-size:1.3em;flex-shrink:0">🧾</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:.9em">Receipt scanner plugin</div>
-            <div style="font-size:.8em;color:var(--ink-mute)">Snap → process → logged. Costco solved.</div>
-          </div>
+        <div class="card" style="border-top:3px solid var(--magenta);text-align:center">
+          <div style="font-family:var(--font-mono);font-size:.6em;color:var(--magenta);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3em">Now · Gemini + GSU</div>
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.6rem);color:var(--magenta);line-height:1">$1.7M</div>
+          <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2em">per year · full expansion</div>
         </div>
-        <div style="display:flex;gap:.7rem;align-items:center">
-          <div style="font-size:1.3em;flex-shrink:0">⚠️</div>
-          <div>
-            <div style="font-family:var(--font-display);font-weight:600;font-size:.9em">Local machine dependency</div>
-            <div style="font-size:.8em;color:var(--ink-mute)">Self-hosting: time + infra instead of $</div>
+      </div>
+
+      <div class="card" style="padding:.8rem 1rem">
+        <div class="kicker" style="font-size:.72em;margin-bottom:.6rem">Monthly · $145k</div>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:rgba(26,110,224,.06);border-radius:8px;border-left:2px solid var(--work)">
+            <div>
+              <div style="font-weight:600;font-size:.85em">🏥 Spine</div>
+              <div style="font-size:.72em;color:var(--ink-mute)">$55k GPT · $2.5k OCR</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.8rem">
+              <div style="font-family:var(--font-mono);font-size:.75em;color:var(--ink-mute)">24,588 docs/mo</div>
+              <div style="font-weight:700;font-size:1.1em;color:var(--work)">$58k</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:rgba(91,63,184,.06);border-radius:8px;border-left:2px solid var(--violet)">
+            <div>
+              <div style="font-weight:600;font-size:.85em">🧠 IP + SNF</div>
+              <div style="font-size:.72em;color:var(--ink-mute)">30 GSU @ $2.4k · $4k OCR</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.8rem">
+              <div style="text-align:right">
+                <div style="font-family:var(--font-mono);font-size:.75em;color:var(--ink-mute)">376,040 docs/mo</div>
+                <div style="font-family:var(--font-mono);font-size:.68em;color:var(--violet);font-weight:600">~15× more than Spine</div>
+              </div>
+              <div style="font-weight:700;font-size:1.1em;color:var(--violet)">$85k</div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:rgba(204,0,64,.08);border-radius:8px">
+            <div style="font-family:var(--font-mono);font-size:.68em;color:var(--magenta);text-transform:uppercase;letter-spacing:.1em">Total</div>
+            <div style="font-weight:700;font-size:1.2em;color:var(--magenta)">$145k</div>
           </div>
         </div>
       </div>
+
+      <div class="insight amber-box" style="margin-top:.7rem">
+        <span class="ik">Why more?</span>
+        <span class="ib">More cases, more expansion — cost grew because coverage grew.</span>
+      </div>
     </div>
 
-    <div class="reveal-blur">
-      <div class="discord-mock">
-        <div style="display:grid;grid-template-columns:160px 1fr">
+    <!-- RIGHT: Personal -->
+    <div>
+      <div style="font-family:var(--font-mono);font-size:.75em;text-transform:uppercase;letter-spacing:.18em;color:var(--personal);margin-bottom:.7rem">🏠 Personal</div>
+
+      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem">
+        <div class="card" style="border-left:3px solid var(--ink-mute);display:flex;align-items:center;gap:1rem">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--ink-mute);line-height:1;min-width:2.5ch">$20</div>
+          <div>
+            <div style="font-weight:600;font-size:.9em">ChatGPT subscription</div>
+            <div style="font-size:.78em;color:var(--ink-mute)">Flat fee · no visibility into actual usage</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute)">↓ started tracking API costs</div>
+        <div class="card" style="border-left:3px solid var(--magenta);display:flex;align-items:center;gap:1rem">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--magenta);line-height:1;min-width:2.5ch">~$500</div>
+          <div>
+            <div style="font-weight:600;font-size:.9em">Per week · API reality</div>
+            <div style="font-size:.78em;color:var(--ink-mute)">$1,500–$2,000/mo at true API rates</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-family:var(--font-mono);font-size:.72em;color:var(--ink-mute)">↓ what I actually pay</div>
+        <div class="card" style="border-left:3px solid var(--cyan);display:flex;align-items:center;gap:1rem">
+          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.4rem);color:var(--cyan);line-height:1;min-width:2.5ch">$200</div>
+          <div>
+            <div style="font-weight:600;font-size:.9em">Claude Max · heavily subsidized</div>
+            <div style="font-size:.78em;color:var(--ink-mute)">Power users draw $5k–$25k · still pay $200</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight cyan-box">
+        <span class="ik">The ROI question</span>
+        <span class="ib">For every dollar I spend, am I getting more back — in time, clarity, or outcomes?</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 10 — OPENCLAW → HERMES -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="slide" data-label="Agents">
+  <span class="eyebrow reveal">Personal · Nov 2025 → Apr 2026 · OpenClaw vs Hermes</span>
+  <h2 class="reveal">Gateway-first vs <span class="cyan">agent-first.</span><br>Same goal, different philosophy.</h2>
+
+  <div class="split reveal" style="gap:2rem;margin-top:.8rem">
+
+    <!-- LEFT: comparison + my choice -->
+    <div style="display:flex;flex-direction:column;gap:.65rem">
+
+      <!-- Comparison table -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
+        <div style="padding:.6rem .8rem;background:var(--bg-3);border:1px solid var(--line);border-radius:8px;border-top:2px solid var(--ink-mute)">
+          <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);margin-bottom:.5rem">🐾 OpenClaw</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;font-size:.75em">
+            <div><span style="color:var(--ink-mute)">Philosophy</span><br>Gateway-first · you set the rules</div>
+            <div><span style="color:var(--ink-mute)">Skills</span><br>44k+ human-written on ClawHub</div>
+            <div><span style="color:var(--ink-mute)">Memory</span><br>Unbounded Markdown · you curate</div>
+            <div><span style="color:var(--ink-mute)">Behavior</span><br>Cautious · asks before acting</div>
+          </div>
+        </div>
+        <div style="padding:.6rem .8rem;background:rgba(0,143,116,.06);border:1px solid var(--cyan);border-radius:8px;border-top:2px solid var(--cyan)">
+          <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:.5rem">🧠 Hermes</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;font-size:.75em">
+            <div><span style="color:var(--ink-mute)">Philosophy</span><br>Agent-first · learns your habits</div>
+            <div><span style="color:var(--ink-mute)">Skills</span><br>Writes &amp; refines its own from experience</div>
+            <div><span style="color:var(--ink-mute)">Memory</span><br>Bounded loop · keeps what matters</div>
+            <div><span style="color:var(--ink-mute)">Behavior</span><br>Autonomous · acts, then reports</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My choice -->
+      <div style="padding:.65rem .9rem;background:rgba(224,92,26,.06);border:1px solid var(--personal);border-radius:10px">
+        <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.1em;color:var(--personal);margin-bottom:.3rem">Why I chose Hermes (non-coder)</div>
+        <div style="font-size:.78em;line-height:1.55">I don't want to curate 44k skills. I want an agent that <strong>watches what I do and gets better at it</strong>. Hermes learns from my behavior — I don't have to build the behavior for it.</div>
+      </div>
+
+      <!-- Cost reality -->
+      <div style="padding:.65rem .9rem;background:var(--bg-3);border:1px solid var(--line);border-radius:10px">
+        <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.1em;color:var(--amber);margin-bottom:.3rem">💸 Cost reality</div>
+        <div style="display:flex;flex-direction:column;gap:.25rem;font-size:.76em">
+          <div>Full agent (Claude Sonnet) → <strong style="color:var(--magenta)">$39–74/mo</strong> · got expensive fast</div>
+          <div>Info ingestion only (DeepSeek) → <strong style="color:var(--cyan)">$6–15/mo</strong> · what I use now</div>
+          <div style="color:var(--ink-mute);font-size:.9em">VPS $5 + API calls ~$2–10 · open source, pay only for compute</div>
+        </div>
+      </div>
+
+      <div class="insight cyan-box" style="margin-top:.1rem">
+        <span class="ik">Today</span>
+        <span class="ib">Hermes handles information ingestion only. Cheap, always-on, and still learns.</span>
+      </div>
+    </div>
+
+    <!-- RIGHT: Discord + Kanban -->
+    <div style="display:flex;flex-direction:column;gap:.7rem">
+
+      <!-- Discord mock -->
+      <div class="discord-mock" style="flex-shrink:0">
+        <div style="display:grid;grid-template-columns:140px 1fr">
           <div class="discord-sidebar">
-            <div style="font-size:.65em;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .6rem .6rem;opacity:.7">Channels</div>
-            <div class="discord-ch"># ai-news</div>
-            <div class="discord-ch active"># personal-finance</div>
+            <div style="font-size:.58em;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .6rem .4rem;opacity:.6">My Channels</div>
+            <div class="discord-ch active"># ai-news</div>
+            <div class="discord-ch"># personal-finance</div>
             <div class="discord-ch"># receipt-log</div>
-            <div class="discord-ch"># tech-updates</div>
             <div class="discord-ch"># market-digest</div>
+            <div class="discord-ch"># tech-updates</div>
+            <div class="discord-ch"># travel-planning</div>
           </div>
-          <div class="discord-main">
-            <div class="discord-msg">
-              <div class="discord-avatar">H</div>
+          <div class="discord-main" style="padding:.5rem .7rem;display:flex;flex-direction:column;gap:.4rem">
+            <div class="discord-msg" style="margin:0">
+              <div class="discord-avatar" style="width:22px;height:22px;font-size:.6em">H</div>
               <div class="discord-content">
-                <div class="discord-name">Hermes Bot <span class="discord-time">Today at 8:02 AM</span></div>
-                <div class="discord-text">📊 <strong>Weekly Finance Digest</strong><br>Portfolio up 2.1% · 3 new expense categories · Costco run: $187.43 logged ✓</div>
+                <div class="discord-name" style="font-size:.7em">Hermes <span class="discord-time">8:02 AM</span></div>
+                <div class="discord-text" style="font-size:.72em">🤖 <strong>AI Daily</strong> — Opus 4.7 tops coding bench · Gemini 2.5 Flash ships · 3 more worth reading</div>
               </div>
             </div>
-            <div class="discord-msg">
-              <div class="discord-avatar">H</div>
+            <div class="discord-msg" style="margin:0">
+              <div class="discord-avatar" style="width:22px;height:22px;font-size:.6em">H</div>
               <div class="discord-content">
-                <div class="discord-name">Hermes Bot <span class="discord-time">Today at 9:15 AM</span></div>
-                <div class="discord-text">🤖 <strong>AI News Roundup</strong><br>Claude 4 · Gemini 2.0 Ultra · OpenAI o3 — 5 headlines worth reading today</div>
-              </div>
-            </div>
-            <div class="discord-msg">
-              <div class="discord-avatar">H</div>
-              <div class="discord-content">
-                <div class="discord-name">Hermes Bot <span class="discord-time">Today at 11:32 AM</span></div>
-                <div class="discord-text">🧾 Receipt scanned · Costco · $143.22 · Grocery category · Added to tracker</div>
+                <div class="discord-name" style="font-size:.7em">Hermes <span class="discord-time">9:15 AM</span></div>
+                <div class="discord-text" style="font-size:.72em">🧾 Costco · $143.22 · Grocery → logged ✓</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="insight cyan-box" style="margin-top:1rem">
-        <span class="ik">The Upgrade</span>
-        <span class="ib">News + receipts + finance in one Discord workspace. Fewer tools, more signal.</span>
+      <!-- Kanban board -->
+      <div>
+        <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-mute);margin-bottom:.4rem">Kanban · /kanban view</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem">
+          <div style="background:var(--bg-3);border:1px solid var(--line);border-radius:8px;padding:.5rem">
+            <div style="font-family:var(--font-mono);font-size:.6em;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);margin-bottom:.4rem">To Do</div>
+            <div style="background:var(--bg-2);border-radius:5px;padding:.35rem .5rem;font-size:.7em;margin-bottom:.3rem;border-left:2px solid var(--ink-mute)">Weekly finance digest</div>
+            <div style="background:var(--bg-2);border-radius:5px;padding:.35rem .5rem;font-size:.7em;border-left:2px solid var(--ink-mute)">Travel research: Tokyo</div>
+          </div>
+          <div style="background:var(--bg-3);border:1px solid var(--cyan);border-radius:8px;padding:.5rem">
+            <div style="font-family:var(--font-mono);font-size:.6em;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:.4rem">In Progress</div>
+            <div style="background:rgba(0,143,116,.1);border-radius:5px;padding:.35rem .5rem;font-size:.7em;margin-bottom:.3rem;border-left:2px solid var(--cyan)">Scan receipts (3)</div>
+            <div style="background:rgba(0,143,116,.1);border-radius:5px;padding:.35rem .5rem;font-size:.7em;border-left:2px solid var(--cyan)">AI news roundup</div>
+          </div>
+          <div style="background:var(--bg-3);border:1px solid var(--line);border-radius:8px;padding:.5rem">
+            <div style="font-family:var(--font-mono);font-size:.6em;text-transform:uppercase;letter-spacing:.1em;color:var(--personal);margin-bottom:.4rem">Done</div>
+            <div style="background:var(--bg-2);border-radius:5px;padding:.35rem .5rem;font-size:.7em;margin-bottom:.3rem;border-left:2px solid var(--personal)">Market digest ✓</div>
+            <div style="background:var(--bg-2);border-radius:5px;padding:.35rem .5rem;font-size:.7em;border-left:2px solid var(--personal)">Portfolio check ✓</div>
+          </div>
+        </div>
+        <div style="font-size:.65em;color:var(--ink-mute);margin-top:.4rem;font-family:var(--font-mono)">Tasks persist across crashes · full audit trail · multi-agent handoff</div>
       </div>
+
     </div>
+
   </div>
 </section>
 
@@ -960,8 +1069,9 @@ h3{font-size:var(--h3);margin-bottom:.3em}
   </div>
 </section>
 
+
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 13 — LESSONS -->
+<!-- 14 — LESSONS -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="slide" data-label="Lessons">
   <span class="eyebrow reveal">Lessons Learned · Personal + Work</span>
@@ -1007,7 +1117,7 @@ h3{font-size:var(--h3);margin-bottom:.3em}
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 14 — CLOSING -->
+<!-- 15 — CLOSING -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="slide" data-label="Closing" style="justify-content:center;text-align:center">
   <div class="blob tl"></div>
