@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Timeline — The World + My Journey</title>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=jetbrains-mono@400,500&display=swap" />
+<style>
+:root{
+  --bg:#080b14;
+  --bg-2:#0f1525;
+  --bg-3:#1a2035;
+  --ink:#e9ecf5;
+  --ink-mute:#5a6480;
+  --line:#1f2a44;
+  --cyan:#00e8c0;
+  --cyan-dim:rgba(0,232,192,.12);
+  --cyan-glow:rgba(0,232,192,.3);
+  --work:#4a9eff;
+  --work-dim:rgba(74,158,255,.12);
+  --personal:#ff7a3d;
+  --personal-dim:rgba(255,122,61,.12);
+  --magenta:#ff4d8d;
+  --amber:#ffb547;
+
+  --font-d:"Clash Display","Satoshi",sans-serif;
+  --font-b:"Satoshi",-apple-system,sans-serif;
+  --font-m:"JetBrains Mono",ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  font-family:var(--font-b);color:var(--ink);background:var(--bg);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+
+/* ── HEADER ── */
+.page-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,11,20,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:.9rem clamp(1.2rem,4vw,3rem);
+  display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;
+}
+.header-title{
+  font-family:var(--font-d);font-weight:700;font-size:1.15rem;
+  letter-spacing:-.01em;color:var(--ink);
+}
+.header-title span{color:var(--cyan)}
+.header-back{
+  font-family:var(--font-m);font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--ink-mute);text-decoration:none;
+  padding:.4em .8em;border:1px solid var(--line);border-radius:6px;
+  transition:color .2s,border-color .2s;
+}
+.header-back:hover{color:var(--ink);border-color:var(--ink-mute)}
+
+.filters{
+  display:flex;gap:.5rem;margin-left:auto;flex-wrap:wrap;
+}
+.filter-btn{
+  font-family:var(--font-m);font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.12em;padding:.4em 1em;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--ink-mute);
+  transition:all .2s;
+}
+.filter-btn.active,.filter-btn:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.filter-btn.f-world.active{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.filter-btn.f-work.active{border-color:var(--work);color:var(--work);background:var(--work-dim)}
+.filter-btn.f-personal.active{border-color:var(--personal);color:var(--personal);background:var(--personal-dim)}
+
+/* ── LEGEND ── */
+.legend{
+  display:flex;gap:1.6rem;flex-wrap:wrap;align-items:center;
+  padding:.8rem clamp(1.2rem,4vw,3rem);border-bottom:1px solid var(--line);
+  font-family:var(--font-m);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+}
+.leg{display:flex;align-items:center;gap:.5em;color:var(--ink-mute)}
+.leg-dot{width:10px;height:10px;border-radius:50%}
+
+/* ── TIMELINE WRAPPER ── */
+.tl-wrap{
+  max-width:1200px;margin:0 auto;
+  padding:3rem clamp(1rem,3vw,2.5rem) 6rem;
+  position:relative;
+}
+
+/* ── LANE LABELS ── */
+.lane-labels{
+  display:grid;grid-template-columns:1fr 96px 1fr;
+  margin-bottom:2rem;padding:0 0;
+}
+.lane-label{
+  font-family:var(--font-m);font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.2em;padding-bottom:.6rem;
+}
+.ll-world{color:var(--cyan);text-align:right;padding-right:2rem;border-bottom:2px solid rgba(0,232,192,.2)}
+.ll-center{border-bottom:2px solid var(--line)}
+.ll-mine{color:var(--work);padding-left:2rem;border-bottom:2px solid rgba(74,158,255,.15)}
+
+/* ── CENTER SPINE ── */
+.tl-spine{
+  position:absolute;left:50%;transform:translateX(-50%);
+  width:2px;background:linear-gradient(180deg,transparent 0%,var(--line) 3%,var(--line) 97%,transparent 100%);
+  top:7rem;bottom:6rem;pointer-events:none;
+}
+
+/* ── PHASE SECTION ── */
+.phase-banner{
+  display:grid;grid-template-columns:1fr 96px 1fr;
+  margin:2.5rem 0 1rem;
+  position:relative;z-index:1;
+}
+.phase-label{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:1rem;
+}
+.phase-badge{
+  font-family:var(--font-m);font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.18em;padding:.4em 1em;border-radius:999px;
+  font-weight:700;white-space:nowrap;
+}
+.phase-1 .phase-badge{background:rgba(0,232,192,.12);color:var(--cyan);border:1px solid rgba(0,232,192,.2)}
+.phase-2 .phase-badge{background:rgba(255,181,71,.1);color:var(--amber);border:1px solid rgba(255,181,71,.2)}
+.phase-3 .phase-badge{background:rgba(255,77,141,.1);color:var(--magenta);border:1px solid rgba(255,77,141,.2)}
+.phase-line{flex:1;height:1px;background:var(--line);opacity:.5}
+
+/* ── YEAR MARKER ── */
+.year-marker{
+  display:grid;grid-template-columns:1fr 96px 1fr;
+  align-items:center;margin:2rem 0;position:relative;z-index:1;
+}
+.year-inner{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-weight:700;font-size:1rem;
+  color:var(--ink-mute);letter-spacing:.04em;
+  background:var(--bg);border:1px solid var(--line);border-radius:999px;
+  padding:.3em .9em;margin:0 auto;white-space:nowrap;
+}
+.year-line{height:1px;background:var(--line);opacity:.3}
+
+/* ── EVENT ROW ── */
+.tl-row{
+  display:grid;grid-template-columns:1fr 96px 1fr;
+  margin-bottom:1.4rem;align-items:flex-start;
+  position:relative;z-index:1;
+}
+.tl-row.hidden{display:none}
+
+.tl-left{
+  display:flex;justify-content:flex-end;padding-right:2.4rem;padding-top:.5rem;
+}
+.tl-center{
+  display:flex;flex-direction:column;align-items:center;gap:0;
+  padding-top:.6rem;
+}
+.tl-right{
+  padding-left:2.4rem;padding-top:.5rem;
+}
+
+/* Connector line from card to spine */
+.tl-connector{
+  position:absolute;top:1.1rem;height:1px;background:var(--line);opacity:.4;
+  z-index:0;pointer-events:none;
+}
+.tl-connector.left{right:96px;transform:translateX(0)}
+
+/* Dot */
+.tl-dot{
+  width:12px;height:12px;border-radius:50%;flex-shrink:0;
+  border:2px solid var(--bg);margin-top:.05rem;
+  position:relative;z-index:2;
+}
+.tl-dot.world{background:var(--cyan);box-shadow:0 0 10px var(--cyan-glow)}
+.tl-dot.work{background:var(--work)}
+.tl-dot.personal{background:var(--personal)}
+.tl-dot.both{
+  background:conic-gradient(var(--cyan) 0 50%,var(--work) 50% 100%);
+}
+.tl-dot-spacer{flex:1;width:2px;background:var(--line);min-height:8px;margin:2px auto}
+
+/* Event card */
+.ev-card{
+  border-radius:10px;border:1px solid var(--line);
+  padding:.85rem 1rem;background:var(--bg-2);
+  position:relative;transition:border-color .2s,box-shadow .2s;
+  max-width:440px;width:100%;
+}
+.ev-card:hover{box-shadow:0 4px 24px rgba(0,0,0,.4)}
+
+.ev-card.world{border-left:3px solid var(--cyan)}
+.ev-card.world:hover{border-color:var(--cyan);box-shadow:0 4px 24px rgba(0,232,192,.1)}
+.ev-card.work{border-left:3px solid var(--work)}
+.ev-card.work:hover{border-color:var(--work);box-shadow:0 4px 24px rgba(74,158,255,.1)}
+.ev-card.personal{border-left:3px solid var(--personal)}
+.ev-card.personal:hover{border-color:var(--personal);box-shadow:0 4px 24px rgba(255,122,61,.1)}
+
+.ev-date{
+  font-family:var(--font-m);font-size:.65rem;text-transform:uppercase;
+  letter-spacing:.15em;margin-bottom:.35rem;
+}
+.ev-card.world .ev-date{color:var(--cyan)}
+.ev-card.work .ev-date{color:var(--work)}
+.ev-card.personal .ev-date{color:var(--personal)}
+
+.ev-title{
+  font-family:var(--font-d);font-weight:600;font-size:.95rem;
+  line-height:1.2;margin-bottom:.3rem;color:var(--ink);
+}
+.ev-body{
+  font-size:.78rem;color:var(--ink-mute);line-height:1.55;
+}
+
+/* ── EMPTY SIDE PLACEHOLDER ── */
+.tl-empty{padding-top:.5rem;}
+
+/* ── "MY CHANGE" BADGE ── */
+.my-badge{
+  display:inline-flex;align-items:center;gap:.3em;
+  font-family:var(--font-m);font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;
+  padding:.15em .5em;border-radius:4px;margin-bottom:.35rem;font-weight:700;
+}
+.my-badge.work{background:var(--work-dim);color:var(--work)}
+.my-badge.personal{background:var(--personal-dim);color:var(--personal)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:720px){
+  .tl-row{grid-template-columns:0 48px 1fr}
+  .tl-left{display:none}
+  .tl-right{padding-left:1.2rem}
+  .tl-center{align-items:flex-start}
+  .lane-labels .ll-world,.lane-labels .ll-center{display:none}
+  .lane-labels{grid-template-columns:0 48px 1fr}
+  .tl-spine{left:calc(clamp(1rem,3vw,2.5rem) + 24px)}
+  .year-marker{grid-template-columns:0 48px 1fr}
+  .year-line:first-child{display:none}
+  .phase-banner{grid-template-columns:0 48px 1fr}
+}
+
+/* ── FOOTER ── */
+.page-footer{
+  text-align:center;padding:2rem;
+  font-family:var(--font-m);font-size:.68rem;color:var(--ink-mute);
+  letter-spacing:.15em;text-transform:uppercase;border-top:1px solid var(--line);
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header">
+  <a class="header-back" href="index.html">← Back</a>
+  <div class="header-title">AI Timeline — <span>The World + My Journey</span></div>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn f-world" data-filter="world">🌐 AI World</button>
+    <button class="filter-btn f-work" data-filter="work">🏥 My Work</button>
+    <button class="filter-btn f-personal" data-filter="personal">🏠 My Life</button>
+  </div>
+</header>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--cyan)"></div> AI World Events</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--work)"></div> My Work (UM CDST)</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--personal)"></div> My Personal Journey</div>
+</div>
+
+<!-- TIMELINE -->
+<div class="tl-wrap">
+  <div class="tl-spine"></div>
+
+  <div class="lane-labels">
+    <div class="lane-label ll-world">AI World Events</div>
+    <div class="ll-center"></div>
+    <div class="lane-label ll-mine">My Changes</div>
+  </div>
+
+  <div id="timeline"></div>
+</div>
+
+<footer class="page-footer">Jenny Jiang · CVS Health · EDAP · 2022–2026</footer>
+
+<script>
+const EVENTS = [
+  {
+    date:"Nov 2022", year:2022, phase:1,
+    world:{title:"GPT-3.5 launches",body:"Text-only, no vision or reasoning. AI = fast assistant, not yet a thinker. The first LLM most people actually used."},
+    mine:{type:"personal",title:"Text-based AI: copywriting + meeting notes",body:"Emails, drafts, rewording. Meeting notes summarization. Mostly text in, text out. AI as a faster keyboard — not yet a thinking partner."}
+  },
+  {
+    date:"2022–2023", year:2022, phase:1,
+    mine:{type:"work",title:"Exploring Gaussian splatting + diffusion models",body:"Early experimentation with generative and 3D AI. Gaussian splatting for scene reconstruction. Diffusion models for image synthesis. Understanding what these models could and couldn't do."}
+  },
+  {
+    date:"Mar 2023", year:2023, phase:1,
+    world:{title:"GPT-4",body:"Adds depth and longer context. Still text-only, no vision. Reasoning improves but same core limitations on structured clinical data."}
+  },
+  {
+    date:"2023–2024", year:2024, phase:2,
+    mine:{type:"work",title:"UM CDST: OCR → GPT pipeline",body:"Clinical doc pipeline in production. PDFs → OCR → GPT extraction. GPT said '99 < 101 was false.' Headers bled into content. Prompt engineering was the biggest quality lever."}
+  },
+  {
+    date:"2024", year:2024, phase:2,
+    mine:{type:"personal",title:"Chrome extension + wedding website",body:"Chrome ext for in-place AI rewrites — no copy/paste. Built the wedding website with AI. A real use case, not a demo. This is when it clicked as a daily tool."}
+  },
+  {
+    date:"Feb 2024", year:2024, phase:2,
+    world:{title:"Gemini 1.5 — long context, multimodal",body:"1M token context window. Models learned to see. The shift from text pipelines to native document understanding."},
+    mine:{type:"work",title:"Migrated to Gemini Vision — rewrote pipeline",body:"PDF direct to Gemini. No more OCR step. Gemini catches blank pages and flags hallucinations. Clinical pipeline quality jumps significantly."}
+  },
+  {
+    date:"May 2024", year:2024, phase:2,
+    world:{title:"GPT-4o — vision + voice",body:"Multimodal goes mainstream. Vision, audio, text in a single model. Real-time voice capabilities open new interaction patterns."}
+  },
+  {
+    date:"Sep 2024", year:2024, phase:2,
+    world:{title:"GPT o1 — chain-of-thought reasoning",body:"Models start thinking step-by-step before answering. Reasoning becomes a first-class feature, not a prompt trick."}
+  },
+  {
+    date:"Dec 2024", year:2024, phase:2,
+    world:{title:"Gemini 2.0 — agentic, real-time",body:"Agentic capabilities built in. Real-time multimodal. The shift from assistant to agent begins in the foundation models."}
+  },
+  {
+    date:"Jan 2025", year:2025, phase:3,
+    world:{title:"DeepSeek R1",body:"Reasoning-level performance at open-source cost. Democratizes chain-of-thought models. Changes the cost calculus for agents."}
+  },
+  {
+    date:"Feb 2025", year:2025, phase:3,
+    world:{title:"GPT Deep Research",body:"Multi-step research workflows running autonomously. AI stops answering one question — it starts pursuing a research goal."}
+  },
+  {
+    date:"Mar 2025", year:2025, phase:3,
+    world:{title:"Manus — autonomous web agent",body:"Multi-step planning over the browser. First widely-seen 'does it for you' agent. Agent year goes mainstream."}
+  },
+  {
+    date:"May 2025", year:2025, phase:3,
+    world:{title:"Claude Code — general release",body:"Coding agents go mainstream. Engineering enters the harness era. Agentic code editing becomes practical for non-researchers."},
+    mine:{type:"work",title:"Full agentic pipeline: SNF + IP nurse workflow",body:"Broke nurse workflow into agent steps. Pre-cert, acute, post-acute UM reviews automated. 376k+ docs/mo through IP+SNF alone — ~15× Spine volume."}
+  },
+  {
+    date:"Nov 2025", year:2025, phase:3,
+    world:{title:"Claude Opus 4.5 + OpenClaw (clawbot) launches",body:"Opus 4.5 makes Claude Code genuinely good for production work. OpenClaw ships on Twitter/X — gateway-first agent with 44k+ human-written skills."},
+    mine:{type:"personal",title:"Switched to OpenClaw for AI news",body:"Phone digest for daily AI news. Gateway-first: 44k human-written skills on ClawHub. Unbounded Markdown memory. You set the rules; it follows."}
+  },
+  {
+    date:"Jan 2026", year:2026, phase:3,
+    world:{title:"OpenClaw goes viral",body:"Clawbot explodes on Twitter/X. Open-source agent tooling moment. The 'personal AI agent' category becomes mainstream conversation."}
+  },
+  {
+    date:"Feb 2026", year:2026, phase:3,
+    world:{title:"Hermes — closed learning loop",body:"Agent-first: self-written skills, bounded learning, autonomous operation. Replaces gateway-first pattern. The agent learns from behavior rather than requiring explicit skill curation."},
+    mine:{type:"personal",title:"Switched to Hermes — agent-first",body:"No skill curation needed. Hermes watches what I do and gets better at it. Closed learning loop vs OpenClaw's curated 44k. Agent-first vs gateway-first."}
+  },
+  {
+    date:"Apr 2026", year:2026, phase:3,
+    world:{title:"Hermes — full agent, self-improving",body:"Persists memory across sessions. Autonomous decision-making. Self-improving through closed learning loop. The personal AI agent matures."},
+    mine:{type:"personal",title:"Hermes: info ingestion only ($6–15/mo)",body:"Full agent (Claude Sonnet) ran $39–74/mo — too expensive. Dialed back to info ingestion with DeepSeek. Cheap, always-on, still learns. ROI discipline: every dollar back in time or clarity?"}
+  }
+];
+
+const PHASE_INFO = {
+  1:{label:"Phase 1 · 2022–2023 · GPT-3.5 Era",cls:"phase-1",desc:"Task-driven: AI as a smarter search."},
+  2:{label:"Phase 2 · 2024 · Multimodal + Reasoning",cls:"phase-2",desc:"Models learned to see — and reason."},
+  3:{label:"Phase 3 · 2025–2026 · The Agent Year",cls:"phase-3",desc:"AI stopped answering and started deciding."}
+};
+
+function render(filter){
+  const container = document.getElementById('timeline');
+  container.innerHTML = '';
+
+  let lastYear = null, lastPhase = null;
+
+  EVENTS.forEach(ev=>{
+    const showWorld  = ev.world  && (filter==='all'||filter==='world');
+    const showWork   = ev.mine   && ev.mine.type==='work'   && (filter==='all'||filter==='work');
+    const showPers   = ev.mine   && ev.mine.type==='personal' && (filter==='all'||filter==='personal');
+    const showMine   = showWork || showPers;
+    if(!showWorld && !showMine) return;
+
+    // Phase banner
+    if(ev.phase !== lastPhase){
+      lastPhase = ev.phase;
+      const pi = PHASE_INFO[ev.phase];
+      const pb = document.createElement('div');
+      pb.className = `phase-banner ${pi.cls}`;
+      pb.innerHTML = `<div class="phase-label">
+        <div class="phase-line"></div>
+        <span class="phase-badge">${pi.label}</span>
+        <div class="phase-line"></div>
+      </div>`;
+      container.appendChild(pb);
+    }
+
+    // Year marker
+    const yr = ev.year;
+    if(yr !== lastYear){
+      lastYear = yr;
+      const ym = document.createElement('div');
+      ym.className = 'year-marker';
+      ym.innerHTML = `<div class="year-line"></div>
+        <div class="year-inner">${yr}</div>
+        <div class="year-line"></div>`;
+      container.appendChild(ym);
+    }
+
+    // Row
+    const row = document.createElement('div');
+    row.className = 'tl-row';
+
+    // Determine dot type
+    let dotCls = 'world';
+    if(showWorld && showMine) dotCls = 'both';
+    else if(showMine && !showWorld) dotCls = ev.mine.type==='work'?'work':'personal';
+
+    // Left: world event
+    const leftDiv = document.createElement('div');
+    leftDiv.className = 'tl-left';
+    if(showWorld){
+      leftDiv.innerHTML = `<div class="ev-card world">
+        <div class="ev-date">${ev.date}</div>
+        <div class="ev-title">${ev.world.title}</div>
+        <div class="ev-body">${ev.world.body}</div>
+      </div>`;
+    } else {
+      leftDiv.innerHTML = '<div class="tl-empty"></div>';
+    }
+
+    // Center: dot
+    const centerDiv = document.createElement('div');
+    centerDiv.className = 'tl-center';
+    centerDiv.innerHTML = `<div class="tl-dot ${dotCls}"></div>`;
+
+    // Right: mine
+    const rightDiv = document.createElement('div');
+    rightDiv.className = 'tl-right';
+    if(showMine){
+      const m = ev.mine;
+      rightDiv.innerHTML = `<div class="ev-card ${m.type}">
+        <div class="my-badge ${m.type}">${m.type==='work'?'🏥 Work':'🏠 Personal'}</div>
+        <div class="ev-date">${ev.date}</div>
+        <div class="ev-title">${m.title}</div>
+        <div class="ev-body">${m.body}</div>
+      </div>`;
+    } else {
+      rightDiv.innerHTML = '<div class="tl-empty"></div>';
+    }
+
+    row.appendChild(leftDiv);
+    row.appendChild(centerDiv);
+    row.appendChild(rightDiv);
+    container.appendChild(row);
+  });
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.filter);
+  });
+});
+
+render('all');
+</script>
+</body>
+</html>

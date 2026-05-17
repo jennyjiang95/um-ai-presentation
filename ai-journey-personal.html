@@ -28,12 +28,12 @@
   --font-body:"Satoshi",-apple-system,sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,monospace;
 
-  --h1:clamp(3rem,7.5vw,6.4rem);
-  --h2:clamp(2rem,3.8vw,3.4rem);
-  --h3:clamp(1.2rem,1.9vw,1.7rem);
-  --body:clamp(1rem,1.3vw,1.3rem);
-  --small:clamp(.85rem,1vw,1rem);
-  --mega:clamp(3.5rem,10vw,9rem);
+  --h1:clamp(3.5rem,8.5vw,7.2rem);
+  --h2:clamp(2.4rem,4.6vw,4.2rem);
+  --h3:clamp(1.4rem,2.3vw,2.1rem);
+  --body:clamp(1.1rem,1.6vw,1.6rem);
+  --small:clamp(1rem,1.2vw,1.25rem);
+  --mega:clamp(4rem,11vw,10rem);
 
   --pad:clamp(1.4rem,3.6vw,3.6rem);
   --gap:clamp(.8rem,1.4vw,1.4rem);
@@ -272,6 +272,66 @@ h3{font-size:var(--h3);margin-bottom:.3em}
 
 /* footnote */
 .footnote{position:absolute;bottom:clamp(1rem,2vh,1.4rem);left:var(--pad);right:var(--pad);font-family:var(--font-mono);font-size:.66rem;color:var(--ink-mute);letter-spacing:.1em;display:flex;justify-content:space-between;pointer-events:none}
+
+/* ── MINI TIMELINE STRIP ── */
+.counter{bottom:64px!important}
+.hint{bottom:64px!important}
+#tl-strip{
+  position:fixed;bottom:0;left:0;right:0;z-index:997;
+  height:52px;display:flex;align-items:center;
+  background:rgba(250,250,247,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  padding:0 clamp(32px,4.5vw,72px);gap:1.4rem;
+}
+#tl-now{
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;
+  min-width:max-content;line-height:1.4;
+}
+#tn-phase{color:var(--cyan);font-weight:700;display:block}
+#tn-date{color:var(--ink-mute)}
+#tl-bar-outer{flex:1;position:relative;height:52px;display:flex;flex-direction:column;justify-content:center}
+#tl-segments{display:flex;height:5px;border-radius:3px;overflow:hidden;gap:1px}
+.tl-s1{flex:30%;background:rgba(0,143,116,.28);border-radius:2px 0 0 2px}
+.tl-s2{flex:30%;background:rgba(196,122,0,.28)}
+.tl-s3{flex:40%;background:rgba(204,0,64,.28);border-radius:0 2px 2px 0}
+/* phase separator labels */
+#tl-phase-labels{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-top:3px;padding:0 1px}
+#tl-dots-layer{position:absolute;top:50%;transform:translateY(-50%);left:0;right:0;height:20px;pointer-events:none}
+.tl-edot{
+  position:absolute;top:50%;transform:translate(-50%,-50%);
+  width:6px;height:6px;border-radius:50%;cursor:default;pointer-events:all;
+  transition:transform .15s,opacity .15s;
+}
+.tl-edot.world{background:var(--cyan);opacity:.55}
+.tl-edot.work{background:var(--work);opacity:.65}
+.tl-edot.personal{background:var(--personal);opacity:.65}
+.tl-edot:hover{opacity:1!important;transform:translate(-50%,-50%) scale(1.7);z-index:5}
+.tl-edot::after{
+  content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);background:var(--bg-2);border:1px solid var(--line);
+  border-radius:6px;padding:3px 8px;font-family:var(--font-mono);font-size:.58rem;
+  color:var(--ink);white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .15s;box-shadow:0 4px 10px rgba(0,0,0,.1);z-index:10;
+}
+.tl-edot:hover::after{opacity:1}
+#tl-needle{
+  position:absolute;top:0;bottom:0;width:2px;background:var(--magenta);
+  transform:translateX(-50%);
+  transition:left .55s cubic-bezier(.16,1,.3,1),opacity .3s;
+  pointer-events:none;border-radius:1px;
+}
+#tl-needle::before{
+  content:"";position:absolute;top:-5px;left:50%;transform:translateX(-50%);
+  width:8px;height:8px;border-radius:50%;background:var(--magenta);
+  box-shadow:0 0 10px rgba(204,0,64,.55);
+}
+#tl-needle.tl-hidden{opacity:0}
+#tl-next{
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-mute);min-width:max-content;text-align:right;line-height:1.4;
+}
+#tn-next-label{color:var(--ink);display:block}
+@media(max-width:720px){#tl-now,#tl-next{display:none}}
 </style>
 </head>
 <body>
@@ -311,6 +371,12 @@ h3{font-size:var(--h3);margin-bottom:.3em}
     <span>Phase 1 → Task-Driven</span>
     <span>Phase 2 → Multimodal</span>
     <span>Phase 3 → Agentic</span>
+  </div>
+
+  <!-- QR code -->
+  <div class="reveal" style="position:absolute;top:clamp(1.2rem,3vh,2.2rem);right:clamp(1.2rem,3vw,2.4rem);display:flex;flex-direction:column;align-items:center;gap:.4rem">
+    <img src="qr.png" alt="QR code" style="width:clamp(72px,9vw,108px);height:auto;border-radius:6px;display:block">
+    <span style="font-family:var(--font-mono);font-size:.58rem;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase">Scan to open</span>
   </div>
 </section>
 
@@ -394,19 +460,19 @@ h3{font-size:var(--h3);margin-bottom:.3em}
     <div style="font-family:var(--font-mono);font-size:.75em;text-transform:uppercase;letter-spacing:.18em;color:var(--work);margin-bottom:.5rem">🏥 Work</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem">
       <div class="card" style="border-top:3px solid var(--work)">
-        <div style="font-size:1.5em;margin-bottom:.4em">📄</div>
-        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">OCR → GPT pipeline</div>
-        <div style="font-size:.8em;color:var(--ink-mute)">Text in, extraction out</div>
+        <div style="font-size:1.5em;margin-bottom:.4em">📋</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Manual review</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">Nurses read unstructured clinical docs — faxed PDFs, free-text notes</div>
       </div>
       <div class="card" style="border-top:3px solid var(--work)">
-        <div style="font-size:1.5em;margin-bottom:.4em">🔧</div>
-        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Prompt engineering</div>
-        <div style="font-size:.8em;color:var(--ink-mute)">Biggest lever on quality</div>
+        <div style="font-size:1.5em;margin-bottom:.4em">🧩</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Synthesize information</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">Pull criteria, dates, clinical context across multiple pages manually</div>
       </div>
       <div class="card" style="border-top:3px solid var(--work)">
-        <div style="font-size:1.5em;margin-bottom:.4em">⚠️</div>
-        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Dates &amp; math: unreliable</div>
-        <div style="font-size:.8em;color:var(--ink-mute)">GPT said 99 &lt; 101 was <em>false</em> · headers bleed into content</div>
+        <div style="font-size:1.5em;margin-bottom:.4em">⏱️</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.9em;margin-bottom:.3em">Slow &amp; error-prone</div>
+        <div style="font-size:.8em;color:var(--ink-mute)">High cognitive load · missed details · inconsistent across reviewers</div>
       </div>
     </div>
   </div>
@@ -593,11 +659,6 @@ h3{font-size:var(--h3);margin-bottom:.3em}
           <div class="tl-title">OpenClaw (clawbot) launches</div>
           <div class="tl-body">Twitter/X → phone digest. Open source. Jan 2026: goes viral.</div>
         </div>
-        <div class="tl-event work-ev">
-          <div class="tl-date">Q1 2026</div>
-          <div class="tl-title">Work: Beyond Summarization</div>
-          <div class="tl-body">CDST gives case-level answers. SNF + IP auto-approval pilots launch.</div>
-        </div>
         <div class="tl-event personal-ev">
           <div class="tl-date">Feb 2026</div>
           <div class="tl-title">Hermes (closed learning loop)</div>
@@ -607,7 +668,13 @@ h3{font-size:var(--h3);margin-bottom:.3em}
     </div>
 
     <div>
-      <div class="card" style="margin-bottom:1rem">
+      <div class="card" style="margin-bottom:.8rem;border-left:3px solid var(--work)">
+        <div class="kicker" style="margin-bottom:.4rem;font-size:.75em;color:var(--work)">🏥 Work · Q1 2026</div>
+        <div style="font-family:var(--font-display);font-weight:600;font-size:.95em;margin-bottom:.3em">Beyond Summarization</div>
+        <div style="font-size:.82em;color:var(--ink-mute)">CDST gives case-level answers. SNF + IP auto-approval pilots launch.</div>
+      </div>
+
+      <div class="card" style="margin-bottom:.8rem;flex:1">
         <div class="kicker" style="margin-bottom:.7rem">The pattern shift</div>
         <div class="compare" style="margin-top:.5rem">
           <div class="cmp-h personal-h" style="font-size:.8em">Before</div>
@@ -735,7 +802,7 @@ h3{font-size:var(--h3);margin-bottom:.3em}
         </div>
         <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.5rem .7rem;background:var(--bg-3);border-radius:8px;border-left:2px solid var(--cyan)">
           <span style="flex-shrink:0">👑</span>
-          <span><strong>Benevolent dictator.</strong> One domain expert as the quality decision maker — nurse, not committee.</span>
+          <span><strong>Benevolent indicator.</strong> One subject matter expert sets the quality bar — nurses and MDs, not committee vote.</span>
         </div>
         <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em;padding:.5rem .7rem;background:var(--bg-3);border-radius:8px;border-left:2px solid var(--amber)">
           <span style="flex-shrink:0">✅</span>
@@ -748,47 +815,44 @@ h3{font-size:var(--h3);margin-bottom:.3em}
       </div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:.7rem">
-
-      <!-- Criteria drift callout -->
-      <div style="padding:.75rem 1rem;border-radius:10px;background:rgba(204,0,64,.06);border:1px solid var(--magenta)">
-        <div style="font-family:var(--font-mono);font-size:.62em;text-transform:uppercase;letter-spacing:.1em;color:var(--magenta);margin-bottom:.3rem">⚠ Evaluation criteria drift · Shreya Shankar, Stanford</div>
-        <div style="font-size:.78em;line-height:1.5">"Users start with a simple rubric — but as they see more examples, they refine it. Standard ML eval assumes fixed criteria. Real evals don't."</div>
-      </div>
+    <div style="display:flex;flex-direction:column;gap:.9rem">
 
       <!-- Three Gulfs -->
       <div>
-        <div class="kicker" style="margin-bottom:.5rem;font-size:.68em">The Three Gulfs (EvalGen / DocWrangler)</div>
-        <div style="display:flex;flex-direction:column;gap:.35rem">
-          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em">
-            <span style="color:var(--work);flex-shrink:0;font-weight:700">1</span>
-            <span><strong>Comprehension</strong> — What's actually in my data? You can't write good prompts for data you don't understand.</span>
+        <div class="kicker" style="margin-bottom:.6rem">The Three Gulfs</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <div style="display:flex;gap:.8rem;align-items:center;padding:.5rem .8rem;background:var(--bg-3);border-radius:8px">
+            <span style="color:var(--work);font-weight:700;font-size:1.1em;flex-shrink:0">1</span>
+            <span><strong>Comprehension</strong> — understand your data before you write a single prompt</span>
           </div>
-          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em">
-            <span style="color:var(--amber);flex-shrink:0;font-weight:700">2</span>
-            <span><strong>Specification</strong> — How do I write the right prompt? Accumulated observations are hard to operationalize.</span>
+          <div style="display:flex;gap:.8rem;align-items:center;padding:.5rem .8rem;background:var(--bg-3);border-radius:8px">
+            <span style="color:var(--amber);font-weight:700;font-size:1.1em;flex-shrink:0">2</span>
+            <span><strong>Specification</strong> — turn observations into a clear, testable rubric</span>
           </div>
-          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.78em">
-            <span style="color:var(--cyan);flex-shrink:0;font-weight:700">3</span>
-            <span><strong>Generalization</strong> — Will this work at scale? A prompt that works on 10 examples can fail on 10,000.</span>
+          <div style="display:flex;gap:.8rem;align-items:center;padding:.5rem .8rem;background:var(--bg-3);border-radius:8px">
+            <span style="color:var(--cyan);font-weight:700;font-size:1.1em;flex-shrink:0">3</span>
+            <span><strong>Generalization</strong> — what works on 10 examples can fail on 10,000</span>
           </div>
         </div>
       </div>
 
       <!-- EvalGen loop -->
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.6rem .8rem;background:var(--bg-3);border-radius:10px;border:1px solid var(--line)">
-        <div style="text-align:center;font-size:.72em">Label<br><span style="color:var(--ink-mute);font-size:.9em">outputs live</span></div>
-        <div style="color:var(--cyan);font-size:.9em">→</div>
-        <div style="text-align:center;font-size:.72em">Build<br><span style="color:var(--ink-mute);font-size:.9em">LLM evaluator</span></div>
-        <div style="color:var(--cyan);font-size:.9em">→</div>
-        <div style="text-align:center;font-size:.72em">Report card<br><span style="color:var(--ink-mute);font-size:.9em">vs. intent</span></div>
-        <div style="color:var(--cyan);font-size:.9em">→</div>
-        <div style="text-align:center;font-size:.72em">Refine<br><span style="color:var(--ink-mute);font-size:.9em">criteria</span></div>
+      <div>
+        <div class="kicker" style="margin-bottom:.6rem">The eval loop</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:.3rem;padding:.7rem 1rem;background:var(--bg-3);border-radius:10px;border:1px solid var(--line)">
+          <div style="text-align:center">Label<br><span style="color:var(--ink-mute);font-size:.85em">real outputs</span></div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="text-align:center">Build<br><span style="color:var(--ink-mute);font-size:.85em">LLM evaluator</span></div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="text-align:center">Score<br><span style="color:var(--ink-mute);font-size:.85em">vs. intent</span></div>
+          <div style="color:var(--cyan)">→</div>
+          <div style="text-align:center">Refine<br><span style="color:var(--ink-mute);font-size:.85em">criteria</span></div>
+        </div>
       </div>
 
-      <div class="insight amber-box">
-        <span class="ik">Our version</span>
-        <span class="ib">$145k/mo spend must deliver more back. Evaluation is how we prove it — and keep refining what "good" means.</span>
+      <div class="insight cyan-box">
+        <span class="ik">The discipline</span>
+        <span class="ib">Evals are how you know if it's working — and how you keep refining what "good" means.</span>
       </div>
     </div>
   </div>
@@ -807,55 +871,67 @@ h3{font-size:var(--h3);margin-bottom:.3em}
     <div>
       <div style="font-family:var(--font-mono);font-size:.75em;text-transform:uppercase;letter-spacing:.18em;color:var(--work);margin-bottom:.7rem">🏥 Work · Enterprise</div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem">
-        <div class="card" style="border-top:3px solid var(--ink-mute);text-align:center">
-          <div style="font-family:var(--font-mono);font-size:.6em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3em">Before · GPT</div>
-          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.6rem);color:var(--ink-mute);line-height:1">$1.4M</div>
-          <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2em">per year</div>
+      <!-- Pipeline evolution -->
+      <div style="display:flex;align-items:stretch;gap:.5rem;margin-bottom:.8rem">
+        <div class="card" style="flex:1;border-top:3px solid var(--ink-mute);padding:.6rem .8rem">
+          <div style="font-family:var(--font-mono);font-size:.58em;color:var(--ink-mute);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.3em">Before</div>
+          <div style="font-weight:700;font-size:.88em;margin-bottom:.2em">OCR + LLM</div>
+          <div style="font-size:.72em;color:var(--ink-mute)">Scan → extract → GPT-4o</div>
         </div>
-        <div class="card" style="border-top:3px solid var(--magenta);text-align:center">
-          <div style="font-family:var(--font-mono);font-size:.6em;color:var(--magenta);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3em">Now · Gemini + GSU</div>
-          <div style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.6rem);color:var(--magenta);line-height:1">$1.7M</div>
-          <div style="font-size:.72em;color:var(--ink-mute);margin-top:.2em">per year · full expansion</div>
-        </div>
-      </div>
-
-      <div class="card" style="padding:.8rem 1rem">
-        <div class="kicker" style="font-size:.72em;margin-bottom:.6rem">Monthly · $145k</div>
-        <div style="display:flex;flex-direction:column;gap:.4rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:rgba(26,110,224,.06);border-radius:8px;border-left:2px solid var(--work)">
-            <div>
-              <div style="font-weight:600;font-size:.85em">🏥 Spine</div>
-              <div style="font-size:.72em;color:var(--ink-mute)">$55k GPT · $2.5k OCR</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:.8rem">
-              <div style="font-family:var(--font-mono);font-size:.75em;color:var(--ink-mute)">24,588 docs/mo</div>
-              <div style="font-weight:700;font-size:1.1em;color:var(--work)">$58k</div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:rgba(91,63,184,.06);border-radius:8px;border-left:2px solid var(--violet)">
-            <div>
-              <div style="font-weight:600;font-size:.85em">🧠 IP + SNF</div>
-              <div style="font-size:.72em;color:var(--ink-mute)">30 GSU @ $2.4k · $4k OCR</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:.8rem">
-              <div style="text-align:right">
-                <div style="font-family:var(--font-mono);font-size:.75em;color:var(--ink-mute)">376,040 docs/mo</div>
-                <div style="font-family:var(--font-mono);font-size:.68em;color:var(--violet);font-weight:600">~15× more than Spine</div>
-              </div>
-              <div style="font-weight:700;font-size:1.1em;color:var(--violet)">$85k</div>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .7rem;background:rgba(204,0,64,.08);border-radius:8px">
-            <div style="font-family:var(--font-mono);font-size:.68em;color:var(--magenta);text-transform:uppercase;letter-spacing:.1em">Total</div>
-            <div style="font-weight:700;font-size:1.2em;color:var(--magenta)">$145k</div>
-          </div>
+        <div style="display:flex;align-items:center;font-size:1.2rem;color:var(--cyan);padding:0 .1rem">→</div>
+        <div class="card" style="flex:1;border-top:3px solid var(--cyan);padding:.6rem .8rem">
+          <div style="font-family:var(--font-mono);font-size:.58em;color:var(--cyan);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.3em">Now</div>
+          <div style="font-weight:700;font-size:.88em;margin-bottom:.2em">Multi-model LLM</div>
+          <div style="font-size:.72em;color:var(--ink-mute)">PDF direct → Gemini Vision</div>
         </div>
       </div>
 
-      <div class="insight amber-box" style="margin-top:.7rem">
-        <span class="ik">Why more?</span>
-        <span class="ib">More cases, more expansion — cost grew because coverage grew.</span>
+      <!-- Cost comparison table -->
+      <div class="card" style="padding:.75rem 1rem">
+        <!-- Column headers -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3rem;margin-bottom:.5rem">
+          <div></div>
+          <div style="font-family:var(--font-mono);font-size:.6em;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-mute);text-align:right">Spine · GPT</div>
+          <div style="font-family:var(--font-mono);font-size:.6em;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);text-align:right">IP+SNF · Gemini</div>
+        </div>
+        <!-- Volume -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3rem;padding:.38rem .5rem;background:var(--bg-3);border-radius:6px;margin-bottom:.25rem;align-items:center">
+          <div style="font-family:var(--font-mono);font-size:.68em;color:var(--ink-mute)">Volume</div>
+          <div style="font-family:var(--font-mono);font-size:.72em;text-align:right">24,588/mo</div>
+          <div style="font-family:var(--font-mono);font-size:.72em;text-align:right;color:var(--cyan)">376,040/mo <span style="color:var(--violet);font-size:.85em">+15×</span></div>
+        </div>
+        <!-- LLM -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3rem;padding:.38rem .5rem;margin-bottom:.25rem;align-items:center">
+          <div style="font-family:var(--font-mono);font-size:.68em;color:var(--ink-mute)">LLM</div>
+          <div style="font-size:.8em;text-align:right">$55k/mo</div>
+          <div style="font-size:.8em;text-align:right;color:var(--cyan)">$72k/mo</div>
+        </div>
+        <!-- OCR -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3rem;padding:.38rem .5rem;background:var(--bg-3);border-radius:6px;margin-bottom:.25rem;align-items:center">
+          <div style="font-family:var(--font-mono);font-size:.68em;color:var(--ink-mute)">OCR</div>
+          <div style="font-size:.8em;text-align:right">$2.5k/mo</div>
+          <div style="font-size:.8em;text-align:right;color:var(--ink-mute)">$4k/mo</div>
+        </div>
+        <!-- Total -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3rem;padding:.38rem .5rem;margin-bottom:.5rem;align-items:center">
+          <div style="font-family:var(--font-mono);font-size:.68em;font-weight:700">Total</div>
+          <div style="font-size:.88em;font-weight:700;text-align:right">$57.5k/mo</div>
+          <div style="font-size:.88em;font-weight:700;text-align:right">$85k/mo</div>
+        </div>
+        <!-- Cost per doc — highlighted -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.3rem;padding:.5rem .7rem;background:rgba(0,143,116,.08);border-radius:8px;border:1px solid rgba(0,143,116,.2);align-items:center">
+          <div style="font-family:var(--font-mono);font-size:.68em;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);font-weight:700">$/doc</div>
+          <div style="font-family:var(--font-display);font-weight:700;font-size:1.15em;color:var(--ink-mute);text-align:right">$2.34</div>
+          <div style="text-align:right">
+            <span style="font-family:var(--font-display);font-weight:700;font-size:1.15em;color:var(--cyan)">$0.23</span>
+            <span style="font-family:var(--font-mono);font-size:.65em;color:var(--personal);font-weight:700;margin-left:.3em">−90%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight cyan-box" style="margin-top:.7rem">
+        <span class="ik">15× more volume · 10× cheaper per doc</span>
+        <span class="ib">Coverage grew massively. Cost per document collapsed.</span>
       </div>
     </div>
 
@@ -1162,6 +1238,31 @@ h3{font-size:var(--h3);margin-bottom:.3em}
   </div>
 </section>
 
+<!-- ── MINI TIMELINE STRIP ── -->
+<div id="tl-strip">
+  <div id="tl-now">
+    <span id="tn-phase">AI Timeline</span>
+    <span id="tn-date">2022 → 2026</span>
+  </div>
+  <div id="tl-bar-outer">
+    <div id="tl-segments">
+      <div class="tl-s1"></div>
+      <div class="tl-s2"></div>
+      <div class="tl-s3"></div>
+    </div>
+    <div id="tl-dots-layer"></div>
+    <div id="tl-needle" class="tl-hidden"></div>
+    <div id="tl-phase-labels">
+      <span>Phase 1 · 2022–23</span>
+      <span>Phase 2 · 2024</span>
+      <span>Phase 3 · 2025–26</span>
+    </div>
+  </div>
+  <div id="tl-next">
+    Next →<span id="tn-next-label"></span>
+  </div>
+</div>
+
 <!-- ============================================================ -->
 <!-- NAV SCRIPT -->
 <!-- ============================================================ -->
@@ -1196,6 +1297,7 @@ function onVisible(idx){
   dotsNav.querySelectorAll('button').forEach((b,i)=>{
     b.classList.toggle('active',i===idx);
   });
+  updateTimeline(idx);
 }
 
 // intersection observer
@@ -1213,7 +1315,87 @@ slides.forEach(s=>io.observe(s));
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key===' '){e.preventDefault();goTo(current+1)}
   if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();goTo(current-1)}
+  if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement){document.documentElement.requestFullscreen()}else{document.exitFullscreen()}}
 });
+
+// ── MINI TIMELINE STRIP ──
+const TL_EVENTS = [
+  // World model releases
+  {pct:5,  label:"GPT-3.5 · Nov '22",     type:"world"},
+  {pct:15, label:"GPT-4 · Mar '23",        type:"world"},
+  {pct:32, label:"Gemini 1.5 · Feb '24",   type:"world"},
+  {pct:40, label:"GPT-4o · May '24",       type:"world"},
+  {pct:47, label:"GPT o1 · Sep '24",       type:"world"},
+  {pct:54, label:"Gemini 2.0 · Dec '24",   type:"world"},
+  {pct:62, label:"DeepSeek R1 · Jan '25",  type:"world"},
+  {pct:67, label:"Claude Code · May '25",  type:"world"},
+  {pct:79, label:"OpenClaw · Nov '25",     type:"world"},
+  {pct:88, label:"Hermes · Feb '26",       type:"world"},
+  {pct:95, label:"Hermes agent · Apr '26", type:"world"},
+  // My changes
+  {pct:8,  label:"Writing + notes · '22–23",    type:"personal"},
+  {pct:28, label:"CDST OCR→GPT · '23–24",       type:"work"},
+  {pct:34, label:"Gemini Vision · Feb '24",      type:"work"},
+  {pct:69, label:"SNF+IP pipeline · May '25",    type:"work"},
+  {pct:80, label:"→ OpenClaw · Nov '25",         type:"personal"},
+  {pct:89, label:"→ Hermes · Feb '26",           type:"personal"},
+];
+
+// Maps slide index → position on the timeline (null = no specific position)
+const SLIDE_TL = [
+  null,                                                     // 0 Cover
+  null,                                                     // 1 Mindset
+  {pct:10, phase:"Phase 1 · 2022–23",   date:"2022–23"},   // 2 Phase 1
+  {pct:38, phase:"Phase 2 · 2024",      date:"2024"},       // 3 Multimodal
+  {pct:46, phase:"Phase 2 · 2024",      date:"2024"},       // 4 Preprocessing
+  {pct:63, phase:"Phase 3 · 2025",      date:"2025"},       // 5 Agent Year
+  {pct:70, phase:"Phase 3 · 2025",      date:"2025"},       // 6 Agent Pipeline
+  {pct:73, phase:"Phase 3 · 2025",      date:"2025"},       // 7 Evaluation
+  {pct:76, phase:"Phase 3 · 2025–26",   date:"2025–26"},    // 8 Cost
+  {pct:84, phase:"Phase 3 · 2025–26",   date:"Nov '25–Apr '26"}, // 9 Agents
+  {pct:90, phase:"Phase 3 · 2025–26",   date:"2025–26"},    // 10 Work Productivity
+  null,                                                     // 11 Lessons
+  {pct:98, phase:"Today · May 2026",    date:"May 2026"},   // 12 Closing
+];
+
+// Inject event dots
+const dotsLayer = document.getElementById('tl-dots-layer');
+TL_EVENTS.forEach(ev=>{
+  const d = document.createElement('div');
+  d.className = `tl-edot ${ev.type}`;
+  d.style.left = ev.pct + '%';
+  d.dataset.tip = ev.label;
+  dotsLayer.appendChild(d);
+});
+
+const needle     = document.getElementById('tl-needle');
+const tnPhase    = document.getElementById('tn-phase');
+const tnDate     = document.getElementById('tn-date');
+const tnNextEl   = document.getElementById('tl-next');
+const tnNextLabel= document.getElementById('tn-next-label');
+
+function updateTimeline(idx){
+  const meta = SLIDE_TL[idx];
+  const nextSlide = slides[idx + 1];
+  if(meta){
+    needle.classList.remove('tl-hidden');
+    needle.style.left = meta.pct + '%';
+    tnPhase.textContent = meta.phase;
+    tnDate.textContent  = meta.date;
+  } else {
+    needle.classList.add('tl-hidden');
+    tnPhase.textContent = 'AI Timeline';
+    tnDate.textContent  = '2022 → 2026';
+  }
+  if(nextSlide){
+    tnNextEl.style.display = '';
+    tnNextLabel.textContent = nextSlide.dataset.label || '';
+  } else {
+    tnNextEl.style.display = 'none';
+  }
+}
+
+updateTimeline(0);
 </script>
 </body>
 </html>
