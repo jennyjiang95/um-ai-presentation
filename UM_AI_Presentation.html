@@ -1252,6 +1252,10 @@ h3{font-size:var(--h3);margin-bottom:.3em}
   document.addEventListener('keydown', (e) => {
     if (['ArrowDown','PageDown','ArrowRight',' '].includes(e.key)) { e.preventDefault(); goto(current+1); }
     if (['ArrowUp','PageUp','ArrowLeft'].includes(e.key))         { e.preventDefault(); goto(current-1); }
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
     if (e.key === 'Home') { e.preventDefault(); goto(0); }
     if (e.key === 'End')  { e.preventDefault(); goto(slides.length-1); }
   });
